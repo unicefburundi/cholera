@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'surveillance_cholera',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -74,12 +75,12 @@ WSGI_APPLICATION = 'cholera.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+#}
 
 
 # Internationalization
@@ -87,7 +88,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Bujumbura'
 
 USE_I18N = True
 
@@ -100,3 +101,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(PROJECT_PATH,  'media')
+
+MEDIA_URL = '/media/'
+
+STATIC_ROOT = os.path.join(PROJECT_PATH,  'static')
+
+
+try:
+    from localsettings import *
+except ImportError:
+    pass
