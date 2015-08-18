@@ -1,0 +1,8 @@
+localsettings.py
+localsettings.py~
+localsettings.pyc
+*.html~
+*.py~
+*.htmlc
+*.pyc
+
