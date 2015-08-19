@@ -111,6 +111,12 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(PROJECT_PATH,  'static')
 
+KNOWN_PREFIXES = {
+'Rg':'SELF_REGISTRATION',
+'ENR':'PATIENT_REGISTRATION',
+'SV':'TRACK',
+}
+
 
 try:
     from localsettings import *

@@ -42,6 +42,7 @@ class CDS(models.Model):
                 return name
 
 class Reporter(models.Model):
+	phone_number = models.CharField(max_length=12)
 	cds = models.ForeignKey(CDS)
 	supervisor_phone_number = models.CharField(max_length=12)
 
