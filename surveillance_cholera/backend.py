@@ -1,5 +1,6 @@
 from jsonview.decorators import json_view
 from django.views.decorators.csrf import csrf_exempt
+import urllib2
 
 @csrf_exempt
 @json_view
@@ -16,8 +17,13 @@ def handel_rapidpro_request(request):
 
 	#Let's put all the incoming data in the dictionary 'incoming_data'
 	for couple in list_of_data:
+		print("*******")
+		print(couple)
+		print("*******")
 		incoming_data[couple.split("=")[0]] = couple.split("=")[1]
-	
-	print("------Below is the content of incoming_data--------")
+	print("urllib2.unquote(incoming_data.values()).decode('utf8')")
+	print("=====================================================")
+	print urllib2.unquote(incoming_data.values()).decode('utf8')
+	#import pdb; pdb.set_trace();
 	return incoming_data
 	

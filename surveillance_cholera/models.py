@@ -42,7 +42,6 @@ class CDS(models.Model):
                 return name
 
 class Reporter(models.Model):
-	person = models.ForeignKey(Person)
 	cds = models.ForeignKey(CDS)
 	supervisor_phone_number = models.CharField(max_length=12)
 
@@ -82,3 +81,10 @@ class CDSUser(models.Model):
 	cds = models.ForeignKey(CDS)
         login = models.CharField(max_length=40)
         password = models.CharField(max_length=40)
+
+class Session(models.Model):
+	report = models.ForeignKey(Reporter)
+	operation = models.CharField(max_length=10)
+	level = models.IntegerField()
+
+	
