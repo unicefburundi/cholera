@@ -19,4 +19,5 @@ def handel_rapidpro_request(request):
 		incoming_data[couple.split("=")[0]] = couple.split("=")[1]
 	
 	print("------Below is the content of incoming_data--------")
+	return incoming_data
 	
