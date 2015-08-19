@@ -17,3 +17,6 @@ def handel_rapidpro_request(request):
 	#Let's put all the incoming data in the dictionary 'incoming_data'
 	for couple in list_of_data:
 		incoming_data[couple.split("=")[0]] = couple.split("=")[1]
+	
+	print("------Below is the content of incoming_data--------")
+	
