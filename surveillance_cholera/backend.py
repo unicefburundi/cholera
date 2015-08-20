@@ -2,14 +2,15 @@ from jsonview.decorators import json_view
 from django.views.decorators.csrf import csrf_exempt
 import urllib2
 from django.conf import settings
-from surveillance_cholera.models import Reporter, Session
+from surveillance_cholera.models import Reporter, Temporary
 import re
+from recorders import *
 
 
 def identify_message(args):
 	''' This function identifies which kind of message this message is. '''
-
-	if args['text'].split('+')[0] in getattr(settings,'KNOWN_PREFIXES',''):
+	print(args['text'].split(' ')[0].upper())
+	if args['text'].split('+')[0].upper() in getattr(settings,'KNOWN_PREFIXES',''):
 		#Prefixes and related meanings are stored in the dictionary "KNOWN_PREFIXES"
 		args['message_type'] = getattr(settings,'KNOWN_PREFIXES','')[args['text'].split('+')[0]]
 	else:
@@ -18,7 +19,7 @@ def identify_message(args):
 def check_session(args):
 	'''This function checks if there is an already created session'''
 	reporter_phone_number = args['phone']
-	concerned_reporter = Reporter.objects.filter(phone_number = reporter_phone_number)
+	concerned_reporter = Temporary.objects.filter(phone_number = reporter_phone_number)
 	if len(concerned_reporter) < 1:
 		args['has_session'] = False
 	else:
@@ -34,10 +35,7 @@ def eliminate_unnecessary_spaces(args):
 	the_new_message = re.sub(' +',' ',the_incoming_message)
 	args['text'] = the_new_message
 
-def record_reporter(args):
-	'''This function record a contact'''
-	phone_number = args['phone']
-
+	
 def record_patient(args):
 	pass
 
@@ -84,7 +82,7 @@ def handel_rapidpro_request(request):
 		if not(incoming_data['has_session']):
 			#This contact doesn't have an already created session
 			response['ok'] = False
-			response['info_to_contact'] = "Nous n'avons pas compris votre message."
+			response['info_to_contact'] = "Le mot qui commence votre message n'est pas reconnu par le systeme. Envoie un message valide."
 			return response
 		else:
 			#This contact is confirming the phone number of his supervisor
@@ -94,7 +92,7 @@ def handel_rapidpro_request(request):
 	
 	if(incoming_data['message_type']=='SELF_REGISTRATION'):
 			#The contact who sent the current message is doing self registration  in the group of reporters
-			record_reporter(incoming_data)
+			temporary_record_reporter(incoming_data)
 	if(incoming_data['message_type']=='PATIENT_REGISTRATION'):
 			#The contact who sent the current message is registering a patient
 			record_patient(incoming_data)

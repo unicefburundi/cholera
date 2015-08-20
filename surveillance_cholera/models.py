@@ -36,10 +36,11 @@ class District(models.Model):
 
 class CDS(models.Model):
 	name = models.CharField(max_length=40)
-        district = models.ForeignKey(District)
-        def __unicode__(self):
-                name = self.name
-                return name
+	code = models.CharField(max_length=6)
+	district = models.ForeignKey(District)
+	def __unicode__(self):
+		name = self.name
+		return name
 
 class Reporter(models.Model):
 	phone_number = models.CharField(max_length=12)
