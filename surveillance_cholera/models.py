@@ -83,9 +83,10 @@ class CDSUser(models.Model):
         login = models.CharField(max_length=40)
         password = models.CharField(max_length=40)
 
-class Session(models.Model):
-	report = models.ForeignKey(Reporter)
-	operation = models.CharField(max_length=10)
-	level = models.IntegerField()
+class Temporary(models.Model):
+	'''This model will be used to temporary store a reporter who doesn't finish his self registration'''
+	phone_number = models.CharField(max_length=12)
+	cds = models.ForeignKey(CDS)
+	supervisor_phone_number = models.CharField(max_length=12)
 
 	
