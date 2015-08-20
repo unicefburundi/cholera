@@ -1,3 +1,5 @@
+from surveillance_cholera.models import CDS
+
 def check_number_of_values(args):
 	#This function checks if the message sent is composed by an expected number of values
 	if len(args['text'].split('+')) < 3:
@@ -12,7 +14,14 @@ def check_number_of_values(args):
 
 def check_cds(args):
 	''' This function checks if the CDS code sent by the reporter exists '''
-	
+	the_cds_code = args['text'].split('+')[1]
+	concerned_cds = CDS.objects.filter(code = the_cds_code)
+	if (len(concerned_cds) > 0):
+		args['valide'] = "True"
+		args['info_to_contact'] = "Le code cds envoye est reconnu."
+	else:
+		args['valide'] = "False"
+		args['info_to_contact'] = "Le code cds envoye n est enregistre dans le systeme."
 
 def check_supervisor_phone_number(args):
 	pass
