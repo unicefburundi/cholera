@@ -25,9 +25,9 @@ def check_session(args):
 	else:
 		args['has_session'] = True
 
-def complete_registration(args):
-	'''This function complete a registration of a reporter'''
-	print("Put here some code.")
+#def complete_registration(args):
+#	'''This function complete a registration of a reporter'''
+#	print("Put here some code.")
 
 def eliminate_unnecessary_spaces(args):
 	'''This function eliminate unnecessary spaces in an the incoming message'''
@@ -87,6 +87,8 @@ def handel_rapidpro_request(request):
 		else:
 			#This contact is confirming the phone number of his supervisor
 			complete_registration(incoming_data)
+			response['ok'] = False
+			response['info_to_contact'] = incoming_data['info_to_contact']
 			return response
 	
 	
