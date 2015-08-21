@@ -1,0 +1,15 @@
+{% extends "base_layout.html" %}
+{% load i18n staticfiles %}
+{% block content %}
+<h2>{% trans 'New User ? ' %}</h2>
+{% if form.errors %}
+<p>{% trans 'Invalid data. Please try again.' %}</p>
+{% endif %}
+<form method="post" action="" >
+  {% csrf_token %}
+  <div class="form-group">
+      {{ form.as_p }}
+        <input type="submit" class="btn btn-default" value="{% trans 'Register' %}" />
+  </div>
+</form>
+{% endblock %}

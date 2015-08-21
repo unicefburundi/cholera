@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
-
+from django.contrib.auth import get_user_model
 from authentication.models import UserProfile
 
 # Define an inline admin descriptor for UserProfile model
@@ -10,9 +9,9 @@ class UserProfileInline(admin.StackedInline):
     can_delete = False
 
 # Define a new User admin
-class UserAdmin(UserAdmin):
+class UserProfileAdmin(UserAdmin):
     inlines = (UserProfileInline, )
 
 # Re-register UserAdmin
-admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+admin.site.unregister(get_user_model())
+admin.site.register(get_user_model(), UserProfileAdmin)

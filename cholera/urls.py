@@ -18,12 +18,15 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.contrib.auth.views import logout_then_login
+from authentication.views import UserProfileDetailView
 
 urlpatterns = patterns('',
     url(r'^$', 'cholera.views.home', name='home'),
     url(r'^admin/', include(admin.site.urls)),
-    url('^accounts/', include('django.contrib.auth.urls')),
+    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}, name="login"),
+    url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),
+    url(r'^users/(?P<slug>\w+)/$', UserProfileDetailView.as_view(), name="profile"),
+    url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^cholera/', include('surveillance_cholera.urls')),
 ) +  static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

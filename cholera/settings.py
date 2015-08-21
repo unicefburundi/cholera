@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.8/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
-
+from django.core.urlresolvers import reverse_lazy
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
+    'registration',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -139,7 +140,11 @@ GROUP_PERMISSIONS = {
 # this is required by guardian
 ANONYMOUS_USER_ID = -1
 
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL=reverse_lazy('login')
+LOGIN_REDIRECT_URL = reverse_lazy('home')
+LOGOUT_URL=reverse_lazy('logout')
+ACCOUNT_ACTIVATION_DAYS = 20
+REGISTRATION_AUTO_LOGIN = True
 
 try:
     from localsettings import *
