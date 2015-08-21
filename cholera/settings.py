@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'surveillance_cholera',
     'authentication',
+    'guardian',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -108,6 +109,17 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.template.context_processors.debug',
+    'django.template.context_processors.i18n',
+    'django.template.context_processors.media',
+    'django.core.context_processors.request',
+    'django.template.context_processors.static',
+    'django.template.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    )
+
 #smartmin
 # create the smartmin CRUDL permissions on all objects
 PERMISSIONS = {
@@ -127,15 +139,7 @@ GROUP_PERMISSIONS = {
 # this is required by guardian
 ANONYMOUS_USER_ID = -1
 
-# set this if you want to use smartmin's user login
-# LOGIN_URL = '/users/login'
-
-# INSTALLED_APPS += (
-#   # .. other apps ..
-
-#   'guardian',
-#   'smartmin',
-# )
+LOGIN_URL = '/accounts/login/'
 
 try:
     from localsettings import *

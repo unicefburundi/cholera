@@ -15,7 +15,6 @@ class PhoneNumber(models.Model):
             return self.number
 
 
-
 class Patient(models.Model):
     patient_id = models.CharField(max_length=50)
     colline_name = models.CharField(max_length=50)

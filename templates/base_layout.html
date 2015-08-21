@@ -25,7 +25,7 @@
     <link href="{% static 'css/scrolling-nav.css' %}" rel="stylesheet">
     {% endblock css_section %}
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-    <title>Categorization - {% block page_title %}App{% endblock page_title %} </title>
+    <title>Cholera - {% block page_title %}App{% endblock page_title %} </title>
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
@@ -39,7 +39,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll" href=" {% url 'home' %}">Categorize.</a>
+                <a class="navbar-brand page-scroll" href=" {% url 'home' %}">Cholera Monitor.</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -50,14 +50,23 @@
                         <a class="page-scroll" href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#categories">Categories</a>
+                        <a class="page-scroll" href="#categories">About</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#messages">Messages</a>
+                        <a class="page-scroll" href="#messages">Contact</a>
                     </li>
-                    <li>
-                        <a class="page-scroll" href="{% url 'search' %}">Search</a>
-                    </li>
+                    {% if user.is_authenticated %}
+                        <li>
+                                <a href="user.id"> {{user.username}} </a>
+                        </li>
+                        <li>
+                                <a class="page-scroll navbar-right" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                            {% else %}
+                        <li>
+                            <a class="page-scroll text-right" href="{% url 'login' %}">Login</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -70,7 +79,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1>Categorization app</h1>
+                    <h1>Cholera App</h1>
                     <div class="row">
                         <div class="container">
                                 {% block content %}
@@ -90,23 +99,13 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1>Categories in Here!</h1>
-                    <a href=" {% url 'categories.category_list' %} " class="btn btn-info"  role="button">Categories</a>
+                    <a href="" class="btn btn-info"  role="button">Categories</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section id="messages" class="messages-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1>Messages in Here! </h1>
-                    <a href=" {% url 'categories.message_list' %} " class="btn btn-info"  role="button">Messages</a>
-                </div>
-            </div>
-        </div>
-    </section>
+
     {% block js_footer %}
         <!-- Scrolling Nav JavaScript -->
         <script src="{% static 'js/jquery.easing.min.js' %}"></script>
