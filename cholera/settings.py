@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'surveillance_cholera',
+    'authentication',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -54,38 +55,9 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'cholera.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
 
 WSGI_APPLICATION = 'cholera.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#    }
-#}
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -117,6 +89,53 @@ KNOWN_PREFIXES = {
 'SV':'TRACK',
 }
 
+#you better use yours
+SECRET_KEY = ')_7av^!cy(wfx=k#3*7x+(=j^fzv+ot^1@sh9s9t=8$bu@r(z$'
+
+DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'staticfiles'),
+)
+
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+)
+
+#smartmin
+# create the smartmin CRUDL permissions on all objects
+PERMISSIONS = {
+  '*': ('create', # can create an object
+        'read',   # can read an object, viewing it's details
+        'update', # can update an object
+        'delete', # can delete an object,
+        'list'),  # can view a list of the objects
+}
+
+# assigns the permissions that each group should have, here creating an Administrator group with
+# authority to create and change users
+GROUP_PERMISSIONS = {
+    "Administrator": ('auth.user.*',)
+}
+
+# this is required by guardian
+ANONYMOUS_USER_ID = -1
+
+# set this if you want to use smartmin's user login
+# LOGIN_URL = '/users/login'
+
+# INSTALLED_APPS += (
+#   # .. other apps ..
+
+#   'guardian',
+#   'smartmin',
+# )
 
 try:
     from localsettings import *

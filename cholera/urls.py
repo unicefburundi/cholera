@@ -17,6 +17,8 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
+    # url(r'^users/', include('smartmin.users.urls')),
+    # url(r'^$', 'cholera.views.home', name='home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^cholera/', include('surveillance_cholera.urls')),
 ]
