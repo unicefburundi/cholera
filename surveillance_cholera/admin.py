@@ -14,3 +14,5 @@ admin.site.register(GeneralUser)
 admin.site.register(ProvinceUser)
 admin.site.register(DistrictUser)
 admin.site.register(Session)
+admin.site.register(Temporary)
+

@@ -41,9 +41,11 @@ class District(models.Model):
 class CDS(models.Model):
     name = models.CharField(max_length=40)
     district = models.ForeignKey(District)
+    code = models.CharField(max_length=6)
 
     def __unicode__(self):
         return self.name
+
 
 class Reporter(models.Model):
     phone_number = models.CharField(max_length=12)
@@ -115,4 +117,13 @@ class Session(models.Model):
 
     def __unicode__(self):
         return self.report.phone_number
+
+class Temporary(models.Model):
+    '''
+    This model will be used to temporary store a reporter who doesn't finish his self registration
+    '''
+    phone_number = models.CharField(max_length=12)
+    cds = models.ForeignKey(CDS)
+    supervisor_phone_number = models.CharField(max_length=12)
+
 
