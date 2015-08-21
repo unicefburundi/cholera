@@ -1,4 +1,5 @@
-from surveillance_cholera.models import CDS
+from surveillance_cholera.models import CDS, Temporary
+import re
 
 def check_number_of_values(args):
 	#This function checks if the message sent is composed by an expected number of values
@@ -24,10 +25,33 @@ def check_cds(args):
 		args['info_to_contact'] = "Le code cds envoye n est enregistre dans le systeme."
 
 def check_supervisor_phone_number(args):
-	pass
+	''' This function checks if the phone number of the supervisor is well written '''
+	the_supervisor_phone_number = args['text'].split('+')[2]
+	the_supervisor_phone_number_no_space = the_supervisor_phone_number.replace(" ", "")
+	expression = r'^(\+?(257)?)((62)|(79)|(71)|(76))([0-9]{6})$'
+	print(the_supervisor_phone_number_no_space)
+	if re.search(expression, the_supervisor_phone_number_no_space) is None:
+		#The phone number is not well written
+		args['valide'] = "False"
+		args['info_to_contact'] = "Le numero de telephone du superviseur n est pas bien ecrit."
+	else:
+		args['valide'] = "True"
+		args['info_to_contact'] = "Le numero de telephone du superviseur est bien ecrit."
 
 def save_temporary_the_reporter(args):
-	pass
+	same_existing_temp = Temporary.objects.filter(phone_number = args['phone'])
+	if len(same_existing_temp) > 0:
+		args['valide'] = "False"
+		args['info_to_contact'] = "Vous devriez envoyer le numero de telephone de votre superviseur seulement."
+	else:
+		the_phone_number = args['phone']
+
+		the_cds = args['text'].split('+')[1]
+	
+		the_supervisor_phone_number = args['text'].split('+')[2]
+		the_supervisor_phone_number_no_space = the_supervisor_phone_number.replace(" ", "")
+
+		Temporary.objects.create(phone_number = the_phone_number,cds = the_cds,supervisor_phone_number = the_supervisor_phone_number_no_space)
 
 def temporary_record_reporter(args):
 	'''This function is used to record temporary a reporter'''
@@ -39,13 +63,19 @@ def temporary_record_reporter(args):
 
 	#Let's check if the code of CDS is valid
 	check_cds(args)
+	if not args['valide']:
+		return
 
 	#Let's check is the supervisor phone number is valid
 	check_supervisor_phone_number(args)
+	if not args['valide']:
+		return
 
 	#Let's temporary save the reporter
 	save_temporary_the_reporter(args)
 	
+
+#-----------------------------------------------------------------
 
 def record_patient(args):
 	print("This function is used to record a patient")
