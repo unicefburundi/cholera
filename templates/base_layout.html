@@ -56,9 +56,11 @@
                         <a class="page-scroll" href="#messages">Contact</a>
                     </li>
                     {% if user.is_authenticated %}
+                        {% with user.username as  username %}
                         <li>
-                                <a href="user.id"> {{user.username}} </a>
+                                <a href="{% url 'profile' username %}"> {{user.username}} </a>
                         </li>
+                        {% endwith %}
                         <li>
                                 <a class="page-scroll navbar-right" href="{% url 'logout' %}">Logout</a>
                         </li>

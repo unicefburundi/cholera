@@ -1,7 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from surveillance_cholera.models  import PhoneNumber #, Person
-# Signal while saving user
 from django.db.models.signals import post_save
 
 class UserProfile(models.Model):
@@ -12,7 +10,7 @@ class UserProfile(models.Model):
         ('d', 'CDS'),
     )
     user = models.OneToOneField(User, primary_key=True)
-    telephone = models.ForeignKey(PhoneNumber, null=True, blank=True)
+    telephone = models.CharField(max_length=12, null=True, blank=True)
     level= models.CharField(max_length=1, choices=MOH_LEVEL_CHOICES, null=True, blank=True)
 
     def __unicode__(self):
