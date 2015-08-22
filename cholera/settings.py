@@ -140,11 +140,25 @@ GROUP_PERMISSIONS = {
 # this is required by guardian
 ANONYMOUS_USER_ID = -1
 
+# for registratio
 LOGIN_URL=reverse_lazy('login')
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGOUT_URL=reverse_lazy('logout')
 ACCOUNT_ACTIVATION_DAYS = 20
 REGISTRATION_AUTO_LOGIN = True
+
+#for e-mail
+INTERNAL_IPS = '127.0.0.1'
+
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_HOST_USER = 'youremail@gmail.com'
+
+EMAIL_HOST_PASSWORD = 'abcdefghijklmnopqr'
+
+EMAIL_PORT = 587
+
+EMAIL_USE_TLS = True
 
 try:
     from localsettings import *
