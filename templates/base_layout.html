@@ -51,11 +51,11 @@
                                 <a href="{% url 'profile' slug=user.username %}"> {{user.username}} </a>
                         </li>
                         <li>
-                                <a class="page-scroll navbar-right" href="{% url 'logout' %}">Logout</a>
+                                <a class="page-scroll navbar-right" href="{% url 'auth_logout' %}">Logout</a>
                         </li>
                             {% else %}
                         <li>
-                            <a class="page-scroll text-right" href="{% url 'login' %}">Login</a>
+                            <a class="page-scroll text-right" href="{% url 'auth_login' %}">Login</a>
                         </li>
                         <li>
                             <a href="{% url 'registration_register' %}">Register</a>

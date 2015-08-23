@@ -9,8 +9,6 @@ from authentication.views import UserProfileDetailView, UserProfileEditView
 urlpatterns = patterns('',
     url(r'^$', 'cholera.views.home', name='home'),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}, name="login"),
-    url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),
     url(r'^users/(?P<slug>\w+)/$', UserProfileDetailView.as_view(), name="profile"),
     url(r'^edit_profile/$', auth(UserProfileEditView.as_view()), name="edit_profile"),
     url(r'^accounts/', include('registration.backends.simple.urls')),
