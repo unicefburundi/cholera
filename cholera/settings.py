@@ -34,7 +34,6 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
-    'registration',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -42,6 +41,7 @@ INSTALLED_APPS = (
     'surveillance_cholera',
     'authentication',
     'guardian',
+    'registration',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -137,15 +137,24 @@ GROUP_PERMISSIONS = {
     "Administrator": ('auth.user.*',)
 }
 
-# this is required by guardian
-ANONYMOUS_USER_ID = -1
+#-----------------------------------------------------------------------------------
+# Login / Logout
+#-----------------------------------------------------------------------------------
+LOGIN_URL = reverse_lazy("login")
+LOGOUT_URL = reverse_lazy("logout")
+LOGIN_REDIRECT_URL = reverse_lazy("home")
+LOGOUT_REDIRECT_URL = reverse_lazy("home")
 
-# for registratio
-LOGIN_URL=reverse_lazy('login')
-LOGIN_REDIRECT_URL = reverse_lazy('home')
-LOGOUT_URL=reverse_lazy('logout')
-ACCOUNT_ACTIVATION_DAYS = 20
-REGISTRATION_AUTO_LOGIN = True
+#-----------------------------------------------------------------------------------
+# Guardian Configuration
+#-----------------------------------------------------------------------------------
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
+)
+
+ANONYMOUS_USER_ID = -1
 
 #for e-mail
 INTERNAL_IPS = '127.0.0.1'

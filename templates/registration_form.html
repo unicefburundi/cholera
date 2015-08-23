@@ -8,7 +8,7 @@
 <form method="post" action="" >
   {% csrf_token %}
   <div class="form-group">
-      {{ form.as_p }}
+      {{ form.as_div }}
         <input type="submit" class="btn btn-default" value="{% trans 'Register' %}" />
   </div>
 </form>

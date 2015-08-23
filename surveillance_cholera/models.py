@@ -71,7 +71,7 @@ class TrackPatientMessage(models.Model):
     report = models.ForeignKey(Reporter)
 
     def __unicode__(self):
-        return self.report.phone_number
+        return self.report
 
 class GeneralUser(models.Model):
     person = models.ForeignKey(Person)
@@ -80,7 +80,7 @@ class GeneralUser(models.Model):
     password = models.CharField(max_length=40)
 
     def __unicode__(self):
-        return self.person.user.username
+        return self.person
 
 
 class ProvinceUser(models.Model):
@@ -99,7 +99,7 @@ class DistrictUser(models.Model):
     password = models.CharField(max_length=40)
 
     def __unicode__(self):
-        return self.district.name
+        return self.district
 
 class CDSUser(models.Model):
     person = models.ForeignKey(Person)
@@ -108,7 +108,7 @@ class CDSUser(models.Model):
     password = models.CharField(max_length=40)
 
     def __unicode__(self):
-        return self.person.user.usernamer
+        return self.person
 
 class Session(models.Model):
     report = models.ForeignKey(Reporter)
@@ -116,7 +116,7 @@ class Session(models.Model):
     level = models.IntegerField()
 
     def __unicode__(self):
-        return self.report.phone_number
+        return self.report
 
 class Temporary(models.Model):
     '''
@@ -126,4 +126,6 @@ class Temporary(models.Model):
     cds = models.ForeignKey(CDS)
     supervisor_phone_number = models.CharField(max_length=12)
 
+    def __unicode__(self):
+        return self.phone_number
 
