@@ -2,11 +2,13 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('auth', '0006_require_contenttypes_0002'),
     ]
 
     operations = [
@@ -15,6 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=40)),
+                ('code', models.CharField(max_length=6)),
             ],
         ),
         migrations.CreateModel(
@@ -65,10 +68,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Person',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('first_name', models.CharField(max_length=80)),
-                ('last_name', models.CharField(max_length=80)),
-                ('email', models.CharField(max_length=50)),
+                ('user', models.OneToOneField(primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -110,6 +110,7 @@ class Migration(migrations.Migration):
             name='Reporter',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('phone_number', models.CharField(max_length=12)),
                 ('supervisor_phone_number', models.CharField(max_length=12)),
                 ('cds', models.ForeignKey(to='surveillance_cholera.CDS')),
             ],
@@ -121,6 +122,15 @@ class Migration(migrations.Migration):
                 ('operation', models.CharField(max_length=10)),
                 ('level', models.IntegerField()),
                 ('report', models.ForeignKey(to='surveillance_cholera.Reporter')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Temporary',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('phone_number', models.CharField(max_length=12)),
+                ('supervisor_phone_number', models.CharField(max_length=12)),
+                ('cds', models.ForeignKey(to='surveillance_cholera.CDS')),
             ],
         ),
         migrations.CreateModel(

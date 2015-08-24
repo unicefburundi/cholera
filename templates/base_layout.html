@@ -1,0 +1,104 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <script type="text/javascript" src="{% static 'js/libs/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/libs/jquery-ui.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}">
+    <script type="text/javascript">
+      // Change JQueryUI plugin names to fix name collision with Bootstrap.
+      $.widget.bridge('uitooltip', $.ui.tooltip);
+      $.widget.bridge('uibutton', $.ui.button);
+      // on page load
+      $(function() {
+      $( ".datePicker" ).datepicker();
+      });
+    </script>
+    {% block css_section %}
+        <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-theme.css' %}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static 'css/scrolling-nav.css' %}" rel="stylesheet">
+    {% endblock css_section %}
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <title>Cholera - {% block page_title %}App{% endblock page_title %} </title>
+</head>
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href=" {% url 'home' %}">Cholera Monitor.</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    {% if user.is_authenticated %}
+                        <li>
+                                <a href="{% url 'profile' slug=user.username %}"> {{user.username}} </a>
+                        </li>
+                        <li>
+                                <a class="page-scroll navbar-right" href="{% url 'auth_logout' %}">Logout</a>
+                        </li>
+                            {% else %}
+                        <li>
+                            <a class="page-scroll text-right" href="{% url 'auth_login' %}">Login</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'registration_register' %}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Intro Section -->
+    <section id="intro" class="intro-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Cholera App</h1>
+                    <div class="row">
+                        <div class="container">
+                                {% block content %}
+                                <!--  MAIN CONTENT GOES HERE -->
+                                <a class="btn btn-default page-scroll" href="#categories">Click to See!</a>
+                                {% endblock content %}
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="row">
+        <footer>
+        <p class="site-info text-center">
+                   &copy; {% now "Y" %} <span class="separator">|</span> Powered by Open-Source.
+        </p>
+    </footer>
+
+
+    {% block js_footer %}
+        <!-- Scrolling Nav JavaScript -->
+        <script src="{% static 'js/jquery.easing.min.js' %}"></script>
+        <script src="{% static 'js/scrolling-nav.js' %}"></script>
+    {% endblock js_footer %}
+</body>
+</html>

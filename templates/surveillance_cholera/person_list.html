@@ -1,0 +1,33 @@
+{% extends "base_layout.html" %}
+{% block content %}
+{% if object_list %}
+    <table id="person" class="table table-bordered">
+        {% for car in object_list %}
+            <tr>
+                <td>{{ car.user.username }}</td>
+                <td>{{ car.user.first_name}}</td>
+                <td><a href="/car/{{ car.user.id }}/" class="btn btn_link">detail</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    {# .... **Now the pagination section** .... #}
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="/cars?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="/cars?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+{% else %}
+    <h3>My Cars</h3>
+    <p>No cars found!!! :(</p>
+{% endif %}
+{% endblock content %}

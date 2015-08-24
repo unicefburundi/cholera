@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from surveillance_cholera.models import Person
+from django.views.generic import ListView
 
-# Create your views here.
+class PersonListView(ListView):
+    model = Person
+    paginate_by = 10  #and that's it !!
