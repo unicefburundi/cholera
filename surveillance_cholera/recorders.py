@@ -158,6 +158,20 @@ def check_patient_age(args):
 		args['valide'] = True
 		args['info_to_contact'] = "La valeur envoyee pour age est valide."
 
+def check_gender(args):
+	''' This function checks if the value sent for gender is valid. '''
+	the_patient_gender = args['text'].split('+')[4]
+	
+	#The bellow list will be putted in localsettings
+	gender_values = ['F','M']
+
+	if(the_patient_gender not in gender_values):
+		args['valide'] = False
+		args['info_to_contact'] = "La valeur envoyee pour indiquer le genre du patient n est pas valide."
+	else:
+		args['valide'] = True
+		args['info_to_contact'] = "La valeur envoyee pour indiquer le genre du patient est valide."
+
 def record_patient(args):
 	'''This function is used to record a patient'''
 	#Let's check if the message sent is composed by an expected number of values
@@ -177,6 +191,11 @@ def record_patient(args):
 
 	#Let's check if the age of the patient is valid
 	check_patient_age(args)
+	if not args['valide']:
+		return
+
+	#Let's check if the value sent for gender id valid
+	check_gender(args)
 	if not args['valide']:
 		return
 	
