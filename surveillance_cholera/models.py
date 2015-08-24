@@ -68,7 +68,7 @@ class Report(models.Model):
 class TrackPatientMessage(models.Model):
     exit_date = models.DateField()
     exit_status = models.CharField(max_length=20)
-    report = models.ForeignKey(Reporter)
+    report = models.ForeignKey(Report)
 
     def __unicode__(self):
         return self.report
