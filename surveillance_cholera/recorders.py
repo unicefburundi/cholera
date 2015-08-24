@@ -10,7 +10,7 @@ def check_number_of_values(args):
 		args['valide'] = False
 		args['info_to_contact'] = "Vous avez envoye beaucoup de valeurs."
 	if len(args['text'].split('+')) == 3:
-		args['valide'] = "True"
+		args['valide'] = True
 		args['info_to_contact'] = "Le nombre de valeurs envoye est correct."
 
 def check_cds(args):
@@ -18,10 +18,10 @@ def check_cds(args):
 	the_cds_code = args['text'].split('+')[1]
 	concerned_cds = CDS.objects.filter(code = the_cds_code)
 	if (len(concerned_cds) > 0):
-		args['valide'] = "True"
+		args['valide'] = True
 		args['info_to_contact'] = "Le code cds envoye est reconnu."
 	else:
-		args['valide'] = "False"
+		args['valide'] = False
 		args['info_to_contact'] = "Le code cds envoye n est enregistre dans le systeme."
 
 def check_supervisor_phone_number(args):
@@ -32,16 +32,16 @@ def check_supervisor_phone_number(args):
 	print(the_supervisor_phone_number_no_space)
 	if re.search(expression, the_supervisor_phone_number_no_space) is None:
 		#The phone number is not well written
-		args['valide'] = "False"
+		args['valide'] = False
 		args['info_to_contact'] = "Le numero de telephone du superviseur n est pas bien ecrit."
 	else:
-		args['valide'] = "True"
+		args['valide'] = True
 		args['info_to_contact'] = "Le numero de telephone du superviseur est bien ecrit."
 
 def save_temporary_the_reporter(args):
 	same_existing_temp = Temporary.objects.filter(phone_number = args['phone'])
 	if len(same_existing_temp) > 0:
-		args['valide'] = "False"
+		args['valide'] = False
 		args['info_to_contact'] = "Vous devriez envoyer le numero de telephone de votre superviseur seulement."
 	else:
 		the_phone_number = args['phone']
@@ -56,7 +56,7 @@ def save_temporary_the_reporter(args):
 			the_supervisor_phone_number_no_space = the_supervisor_phone_number.replace(" ", "")
 
 			Temporary.objects.create(phone_number = the_phone_number,cds = the_concerned_cds,supervisor_phone_number = the_supervisor_phone_number_no_space)
-			args['valide'] = "True"
+			args['valide'] = True
 			args['info_to_contact'] = "Merci. Veuillez confirmer le numero du superviseur s il vous plait."
 
 def temporary_record_reporter(args):
@@ -88,7 +88,7 @@ def complete_registration(args):
 	the_existing_temp = Temporary.objects.filter(phone_number = args['phone'])
 	
 	if len(the_existing_temp) < 1:
-		args['valide'] = "False"
+		args['valide'] = False
 		args['info_to_contact'] = "Votre message n est pas considere."
 	else:
 		the_one_existing_temp = the_existing_temp[0]
@@ -98,11 +98,12 @@ def complete_registration(args):
 
 			the_one_existing_temp.delete()
 
-			args['valide'] = "True"
+			args['valide'] = True
 			args['info_to_contact'] = "Vous vous etes enregistre correctement."
 		else:
-			args['valide'] = "False"
-			args['info_to_contact'] = "Vous avez envoye le numero de telephone du superviseur de differentes manieres."
+			the_one_existing_temp.delete()
+			args['valide'] = False
+			args['info_to_contact'] = "Vous avez envoye le numero de telephone du superviseur de differentes manieres. Recommencer l enregistrement."
 #-----------------------------------------------------------------
 
 def record_patient(args):
