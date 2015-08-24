@@ -3,15 +3,34 @@ import re
 
 def check_number_of_values(args):
 	#This function checks if the message sent is composed by an expected number of values
-	if len(args['text'].split('+')) < 3:
-		args['valide'] = False
-		args['info_to_contact'] = "Vous avez envoye peu de valeurs."
-	if len(args['text'].split('+')) > 3:
-		args['valide'] = False
-		args['info_to_contact'] = "Vous avez envoye beaucoup de valeurs."
-	if len(args['text'].split('+')) == 3:
-		args['valide'] = True
-		args['info_to_contact'] = "Le nombre de valeurs envoye est correct."
+	if(args['message_type']=='SELF_REGISTRATION'):
+		if len(args['text'].split('+')) < 3:
+			args['valide'] = False
+			args['info_to_contact'] = "Vous avez envoye peu de valeurs."
+		if len(args['text'].split('+')) > 3:
+			args['valide'] = False
+			args['info_to_contact'] = "Vous avez envoye beaucoup de valeurs."
+		if len(args['text'].split('+')) == 3:
+			args['valide'] = True
+			args['info_to_contact'] = "Le nombre de valeurs envoye est correct."
+	if(incoming_data['message_type']=='PATIENT_REGISTRATION'):
+		if len(args['text'].split('+')) < 6:
+			args['valide'] = False
+			args['info_to_contact'] = "Vous avez envoye peu de valeurs."
+		if len(args['text'].split('+')) > 6:
+			args['valide'] = False
+			args['info_to_contact'] = "Vous avez envoye beaucoup de valeurs."
+		if len(args['text'].split('+')) == 3:
+			args['valide'] = True
+			args['info_to_contact'] = "Le nombre de valeurs envoye est correct."
+
+
+
+
+#------------------------------------------------------------------------------------
+
+
+
 
 def check_cds(args):
 	''' This function checks if the CDS code sent by the reporter exists '''
@@ -104,10 +123,21 @@ def complete_registration(args):
 			the_one_existing_temp.delete()
 			args['valide'] = False
 			args['info_to_contact'] = "Vous avez envoye le numero de telephone du superviseur de differentes manieres. Recommencer l enregistrement."
+
+
+
 #-----------------------------------------------------------------
 
-def record_patient(args):
-	print("This function is used to record a patient")
 
+
+def record_patient(args):
+	'''This function is used to record a patient'''
+	#Let's check if the message sent is composed by an expected number of values
+	check_number_of_values(args)
+	if not args['valide']:
+		return
+
+
+#-----------------------------------------------------------------
 def record_track_message(args):
 	print("This function is used to record a track message")
