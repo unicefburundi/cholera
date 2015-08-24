@@ -1,5 +1,6 @@
 from surveillance_cholera.models import CDS, Temporary, Reporter
 import re
+import time
 
 def check_number_of_values(args):
 	#This function checks if the message sent is composed by an expected number of values
@@ -13,14 +14,14 @@ def check_number_of_values(args):
 		if len(args['text'].split('+')) == 3:
 			args['valide'] = True
 			args['info_to_contact'] = "Le nombre de valeurs envoye est correct."
-	if(incoming_data['message_type']=='PATIENT_REGISTRATION'):
+	if(args['message_type']=='PATIENT_REGISTRATION'):
 		if len(args['text'].split('+')) < 6:
 			args['valide'] = False
 			args['info_to_contact'] = "Vous avez envoye peu de valeurs."
 		if len(args['text'].split('+')) > 6:
 			args['valide'] = False
 			args['info_to_contact'] = "Vous avez envoye beaucoup de valeurs."
-		if len(args['text'].split('+')) == 3:
+		if len(args['text'].split('+')) == 6:
 			args['valide'] = True
 			args['info_to_contact'] = "Le nombre de valeurs envoye est correct."
 
@@ -172,10 +173,26 @@ def check_gender(args):
 		args['valide'] = True
 		args['info_to_contact'] = "La valeur envoyee pour indiquer le genre du patient est valide."
 
+def check_intervention(args):
+	''' This function is used to check if the value sent for intervention is valid. '''
+	intervention = args['text'].split('+')[5]
+	capitalized_intervention = intervention.title()
+	
+	#The bellow list will be putted in localsettings
+	interventions_values = ['Hospi','Desh','Pr','Dd']
+
+	if(capitalized_intervention not in interventions_values):
+		args['valide'] = False
+		args['info_to_contact'] = "La valeur envoyee pour intervention n est pas valide."
+	else:
+		args['valide'] = True
+		args['info_to_contact'] = "La valeur envoyee pour intervention est valide."	
+
 def record_patient(args):
 	'''This function is used to record a patient'''
 	#Let's check if the message sent is composed by an expected number of values
 	check_number_of_values(args)
+	print(args['valide'])
 	if not args['valide']:
 		return
 
@@ -198,6 +215,21 @@ def record_patient(args):
 	check_gender(args)
 	if not args['valide']:
 		return
+
+	#Let's check if the value sent for intervention is valid
+	check_intervention(args)
+	if not args['valide']:
+		return
+
+
+	
+	
+	the_time = time.strftime("%Y%m%d")
+	year = the_time[2:4]
+	month = the_time[4:6]
+	day = the_time[6:8]
+	the_reversed_date = day+""+month+""+year
+
 	
 #-----------------------------------------------------------------
 def record_track_message(args):

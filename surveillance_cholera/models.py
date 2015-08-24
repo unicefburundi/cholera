@@ -16,7 +16,7 @@ class PhoneNumber(models.Model):
 
 
 class Patient(models.Model):
-    patient_id = models.CharField(max_length=50)
+    patient_id = models.CharField(max_length=50, primary_key=True)
     colline_name = models.CharField(max_length=50)
     age = models.CharField(max_length=10)
     sexe = models.CharField(max_length=10)
