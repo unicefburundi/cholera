@@ -128,12 +128,36 @@ def complete_registration(args):
 
 #-----------------------------------------------------------------
 
+def check_patient_id(args):
+	''' This function checks if the id patient sent is valid. '''
+	The_id_patient = args['text'].split('+')[1]
+	expression = r'^[0-9]+$'
+	if re.search(expression, The_id_patient) is None:
+		#The patient id is not well written
+		args['valide'] = False
+		args['info_to_contact'] = "Le numero du patient n est pas bien ecrit."
+	else:
+		args['valide'] = True
+		args['info_to_contact'] = "Le numero du patient est bien ecrit."	
+
+def check_colline_name(args):
+	pass
 
 
 def record_patient(args):
 	'''This function is used to record a patient'''
 	#Let's check if the message sent is composed by an expected number of values
 	check_number_of_values(args)
+	if not args['valide']:
+		return
+
+	#Let's check if the sent patient id is valid
+	check_patient_id(args)
+	if not args['valide']:
+		return
+
+	#Let's check if the colline name is valid
+	check_colline_name(args)
 	if not args['valide']:
 		return
 
