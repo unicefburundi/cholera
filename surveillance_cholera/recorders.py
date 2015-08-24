@@ -141,8 +141,22 @@ def check_patient_id(args):
 		args['info_to_contact'] = "Le numero du patient est bien ecrit."	
 
 def check_colline_name(args):
-	pass
+	''' This function checks if the colline name is valid. '''
+	print("Will be done after discussions.")
 
+def check_patient_age(args):
+	''' This function cheks if the age of the patient is valid. '''
+	The_patient_age = args['text'].split('+')[3]
+	
+	#The below list will be putted in localsettings
+	valid_ages = ['A1','A2']
+
+	if(The_patient_age not in valid_ages):
+		args['valide'] = False
+		args['info_to_contact'] = "La valeur envoyee pour age n est pas valide."
+	else:
+		args['valide'] = True
+		args['info_to_contact'] = "La valeur envoyee pour age est valide."
 
 def record_patient(args):
 	'''This function is used to record a patient'''
@@ -161,7 +175,11 @@ def record_patient(args):
 	if not args['valide']:
 		return
 
-
+	#Let's check if the age of the patient is valid
+	check_patient_age(args)
+	if not args['valide']:
+		return
+	
 #-----------------------------------------------------------------
 def record_track_message(args):
 	print("This function is used to record a track message")
