@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'surveillance_cholera',
     'authentication',
+    'djangular',
     'guardian',
     'registration',
 )
