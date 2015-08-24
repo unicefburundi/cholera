@@ -60,7 +60,7 @@ class Report(models.Model):
     reporter = models.ForeignKey(Reporter)
     cds = models.ForeignKey(CDS)
     message = models.CharField(max_length=160)
-    report_type = models.CharField(max_length=10)
+    report_type = models.CharField(max_length=30)
 
     def __unicode__(self):
         return self.message

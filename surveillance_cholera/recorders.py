@@ -1,4 +1,4 @@
-from surveillance_cholera.models import CDS, Temporary, Reporter
+from surveillance_cholera.models import CDS, Temporary, Reporter, Patient, Report
 import re
 import time
 
@@ -222,15 +222,37 @@ def record_patient(args):
 		return
 
 
+	#Let's check if the person who sent this message is in the list of reporters
+	concerned_reporter = Reporter.objects.filter(phone_number = args['phone'])
+	if len(concerned_reporter) < 1:
+		#This person is not in the list of reporters
+		args['valide'] = False
+		args['info_to_contact'] = "Vous ne vous etes pas enregistre pour pouvoir donner des rapports."
+		return
 	
-	
+	one_concerned_reporter = concerned_reporter[0]
+
+	one_concerned_cds = one_concerned_reporter.cds
+
+	cds_code = one_concerned_cds.code
+		
+
 	the_time = time.strftime("%Y%m%d")
 	year = the_time[2:4]
 	month = the_time[4:6]
 	day = the_time[6:8]
 	the_reversed_date = day+""+month+""+year
 
+	#The id of a patient is made like this : cds_code+date+patient_id_sent_by_the_reporter
+	id_patient = cds_code+""+the_reversed_date+""+args['text'].split('+')[1]
 	
+	#Let's record a patient
+	the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split('+')[2], age = args['text'].split('+')[3], sexe = args['text'].split('+')[4], intervention = args['text'].split('+')[5])
+	
+	the_created_report = Report.objects.create(patient = the_created_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'], report_type = args['message_type'])
+
+	args['valide'] = True
+	args['info_to_contact'] = "Vous ne vous etes pas enregistre pour pouvoir donner des rapports."
 #-----------------------------------------------------------------
 def record_track_message(args):
 	print("This function is used to record a track message")
