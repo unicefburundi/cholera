@@ -1,14 +1,22 @@
 {% extends "base_layout.html" %}
 
 {% block content %}
-<h2>{{ user.username }}'s Profile</h2>
+<h2>{{ user.username|title }}'s Profile</h2>
 
-<form method="post" action="">
-    <div class="form-group">
-          {% csrf_token %}
-              {{ form.as_p }}
-            <input type="submit" value="Edit">
-    </div>
+<form method="post" action="" class="form-horizontal">
+    {% csrf_token %}
+
+    {% if form %}
+                {% for field in form %}
+                <div class="form-group">
+                    <div>{{ field.label_tag }} </div>
+                    <div>{{ field }}</div>
+                </div>
+                    {% for error in field.errors %}
+                      <p  style="color: red;">{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+     <input type="submit" value="Edit">
 </form>
-
 {% endblock %}

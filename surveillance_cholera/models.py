@@ -1,11 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
+from authentication.models import UserProfile
 
 class Person(models.Model):
-    user = models.OneToOneField(User, primary_key=True)
+    user = models.OneToOneField(UserProfile, unique=True)
 
     def __unicode__(self):
-            return self.user.username
+            return self.user.user.username
 
 class PhoneNumber(models.Model):
     number = models.CharField(max_length=12)
