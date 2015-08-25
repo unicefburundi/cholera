@@ -360,7 +360,9 @@ def record_track_message(args):
 
 	the_created_report = Report.objects.create(patient = one_concerned_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'].replace("+", " "), report_type = args['message_type'])
 
-	TrackPatientMessage.objects.create(exit_date = args['text'].split('+')[2], exit_status = args['text'].split('+')[3], report = the_created_report)
+	#exit_date = datetime.datetime.strptime(args['text'].split('+')[2], '%Y-%m-%d')
+
+	#TrackPatientMessage.objects.create(exit_date = args['text'].split('+')[2], exit_status = args['text'].split('+')[3], report = the_created_report)
 
 	args['valide'] = True
 	args['info_to_contact'] = "Votre rapport a ete bien enregistre. Merci."
