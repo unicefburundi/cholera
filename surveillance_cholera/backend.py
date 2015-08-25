@@ -9,10 +9,11 @@ from recorders import *
 
 def identify_message(args):
 	''' This function identifies which kind of message this message is. '''
-	print(args['text'].split(' ')[0].upper())
+	incoming_prefix = args['text'].split('+')[0].upper()
 	if args['text'].split('+')[0].upper() in getattr(settings,'KNOWN_PREFIXES',''):
 		#Prefixes and related meanings are stored in the dictionary "KNOWN_PREFIXES"
-		args['message_type'] = getattr(settings,'KNOWN_PREFIXES','')[args['text'].split('+')[0]]
+		#args['message_type'] = getattr(settings,'KNOWN_PREFIXES','')[args['text'].split('+')[0]]
+		args['message_type'] = getattr(settings,'KNOWN_PREFIXES','')[incoming_prefix]
 	else:
 		args['message_type'] = "UNKNOWN_MESSAGE"
 		
@@ -36,11 +37,6 @@ def eliminate_unnecessary_spaces(args):
 	args['text'] = the_new_message
 
 	
-def record_patient(args):
-	pass
-
-def record_track_message():
-	pass
 	
 
 @csrf_exempt
