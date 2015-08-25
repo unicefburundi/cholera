@@ -15,7 +15,7 @@ class UserProfileForm(forms.ModelForm):
         exclude = ("user",)
 
     def clean(self):
-        # import ipdb; ipdb.set_trace()
+        import ipdb; ipdb.set_trace()
         cleaned_data = super(UserProfileForm, self).clean()
         level = cleaned_data['level']
         moh_facility = cleaned_data['moh_facility']

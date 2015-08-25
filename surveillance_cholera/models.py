@@ -2,7 +2,7 @@ from django.db import models
 from authentication.models import UserProfile
 
 class Person(models.Model):
-    user = models.OneToOneField(UserProfile, unique=True)
+    user = models.OneToOneField(UserProfile)
 
     def __unicode__(self):
             return self.user.user.username
