@@ -254,8 +254,11 @@ def record_patient(args):
 	day = the_time[6:8]
 	the_reversed_date = day+""+month+""+year
 
-	#The id of a patient is made like this : cds_code+date+patient_id_sent_by_the_reporter
-	id_patient = cds_code+""+the_reversed_date+""+args['text'].split('+')[1]
+	#The id of a patient is made like this : cds_code+date+patient_number
+	#id_patient = cds_code+""+the_reversed_date+""+args['text'].split('+')[1]
+	#the reporter sent : date+patient_number.
+	id_patient = cds_code+""+args['text'].split('+')[1]
+	
 
 	#Let's check if the patient with the same id already exists
 	patient = Patient.objects.filter(patient_id = id_patient)
@@ -272,7 +275,7 @@ def record_patient(args):
 	the_created_report = Report.objects.create(patient = the_created_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'].replace("+", " "), report_type = args['message_type'])
 
 	args['valide'] = True
-	args['info_to_contact'] = "Ce patient a ete bien enregistre avec l identifiant : "+id_patient+" Merci."
+	args['info_to_contact'] = "Ce patient a ete bien enregistre avec l identifiant : "+id_patient+". Merci."
 #-----------------------------------------------------------------
 def check_validity_of_id(args):
 	'''This function checks if the patient id is known in the system'''
