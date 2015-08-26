@@ -12,7 +12,7 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        exclude = ("user",)
+        exclude = ('moh_facility', 'level',)
 
     def clean(self):
         cleaned_data = super(UserProfileForm, self).clean()
