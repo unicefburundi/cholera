@@ -115,12 +115,6 @@ class TrackPatientMessage(models.Model):
 #    report = models.ForeignKey(Reporter)
 #    operation = models.CharField(max_length=10)
 #    level = models.IntegerField()
-=======
-class Session(models.Model):
-    report = models.ForeignKey(Reporter)
-    operation = models.CharField(max_length=10)
-    level = models.IntegerField()
->>>>>>> 0c1eadde4265e6e0d32a2860268c179790abd638
 
 #    def __unicode__(self):
 #        return self.report
