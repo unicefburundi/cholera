@@ -174,6 +174,8 @@ EMAIL_PORT = 587
 
 EMAIL_USE_TLS = True
 
+SITE_ID = 1
+
 try:
     from localsettings import *
 except ImportError:

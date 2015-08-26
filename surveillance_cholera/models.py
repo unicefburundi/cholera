@@ -16,7 +16,7 @@ class PhoneNumber(models.Model):
 
 
 class Patient(models.Model):
-    patient_id = models.CharField(max_length=50, primary_key=True)
+    patient_id = models.CharField(unique=True, max_length=50)
     colline_name = models.CharField(max_length=50)
     age = models.CharField(max_length=10)
     sexe = models.CharField(max_length=10)
@@ -26,22 +26,24 @@ class Patient(models.Model):
             return self.patient_id
 
 class Province(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(unique=True, max_length=20)
+    code = models.IntegerField(unique=True)
 
     def __unicode__(self):
         return self.name
 
 class District(models.Model):
-    name = models.CharField(max_length=40)
+    name = models.CharField(unique=True, max_length=40)
     province = models.ForeignKey(Province)
+    code = models.IntegerField(unique=True)
 
     def __unicode__(self):
         return self.name
 
 class CDS(models.Model):
-    name = models.CharField(max_length=40)
+    name = models.CharField( max_length=40)
     district = models.ForeignKey(District)
-    code = models.CharField(max_length=6)
+    code = models.CharField(unique=True, max_length=6)
 
     def __unicode__(self):
         return self.name
@@ -69,44 +71,6 @@ class TrackPatientMessage(models.Model):
     exit_date = models.DateField()
     exit_status = models.CharField(max_length=20)
     report = models.ForeignKey(Report)
-
-
-#class GeneralUser(models.Model):
-#    person = models.ForeignKey(Person)
-#    cds = models.ForeignKey(CDS)
-#    login = models.CharField(max_length=40)
-#    password = models.CharField(max_length=40)
-
-#    def __unicode__(self):
-#        return self.person
-
-
-#class ProvinceUser(models.Model):
-#    person = models.ForeignKey(Person)
-#    province = models.ForeignKey(Province)
-#    login = models.CharField(max_length=40)
-#    password = models.CharField(max_length=40)
-
-#    def __unicode__(self):
-#        return self.login
-
-#class DistrictUser(models.Model):
-#    person = models.ForeignKey(Person)
-#    district = models.ForeignKey(District)
-#    login = models.CharField(max_length=40)
-#    password = models.CharField(max_length=40)
-
-#    def __unicode__(self):
-#        return self.district
-
-#class CDSUser(models.Model):
-#    person = models.ForeignKey(Person)
-#    cds = models.ForeignKey(CDS)
-#    login = models.CharField(max_length=40)
-#    password = models.CharField(max_length=40)
-
-#    def __unicode__(self):
-#        return self.person
 
 class Session(models.Model):
     report = models.ForeignKey(Reporter)
