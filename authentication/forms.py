@@ -14,11 +14,11 @@ class UserProfileForm(forms.ModelForm):
         self.fields['first_name'].initial = self.instance.user.first_name
         self.fields['last_name'].initial = self.instance.user.last_name
 
-        def save(self, *args, **kw):
-            super(UserProfileForm, self).save(*args, **kw)
-            self.instance.user.first_name = self.cleaned_data.get('first_name')
-            self.instance.user.last_name = self.cleaned_data.get('last_name')
-            self.instance.user.save()
+    def save(self, *args, **kw):
+        super(UserProfileForm, self).save(*args, **kw)
+        self.instance.user.first_name = self.cleaned_data.get('first_name')
+        self.instance.user.last_name = self.cleaned_data.get('last_name')
+        self.instance.user.save()
 
     class Meta:
         model = UserProfile
