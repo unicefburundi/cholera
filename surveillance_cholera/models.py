@@ -72,7 +72,7 @@ class TrackPatientMessage(models.Model):
     exit_status = models.CharField(max_length=20)
     report = models.ForeignKey(Report)
 
-<<<<<<< HEAD
+
 
 #class GeneralUser(models.Model):
 #    person = models.ForeignKey(Person)
