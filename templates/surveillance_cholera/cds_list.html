@@ -1,7 +1,7 @@
 {% extends "base_layout.html" %}
 {% block content %}
 {% if object_list %}
-    <table id="person" class="table table-bordered">
+    <table id="list_cds" class="table table-bordered">
         {% for cds in object_list %}
             <thead>
               <tr>
@@ -11,10 +11,11 @@
               </tr>
             </thead>
             <tr>
-                <td>{{ cds.name }}</td>
-                <td>{{ cds.code}}</td>
-                <td>{{ cds.district}}</td>
-                {# <td><a href="{% url 'cds_detail' p={{ cds.id }} %}" class="btn btn_link">detail</a></td> #}
+                {% with cds.id as code  %}
+                    <td>{{ cds.name }}</td>
+                    <td><a href="{% url 'cds_detail' pk=code %} " class="btn btn_link">{{ cds.code}}</a></td>
+                    <td>{{ cds.district}}</td>
+                {% endwith %}
             </tr>
         {% endfor %}
     </table>
