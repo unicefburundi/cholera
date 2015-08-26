@@ -15,7 +15,6 @@ class UserProfileForm(forms.ModelForm):
         exclude = ("user",)
 
     def clean(self):
-        # import ipdb; ipdb.set_trace()
         cleaned_data = super(UserProfileForm, self).clean()
         level = cleaned_data['level']
         moh_facility = cleaned_data['moh_facility']
@@ -28,8 +27,8 @@ class UserProfileForm(forms.ModelForm):
         elif level=='BPS':
             if Province.objects.filter(name=moh_facility) is not []:
                 self.add_error('moh_facility',_("BPS doesn't exit!"))
-        # else:
-        #     cleaned_data['moh_facility'] = ''
+        else:
+            return True
 
 
 class UserForm(forms.ModelForm):

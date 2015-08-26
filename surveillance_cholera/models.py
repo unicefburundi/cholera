@@ -2,7 +2,7 @@ from django.db import models
 from authentication.models import UserProfile
 
 class Person(models.Model):
-    user = models.OneToOneField(UserProfile, unique=True)
+    user = models.OneToOneField(UserProfile)
 
     def __unicode__(self):
             return self.user.user.username
@@ -16,7 +16,7 @@ class PhoneNumber(models.Model):
 
 
 class Patient(models.Model):
-    patient_id = models.CharField(max_length=50, primary_key=True)
+    patient_id = models.CharField(unique=True, max_length=50)
     colline_name = models.CharField(max_length=50)
     age = models.CharField(max_length=10)
     sexe = models.CharField(max_length=10)
@@ -26,22 +26,24 @@ class Patient(models.Model):
             return self.patient_id
 
 class Province(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(unique=True, max_length=20)
+    code = models.IntegerField(unique=True)
 
     def __unicode__(self):
         return self.name
 
 class District(models.Model):
-    name = models.CharField(max_length=40)
+    name = models.CharField(unique=True, max_length=40)
     province = models.ForeignKey(Province)
+    code = models.IntegerField(unique=True)
 
     def __unicode__(self):
         return self.name
 
 class CDS(models.Model):
-    name = models.CharField(max_length=40)
+    name = models.CharField( max_length=40)
     district = models.ForeignKey(District)
-    code = models.CharField(max_length=6)
+    code = models.CharField(unique=True, max_length=6)
 
     def __unicode__(self):
         return self.name
@@ -70,6 +72,7 @@ class TrackPatientMessage(models.Model):
     exit_status = models.CharField(max_length=20)
     report = models.ForeignKey(Report)
 
+<<<<<<< HEAD
 
 #class GeneralUser(models.Model):
 #    person = models.ForeignKey(Person)
@@ -112,6 +115,12 @@ class TrackPatientMessage(models.Model):
 #    report = models.ForeignKey(Reporter)
 #    operation = models.CharField(max_length=10)
 #    level = models.IntegerField()
+=======
+class Session(models.Model):
+    report = models.ForeignKey(Reporter)
+    operation = models.CharField(max_length=10)
+    level = models.IntegerField()
+>>>>>>> 0c1eadde4265e6e0d32a2860268c179790abd638
 
 #    def __unicode__(self):
 #        return self.report
