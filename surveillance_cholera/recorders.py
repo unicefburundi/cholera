@@ -272,7 +272,7 @@ def record_patient(args):
 	the_created_report = Report.objects.create(patient = the_created_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'].replace("+", " "), report_type = args['message_type'])
 
 	args['valide'] = True
-	args['info_to_contact'] = "Votre rapport a ete bien enregistre. Merci."
+	args['info_to_contact'] = "Ce patient a ete bien enregistre avec l identifiant : "+id_patient+" Merci."
 #-----------------------------------------------------------------
 def check_validity_of_id(args):
 	'''This function checks if the patient id is known in the system'''
