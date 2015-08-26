@@ -108,13 +108,13 @@ class TrackPatientMessage(models.Model):
 #    def __unicode__(self):
 #        return self.person
 
-class Session(models.Model):
-    report = models.ForeignKey(Reporter)
-    operation = models.CharField(max_length=10)
-    level = models.IntegerField()
+#class Session(models.Model):
+#    report = models.ForeignKey(Reporter)
+#    operation = models.CharField(max_length=10)
+#    level = models.IntegerField()
 
-    def __unicode__(self):
-        return self.report
+#    def __unicode__(self):
+#        return self.report
 
 class Temporary(models.Model):
     '''
