@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -42,6 +43,7 @@ INSTALLED_APPS = (
     'authentication',
     'djangular',
     'guardian',
+    'django_extensions',
     'registration',
 )
 
@@ -143,7 +145,7 @@ GROUP_PERMISSIONS = {
 #-----------------------------------------------------------------------------------
 LOGIN_URL = reverse_lazy("login")
 LOGOUT_URL = reverse_lazy("logout")
-LOGIN_REDIRECT_URL = reverse_lazy("home")
+LOGIN_REDIRECT_URL = reverse_lazy("edit_profile")
 LOGOUT_REDIRECT_URL = reverse_lazy("home")
 
 #-----------------------------------------------------------------------------------
@@ -156,6 +158,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 ANONYMOUS_USER_ID = -1
+
+ACCOUNT_ACTIVATION_DAYS = 30
 
 #for e-mail
 INTERNAL_IPS = '127.0.0.1'
