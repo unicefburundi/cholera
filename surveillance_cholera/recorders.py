@@ -279,7 +279,23 @@ def record_patient(args):
 #-----------------------------------------------------------------
 def check_validity_of_id(args):
 	'''This function checks if the patient id is known in the system'''
-	patient_id = args['text'].split('+')[1]
+	
+	concerned_reporter = Reporter.objects.filter(phone_number = args['phone'])
+	if len(concerned_reporter) < 1:
+		#This person is not in the list of reporters
+		args['valide'] = False
+		args['info_to_contact'] = "Vous ne vous etes pas enregistre pour pouvoir donner des rapports."
+		return
+	
+	one_concerned_reporter = concerned_reporter[0]
+
+	one_concerned_cds = one_concerned_reporter.cds
+
+	cds_code = one_concerned_cds.code
+
+
+
+	patient_id = cds_code+""+args['text'].split('+')[1]
 	patient = Patient.objects.filter(patient_id = patient_id)
 	if len(patient) < 1:
 		args['valide'] = False
@@ -357,7 +373,9 @@ def record_track_message(args):
 
 	one_concerned_cds = one_concerned_reporter.cds
 
-	concerned_patient = Patient.objects.filter(patient_id = args['text'].split('+')[1])
+	cds_code = one_concerned_cds.code
+
+	concerned_patient = Patient.objects.filter(patient_id = cds_code+""+args['text'].split('+')[1])
 
 	one_concerned_patient = concerned_patient[0]
 
