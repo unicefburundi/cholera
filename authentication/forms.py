@@ -28,8 +28,8 @@ class UserProfileForm(forms.ModelForm):
         elif level=='BPS':
             if Province.objects.filter(name=moh_facility) is not []:
                 self.add_error('moh_facility',_("BPS doesn't exit!"))
-        # else:
-        #     cleaned_data['moh_facility'] = ''
+        else:
+            return True
 
 
 class UserForm(forms.ModelForm):
