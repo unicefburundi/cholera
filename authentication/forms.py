@@ -1,7 +1,6 @@
 from django import forms
 from .models import UserProfile
 from django.contrib.auth.models import User
-from surveillance_cholera.models import District, Province
 from django.utils.translation import ugettext as _
 
 class UserProfileForm(forms.ModelForm):
@@ -14,8 +13,8 @@ class UserProfileForm(forms.ModelForm):
         self.fields['first_name'].initial = self.instance.user.first_name
         self.fields['last_name'].initial = self.instance.user.last_name
 
-    def save(self, *args, **kw):
-        super(UserProfileForm, self).save(*args, **kw)
+    def save(self, *args, **kwargs):
+        super(UserProfileForm, self).save(*args, **kwargs)
         self.instance.user.first_name = self.cleaned_data.get('first_name')
         self.instance.user.last_name = self.cleaned_data.get('last_name')
         self.instance.user.save()
