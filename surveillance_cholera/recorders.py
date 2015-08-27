@@ -285,6 +285,11 @@ def record_patient(args):
 	
 	full_entry_date_in_date = datetime.datetime.strptime(full_entry_date_in_string, "%d%m%Y").date()
 
+	if full_entry_date_in_date > datetime.datetime.now().date():
+		#The reporter must not record a partient who haven't yet come
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. La date d arrivee du patient n est pas valide."
+		return
 
 	#Let's record a patient
 	the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2], age = args['text'].split(' ')[3], sexe = args['text'].split(' ')[4], intervention = args['text'].split(' ')[5], entry_date = full_entry_date_in_date)
