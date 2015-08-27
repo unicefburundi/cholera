@@ -7,33 +7,31 @@
         <div class="col-md-3">
             <h1>Description </h1>
             <dl class="dl-horizontal">
-                <dt>Name of the CDS : </dt>
+                <dt>Name of the Province : </dt>
                 <p> {{object.name}}</p>
-                <dt>Code of the CDS : </dt>
+                <dt>Code of the Province : </dt>
                 <p> {{object.code}}</p>
-                <dt>District : </dt>
-                <p> {{object.district}}</p>
             </dl>
         </div>
         <div class="col-md-9">
-            <h1>Patients at  {{ object.name|  capfirst }} CDS  </h1>
+            <h1>Districts at  {{ object.name|  capfirst }} Province </h1>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>ID du Patient</th>
-                        <th>Colline</th>
-                        <th>Intervention</th>
+                        <th>Name of the District</th>
+                        <th>Code</th>
+                        <th>Number of cases</th>
                     </tr>
                 </thead>
                 <tr>
-                    <td> <a href="/">125904</a> </td>
-                    <td>Butaganzwa</td>
-                    <td>Hospitalized</td>
+                    <td> <a href="/">BubanzaI</a> </td>
+                    <td>120204</td>
+                    <td>6</td>
                 </tr>
                 <tr>
-                    <td> <a href="/">125734</a> </td>
-                    <td>Butaganzwa</td>
-                    <td>Refered</td>
+                    <td> <a href="/">BubanzaII</a> </td>
+                    <td>120224</td>
+                    <td>2</td>
                 </tr>
             </table>
         </div>

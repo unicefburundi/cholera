@@ -1,26 +1,26 @@
 {% extends "base_layout.html" %}
 {% block content %}
 {% if object_list %}
-    <div class="container">
-        <h3>Centre de Sante.</h3>
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
     <table id="list_cds" class="table table-bordered">
         <thead>
               <tr>
-                <th>Name</th>
-                <th>Code</th>
-                <th>District</th>
-                <th>Status</th>
+                <th>Patient Id</th>
+                <th>Colline</th>
+                <th>Age</th>
+                <th>Sexe</th>
+                <th>Intervention</th>
+                <th>Entry Date</th>
               </tr>
             </thead>
         {% for cds in object_list %}
             <tr>
                 {% with cds.id as code  %}
-                    <td>{{ cds.name }}</td>
-                    <td><a href="{% url 'cds_detail' pk=code %} " class="btn btn_link">{{ cds.code}}</a></td>
-                    <td>{{ cds.district}}</td>
-                    <td>{{cds.status}}</td>
+                    <td>{{ cds.patient_id }}</td>
+                    <td>{{ cds.colline_name}}</td>
+                    <td>{{cds.age}}</td>
+                    <td>{{cds.sexe}}</td>
+                    <td>{{cds.intervention}}</td>
+                    <td>{{cds.date_entry}}</td>
                 {% endwith %}
             </tr>
         {% endfor %}
@@ -41,11 +41,8 @@
             </span>
         </div>
     {% endif %}
-    </div>
-    <div class="col-md-2"></div>
-
 {% else %}
+    <h3>Centre de Sante.</h3>
     <p>No CDS found!!! :(</p>
 {% endif %}
-    </div>
 {% endblock content %}

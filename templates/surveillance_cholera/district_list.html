@@ -2,7 +2,7 @@
 {% block content %}
 {% if object_list %}
     <div class="container">
-        <h3>Centre de Sante.</h3>
+        <h3>Districts Sanitaires.</h3>
     <div class="col-md-2"></div>
     <div class="col-md-8">
     <table id="list_cds" class="table table-bordered">
@@ -10,17 +10,15 @@
               <tr>
                 <th>Name</th>
                 <th>Code</th>
-                <th>District</th>
-                <th>Status</th>
+                <th>Province</th>
               </tr>
             </thead>
         {% for cds in object_list %}
             <tr>
                 {% with cds.id as code  %}
-                    <td>{{ cds.name }}</td>
-                    <td><a href="{% url 'cds_detail' pk=code %} " class="btn btn_link">{{ cds.code}}</a></td>
-                    <td>{{ cds.district}}</td>
-                    <td>{{cds.status}}</td>
+                    <td><a href="{% url 'district_detail' pk=code %} " class="btn btn_link">{{ cds.name }}</a></td>
+                    <td>{{ cds.code}}</td>
+                    <td>{{ cds.province}}</td>
                 {% endwith %}
             </tr>
         {% endfor %}
@@ -45,7 +43,7 @@
     <div class="col-md-2"></div>
 
 {% else %}
-    <p>No CDS found!!! :(</p>
+    <p>No District found!!! :(</p>
 {% endif %}
     </div>
 {% endblock content %}
