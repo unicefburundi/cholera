@@ -77,10 +77,7 @@ def handel_rapidpro_request(request):
 	#Let's eliminate unnecessary spaces in the incoming message
 	eliminate_unnecessary_spaces(incoming_data)
 
-	print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-	print("The bellow row must be deleted.")
-	return response
-	print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
 
 	#Let's check which kind of message this message is.
 	identify_message(incoming_data)
