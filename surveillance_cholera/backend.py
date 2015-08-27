@@ -33,7 +33,16 @@ def check_session(args):
 def eliminate_unnecessary_spaces(args):
 	'''This function eliminate unnecessary spaces in an the incoming message'''
 	the_incoming_message = args['text']
-	the_new_message = re.sub(' +',' ',the_incoming_message)
+	print("The text before sub "+the_incoming_message)
+	#the_new_message = re.sub(' +',' ',the_incoming_message)
+
+	#Messages from RapidPro comes with spaces replaced by '+'
+	#Let's replace those '+' (one or more) by one space
+	the_new_message = re.sub('[+]+',' ',the_incoming_message)
+
+	#Let's eliminate spaces at the begining and the end of the message
+	the_new_message = the_new_message.strip()
+	print("The text after sub "+the_new_message)
 	args['text'] = the_new_message
 
 	
@@ -68,6 +77,10 @@ def handel_rapidpro_request(request):
 	#Let's eliminate unnecessary spaces in the incoming message
 	eliminate_unnecessary_spaces(incoming_data)
 
+	print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	print("The bellow row must be deleted.")
+	return response
+	print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
 	#Let's check which kind of message this message is.
 	identify_message(incoming_data)
