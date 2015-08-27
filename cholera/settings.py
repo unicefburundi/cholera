@@ -108,6 +108,10 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'staticfiles'),
 )
 
+FIXTURE_DIRS = (
+   os.path.join(BASE_DIR, 'fixtures'),
+)
+
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),

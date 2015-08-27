@@ -1,5 +1,6 @@
 from django.db import models
 from authentication.models import UserProfile
+from django.utils.translation import ugettext as _
 
 class Person(models.Model):
     user = models.OneToOneField(UserProfile)
@@ -34,6 +35,7 @@ class Province(models.Model):
         return self.name
 
 class District(models.Model):
+
     name = models.CharField(unique=True, max_length=40)
     province = models.ForeignKey(Province)
     code = models.IntegerField(unique=True)
@@ -42,9 +44,19 @@ class District(models.Model):
         return self.name
 
 class CDS(models.Model):
+    STATUS_CHOICES = (
+        ('Pub', 'Public'),
+        ('Con', 'Conf'),
+        ('Priv', 'Prive'),
+        ('Ass', 'Ass'),
+        ('HPub', 'HPublic'),
+        ('HCon', 'HConf'),
+        ('HPrv', 'HPrive'),
+    )
     name = models.CharField( max_length=40)
     district = models.ForeignKey(District)
     code = models.CharField(unique=True, max_length=6)
+    status = models.CharField(max_length=4, choices=STATUS_CHOICES, blank=True, null=True, help_text=_('Either Public, Conf, Ass, Prive  or Hospital status.'))
 
     def __unicode__(self):
         return self.name
