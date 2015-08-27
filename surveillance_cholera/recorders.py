@@ -251,11 +251,11 @@ def record_patient(args):
 	cds_code = one_concerned_cds.code
 		
 
-	the_time = time.strftime("%Y%m%d")
-	year = the_time[2:4]
-	month = the_time[4:6]
-	day = the_time[6:8]
-	the_reversed_date = day+""+month+""+year
+	#the_time = time.strftime("%Y%m%d")
+	#year = the_time[2:4]
+	#month = the_time[4:6]
+	#day = the_time[6:8]
+	#the_reversed_date = day+""+month+""+year
 
 	#The id of a patient is made like this : cds_code+date+patient_number
 	#id_patient = cds_code+""+the_reversed_date+""+args['text'].split('+')[1]
@@ -272,8 +272,22 @@ def record_patient(args):
 		args['info_to_contact'] = "Un patient avec cet identifiant existe deja. Veuillez changer l identifiant du patient."
 		return
 
+	
+	#Let's work on the entry date of a patient. It's a part of the patient id sent by the reporter.
+	entry_date_in_string = args['text'].split(' ')[1][0:6]
+	if len(entry_date_in_string) < 6:
+		args['valide'] = False
+		args['info_to_contact'] = "Vous avez envoye une valeur tres courte pour l identifiant du patient."
+		return
+
+	full_entry_date_in_string = entry_date_in_string[0:2]+""+entry_date_in_string[2:4]+"20"+entry_date_in_string[4:6]
+
+	
+	full_entry_date_in_date = datetime.datetime.strptime(full_entry_date_in_string, "%d%m%Y").date()
+
+
 	#Let's record a patient
-	the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2], age = args['text'].split(' ')[3], sexe = args['text'].split(' ')[4], intervention = args['text'].split(' ')[5])
+	the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2], age = args['text'].split(' ')[3], sexe = args['text'].split(' ')[4], intervention = args['text'].split(' ')[5], entry_date = full_entry_date_in_date)
 	
 	#the_created_report = Report.objects.create(patient = the_created_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'].replace("+", " "), report_type = args['message_type'])
 	the_created_report = Report.objects.create(patient = the_created_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'], report_type = args['message_type'])
