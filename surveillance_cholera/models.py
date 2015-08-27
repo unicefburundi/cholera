@@ -21,6 +21,7 @@ class Patient(models.Model):
     age = models.CharField(max_length=10)
     sexe = models.CharField(max_length=10)
     intervention = models.CharField(max_length=50)
+    entry_date = models.DateField()
 
     def __unicode__(self):
             return self.patient_id

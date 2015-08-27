@@ -56,7 +56,7 @@ def check_cds(args):
 		args['info_to_contact'] = "Le code cds envoye est reconnu."
 	else:
 		args['valide'] = False
-		args['info_to_contact'] = "Le code cds envoye n est enregistre dans le systeme."
+		args['info_to_contact'] = "Le code cds envoye n est pas enregistre dans le systeme."
 
 def check_supervisor_phone_number(args):
 	''' This function checks if the phone number of the supervisor is well written '''
