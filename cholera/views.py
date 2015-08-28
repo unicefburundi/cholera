@@ -13,6 +13,7 @@ def statistics(request):
     datum = None
     formset = SearchForm()
     if request.method == 'POST':
+        # import ipdb; ipdb.set_trace()
         formset = SearchForm(request.POST)
         if formset.is_valid() :
             datum = formset.cleaned_data
@@ -20,4 +21,7 @@ def statistics(request):
                 results = PatientTable(Patient.objects.filter(date__range=[datum['start_date'], datum['end_date']], ))
                 RequestConfig(request, paginate={"per_page": 25}).configure(results)
                 return render(request, 'statistics.html', {'results' : results})
-    return render(request, 'statistics.html', {'form' : formset})
+
+    all_patients = PatientTable(Patient.objects.all())
+    RequestConfig(request, paginate={"per_page":25}).configure(all_patients)
+    return render(request, 'statistics.html', {'form' : formset, 'all_patients':all_patients })

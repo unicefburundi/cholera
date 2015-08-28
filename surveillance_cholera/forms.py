@@ -23,8 +23,8 @@ class SearchForm(forms.ModelForm):
         super(SearchForm, self).__init__(*args, **kwargs)
         self.formfield_callback = make_custom_datefield
 
-    def clean(self):
-        import ipdb; ipdb.set_trace()
+    def clean(self, *args, **kwargs):
+        # import ipdb; ipdb.set_trace()
         cleaned_data = super(SearchForm, self).clean()
         start_date = cleaned_data['start_date']
         end_date = cleaned_data['end_date']
