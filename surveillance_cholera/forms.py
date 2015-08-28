@@ -13,7 +13,7 @@ def make_custom_datefield(f):
 class SearchForm(forms.ModelForm):
 
     province = forms.ModelChoiceField(queryset=Province.objects.all())
-    districts = forms.ModelChoiceField(queryset=District.objects.none())
+    districts = forms.ModelChoiceField(queryset=District.objects.all())
     cds = forms.ModelChoiceField(queryset=CDS.objects.none())
     start_date = forms.DateField()
     end_date = forms.DateField()
