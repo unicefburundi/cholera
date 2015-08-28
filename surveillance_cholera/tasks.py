@@ -9,7 +9,7 @@ def ask_update_on_patient(request):
 	the_current_date = datetime.datetime.now().date()
 
 	#Let's do a filter of patients who came on the third day before today.
-	filtered_patients = Patient.objects.filter(entry_date=the_current_date - datetime.timedelta(days=3))
+	filtered_patients = Patient.objects.filter(date_entry=the_current_date - datetime.timedelta(days=3))
 
 
 	if len(filtered_patients) > 0:
@@ -29,7 +29,7 @@ def ask_update_on_patient(request):
 
 				an_object = {}
 				an_object['patient_id'] = patient.patient_id
-				an_object['entry_date'] = patient.entry_date
+				an_object['entry_date'] = patient.date_entry
 				an_object['reporter_phone'] = the_reporter_s_phone_number
 				an_object['message'] = "Vous n avez donne aucune nouvelle sur le patient "+patient.patient_id
 
