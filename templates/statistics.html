@@ -1,0 +1,23 @@
+{% extends "base_layout.html" %}
+{% block content %}
+    <form action="" method="post" id="post-form">
+        {% csrf_token %}
+        <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <div class="form-group list-group">
+              {% if form %}
+                {% for field in form %}
+                    <div>{{ field.label_tag }}: {{ field }}</div>
+                    {% for error in field.errors %}
+                      <p  style="color: red;">{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+              <button type="submit" class="btn btn-default">Submit</button>
+          </div>
+        </div>
+        <div class="col-lg-4"></div>
+        </div>
+    </form>
+{% endblock content %}

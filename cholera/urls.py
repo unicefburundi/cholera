@@ -6,6 +6,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
     url(r'^$', 'cholera.views.home', name='home'),
+    url(r'^statistics/$', 'cholera.views.statistics', name='statistics'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^profile/', include('authentication.urls')),
     url(r'^accounts/', include('registration.backends.simple.urls')),
