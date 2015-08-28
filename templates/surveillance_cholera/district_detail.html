@@ -1,0 +1,44 @@
+{% extends "base_layout.html" %}
+{% block content %}
+{% if object %}
+<h2>Centre de sante : {{ object.name|  capfirst }}</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <h1>Description </h1>
+            <dl class="dl-horizontal">
+                <dt>Name of the District : </dt>
+                <p> {{object.name}}</p>
+                <dt>Code of the District : </dt>
+                <p> {{object.code}}</p>
+                <dt>Province : </dt>
+                <p> {{object.province}}</p>
+            </dl>
+        </div>
+        <div class="col-md-9">
+            <h1>CDS at  {{ object.name|  capfirst }} District  </h1>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name of the CDS</th>
+                        <th>Code</th>
+                        <th>Number of cases</th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td> <a href="/">BubanzaI</a> </td>
+                    <td>120204</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td> <a href="/">BubanzaII</a> </td>
+                    <td>120224</td>
+                    <td>2</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+{% endif %}
+{% endblock content %}

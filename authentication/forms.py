@@ -1,34 +1,28 @@
 from django import forms
 from .models import UserProfile
 from django.contrib.auth.models import User
-from surveillance_cholera.models import CDS, District, Province
 from django.utils.translation import ugettext as _
 
 class UserProfileForm(forms.ModelForm):
+    first_name = forms.CharField(label=_(u'First Name'), max_length=30)
+    last_name = forms.CharField(label=_(u'Last Name'), max_length=30)
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(UserProfileForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].initial = self.instance.user.first_name
+        self.fields['last_name'].initial = self.instance.user.last_name
+
+    def save(self, *args, **kwargs):
+        super(UserProfileForm, self).save(*args, **kwargs)
+        self.instance.user.first_name = self.cleaned_data.get('first_name')
+        self.instance.user.last_name = self.cleaned_data.get('last_name')
+        self.instance.user.save()
 
     class Meta:
         model = UserProfile
-        exclude = ("user",)
+        exclude = ('user', 'moh_facility', 'level',)
 
-    def clean(self):
-        cleaned_data = super(UserProfileForm, self).clean()
-        level = cleaned_data['level']
-        moh_facility = cleaned_data['moh_facility']
-        if level == 'CDS':
-            if CDS.objects.filter(name=moh_facility) is not []:
-                self.add_error('moh_facility',_("CDS doesn't exit!"))
-        elif level=='BDS':
-            if District.objects.filter(name=moh_facility) is not []:
-                self.add_error('moh_facility',_("BDS doesn't exit!"))
-        elif level=='BPS':
-            if Province.objects.filter(name=moh_facility) is not []:
-                self.add_error('moh_facility',_("BPS doesn't exit!"))
-        else:
-            return True
 
 
 class UserForm(forms.ModelForm):
