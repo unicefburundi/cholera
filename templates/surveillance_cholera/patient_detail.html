@@ -1,0 +1,35 @@
+{% extends "base_layout.html" %}
+{% block content %}
+{% if object %}
+<h2>Patient numero : {{ object.patient_id}}</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-9">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Patient ID</th>
+                        <th>Sex</th>
+                        <th>Age</th>
+                        <th>Colline Name</th>
+                        <th>Intervention</th>
+                        <th>Date Entry</th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td> {{ object.patient_id}}</td>
+                    <td>{{ object.sexe}}</td>
+                    <td>{{ object.age}}</td>
+                    <td>{{ object.colline_name}}</td>
+                    <td>{{ object.intervention}}</td>
+                    <td>{{ object.date_entry}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+{% endif %}
+{% endblock content %}
