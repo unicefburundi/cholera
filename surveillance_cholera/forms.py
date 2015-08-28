@@ -6,14 +6,14 @@ from datetime import date
 def make_custom_datefield(f):
     formfield = f.formfield()
     if isinstance(f, models.DateField) or isinstance(f, models.DateTimeField):
-        formfield.widget.format = '%m/%d/%Y'
+        formfield.widget.format = '%d/%m/%Y'
         formfield.widget.attrs.update({'class':'datePicker form-control', 'readonly':'true'})
     return formfield
 
 class SearchForm(forms.ModelForm):
 
     province = forms.ModelChoiceField(queryset=Province.objects.all())
-    districts = forms.ModelChoiceField(queryset=District.objects.all())
+    districts = forms.ModelChoiceField(queryset=District.objects.none())
     cds = forms.ModelChoiceField(queryset=CDS.objects.none())
     start_date = forms.DateField()
     end_date = forms.DateField()
@@ -35,4 +35,4 @@ class SearchForm(forms.ModelForm):
 
     class Meta:
         model = Patient
-        exclude = ('patient_id','colline_name', 'age', 'sexe', 'intervention', )
+        exclude = ('patient_id','colline_name', 'age', 'sexe', 'intervention', 'date_entry')

@@ -6,9 +6,7 @@ from .tasks import *
 urlpatterns = patterns('',
     # dashboard view for viewing all poll reports in one place
     url(r'external_request', handel_rapidpro_request, name="handel_request"),
-
-	url(r'test_task', ask_update_on_patient, name="test_task"),
-
+    url(r'test_task', ask_update_on_patient, name="test_task"),
     #CDS
     url(r'^cds/$', CDSListView.as_view(), name='cds_list'),
     url(r'^cds/(?P<pk>\d+)/$', CDSDetailView.as_view(), name='cds_detail'),
