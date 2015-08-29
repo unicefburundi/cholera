@@ -3,12 +3,6 @@ from django.utils.translation import ugettext as _
 from surveillance_cholera.models import *
 from datetime import date
 
-def make_custom_datefield(f):
-    formfield = f.formfield()
-    if isinstance(f, models.DateField) or isinstance(f, models.DateTimeField):
-        formfield.widget.format = '%d/%m/%Y'
-        formfield.widget.attrs.update({'class':'datePicker form-control', 'readonly':'true'})
-    return formfield
 
 class SearchForm(forms.Form):
     PROVINCES = Province.objects.values_list('id','name').distinct()
@@ -16,13 +10,14 @@ class SearchForm(forms.Form):
     province = forms.ChoiceField(choices=[(str(i),n) for i,n in PROVINCES])
     districts = forms.ChoiceField(choices=[('0', 'All'),])
     cds = forms.ChoiceField(choices=[('0', 'All'),])
-    start_date = forms.DateField()
-    end_date = forms.DateField()
-
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
-        super(SearchForm, self).__init__(*args, **kwargs)
-        self.formfield_callback = make_custom_datefield
+    start_date = forms.DateField(widget=forms.TextInput(attrs=
+                                {
+                                    'class':'datePicker'
+                                }))
+    end_date = forms.DateField(widget=forms.TextInput(attrs=
+                                {
+                                    'class':'datePicker'
+                                }))
 
     def clean(self, *args, **kwargs):
         # import ipdb; ipdb.set_trace()
