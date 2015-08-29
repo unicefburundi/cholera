@@ -10,11 +10,12 @@ def make_custom_datefield(f):
         formfield.widget.attrs.update({'class':'datePicker form-control', 'readonly':'true'})
     return formfield
 
-class SearchForm(forms.ModelForm):
-
-    province = forms.ModelChoiceField(queryset=Province.objects.all())
-    districts = forms.ModelChoiceField(queryset=District.objects.none())
-    cds = forms.ModelChoiceField(queryset=CDS.objects.none())
+class SearchForm(forms.Form):
+    PROVINCES = Province.objects.values_list('id','name').distinct()
+    # import ipdb; ipdb.set_trace()
+    province = forms.ChoiceField(choices=[(str(i),n) for i,n in PROVINCES])
+    districts = forms.ChoiceField(choices=[('0', 'All'),])
+    cds = forms.ChoiceField(choices=[('0', 'All'),])
     start_date = forms.DateField()
     end_date = forms.DateField()
 
@@ -25,14 +26,23 @@ class SearchForm(forms.ModelForm):
 
     def clean(self, *args, **kwargs):
         # import ipdb; ipdb.set_trace()
+        start_date = None
+        end_date = None
         cleaned_data = super(SearchForm, self).clean()
-        start_date = cleaned_data['start_date']
-        end_date = cleaned_data['end_date']
+        try:
+            start_date = cleaned_data['start_date']
+        except KeyError:
+            cleaned_data['end_date'] = date.today()
+        try:
+            end_date = cleaned_data['end_date']
+        except KeyError:
+            cleaned_data['end_date'] = date.today()
+
         if start_date and start_date > date.today():
             self.add_error('start_date',_("The Start Date should not be a date in the future."))
         if end_date and start_date and end_date <= start_date:
             self.add_error('end_date',_("The End Date should be a date after the Start Date"))
 
     class Meta:
-        model = Patient
-        exclude = ('patient_id','colline_name', 'age', 'sexe', 'intervention', 'date_entry')
+        model = SearchModel
+        exclude = []

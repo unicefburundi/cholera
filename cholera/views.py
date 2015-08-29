@@ -35,6 +35,7 @@ def statistics(request):
         # import ipdb; ipdb.set_trace()
         formset = SearchForm(request.POST)
         if formset.is_valid() :
+            import ipdb; ipdb.set_trace()
             datum = formset.cleaned_data
             if datum['cds']:
                 results = PatientTable(Patient.objects.filter(date__range=[datum['start_date'], datum['end_date']], ))

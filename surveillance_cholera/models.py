@@ -96,3 +96,6 @@ class Temporary(models.Model):
     def __unicode__(self):
         return self.phone_number
 
+class SearchModel(models.Model):
+    pass
+
