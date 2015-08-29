@@ -31,11 +31,10 @@ def get_districts(request, province_id):
 def statistics(request):
     datum = None
     formset = SearchForm()
+    # import ipdb; ipdb.set_trace()
     if request.method == 'POST':
-        # import ipdb; ipdb.set_trace()
         formset = SearchForm(request.POST)
         if formset.is_valid() :
-            import ipdb; ipdb.set_trace()
             datum = formset.cleaned_data
             if datum['cds']:
                 results = PatientTable(Patient.objects.filter(date__range=[datum['start_date'], datum['end_date']], ))

@@ -6,32 +6,28 @@ from datetime import date
 
 class SearchForm(forms.Form):
     PROVINCES = Province.objects.values_list('id','name').distinct()
-    # import ipdb; ipdb.set_trace()
-    province = forms.ChoiceField(choices=[(str(i),n) for i,n in PROVINCES])
-    districts = forms.ChoiceField(choices=[('0', 'All'),])
-    cds = forms.ChoiceField(choices=[('0', 'All'),])
+    province = forms.ChoiceField(widget = forms.Select(), choices=[('', '---------')] + [(str(i),n) for i,n in PROVINCES])
+    districts = forms.ChoiceField(widget = forms.Select(), choices=[('', '---------')],  required=False)
+    cds = forms.ChoiceField(widget = forms.Select(), choices=[('', '---------')], required=False)
     start_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
     end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
 
-    def clean(self, *args, **kwargs):
-        # import ipdb; ipdb.set_trace()
-        start_date = None
-        end_date = None
-        cleaned_data = super(SearchForm, self).clean()
-        try:
-            start_date = cleaned_data['start_date']
-        except KeyError:
-            cleaned_data['end_date'] = date.today()
-        try:
-            end_date = cleaned_data['end_date']
-        except KeyError:
-            cleaned_data['end_date'] = date.today()
+    # def clean(self, *args, **kwargs):
 
-        if start_date and start_date > date.today():
-            self.add_error('start_date',_("The Start Date should not be a date in the future."))
-        if end_date and start_date and end_date <= start_date:
-            self.add_error('end_date',_("The End Date should be a date after the Start Date"))
+    #     start_date = None
+    #     end_date = None
+    #     cleaned_data = super(SearchForm, self).clean()
+    #     try:
+    #         start_date = cleaned_data['start_date'][0]
+    #     except KeyError:
+    #         cleaned_data['end_date'] = date.today()
+    #     try:
+    #         end_date = cleaned_data['end_date'][0]
+    #     except KeyError:
+    #         cleaned_data['end_date'] = date.today()
 
-    class Meta:
-        model = SearchModel
-        exclude = []
+    #     if start_date and start_date > date.today():
+    #         self.add_error('start_date',_("The Start Date should not be a date in the future."))
+    #     if end_date and start_date and end_date <= start_date:
+    #         self.add_error('end_date',_("The End Date should be a date after the Start Date"))
+    #     return True
