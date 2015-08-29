@@ -10,14 +10,8 @@ class SearchForm(forms.Form):
     province = forms.ChoiceField(choices=[(str(i),n) for i,n in PROVINCES])
     districts = forms.ChoiceField(choices=[('0', 'All'),])
     cds = forms.ChoiceField(choices=[('0', 'All'),])
-    start_date = forms.DateField(widget=forms.TextInput(attrs=
-                                {
-                                    'class':'datePicker'
-                                }))
-    end_date = forms.DateField(widget=forms.TextInput(attrs=
-                                {
-                                    'class':'datePicker'
-                                }))
+    start_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
+    end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
 
     def clean(self, *args, **kwargs):
         # import ipdb; ipdb.set_trace()

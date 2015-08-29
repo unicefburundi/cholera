@@ -1,6 +1,5 @@
 from surveillance_cholera.models import CDS, Temporary, Reporter, Patient, Report, TrackPatientMessage
 import re
-import time
 import datetime
 
 def check_number_of_values(args):
@@ -99,7 +98,7 @@ def temporary_record_reporter(args):
 	check_number_of_values(args)
 	if not args['valide']:
 		return
-	
+
 
 	#Let's check if the code of CDS is valid
 	check_cds(args)
@@ -113,14 +112,14 @@ def temporary_record_reporter(args):
 
 	#Let's temporary save the reporter
 	save_temporary_the_reporter(args)
-	
+
 
 def complete_registration(args):
 	the_sup_phone_number = args['text']
 	the_sup_phone_number_without_spaces = the_sup_phone_number.replace(" ", "")
 
 	the_existing_temp = Temporary.objects.filter(phone_number = args['phone'])
-	
+
 	if len(the_existing_temp) < 1:
 		args['valide'] = False
 		args['info_to_contact'] = "Votre message n est pas considere."
@@ -153,7 +152,7 @@ def check_patient_id(args):
 		args['info_to_contact'] = "Le numero du patient n est pas bien ecrit."
 	else:
 		args['valide'] = True
-		args['info_to_contact'] = "Le numero du patient est bien ecrit."	
+		args['info_to_contact'] = "Le numero du patient est bien ecrit."
 
 def check_colline_name(args):
 	''' This function checks if the colline name is valid. '''
@@ -162,7 +161,7 @@ def check_colline_name(args):
 def check_patient_age(args):
 	''' This function cheks if the age of the patient is valid. '''
 	The_patient_age = args['text'].split(' ')[3]
-	
+
 	#The below list will be putted in localsettings
 	valid_ages = ['A1','A2']
 
@@ -176,7 +175,7 @@ def check_patient_age(args):
 def check_gender(args):
 	''' This function checks if the value sent for gender is valid. '''
 	the_patient_gender = args['text'].split(' ')[4]
-	
+
 	#The bellow list will be putted in localsettings
 	gender_values = ['F','M']
 
@@ -191,7 +190,7 @@ def check_intervention(args):
 	''' This function is used to check if the value sent for intervention is valid. '''
 	intervention = args['text'].split(' ')[5]
 	capitalized_intervention = intervention.title()
-	
+
 	#The bellow list will be putted in localsettings
 	interventions_values = ['Hospi','Desh','Pr','Dd']
 
@@ -200,7 +199,7 @@ def check_intervention(args):
 		args['info_to_contact'] = "La valeur envoyee pour intervention n est pas valide."
 	else:
 		args['valide'] = True
-		args['info_to_contact'] = "La valeur envoyee pour intervention est valide."	
+		args['info_to_contact'] = "La valeur envoyee pour intervention est valide."
 
 def record_patient(args):
 	'''This function is used to record a patient'''
@@ -243,13 +242,13 @@ def record_patient(args):
 		args['valide'] = False
 		args['info_to_contact'] = "Vous ne vous etes pas enregistre pour pouvoir donner des rapports."
 		return
-	
+
 	one_concerned_reporter = concerned_reporter[0]
 
 	one_concerned_cds = one_concerned_reporter.cds
 
 	cds_code = one_concerned_cds.code
-		
+
 
 	#the_time = time.strftime("%Y%m%d")
 	#year = the_time[2:4]
@@ -261,7 +260,7 @@ def record_patient(args):
 	#id_patient = cds_code+""+the_reversed_date+""+args['text'].split('+')[1]
 	#the reporter sent : date+patient_number.
 	id_patient = cds_code+""+args['text'].split(' ')[1]
-	
+
 
 	#Let's check if the patient with the same id already exists
 	patient = Patient.objects.filter(patient_id = id_patient)
@@ -272,7 +271,7 @@ def record_patient(args):
 		args['info_to_contact'] = "Un patient avec cet identifiant existe deja. Veuillez changer l identifiant du patient."
 		return
 
-	
+
 	#Let's work on the entry date of a patient. It's a part of the patient id sent by the reporter.
 	entry_date_in_string = args['text'].split(' ')[1][0:6]
 	if len(entry_date_in_string) < 6:
@@ -282,7 +281,7 @@ def record_patient(args):
 
 	full_entry_date_in_string = entry_date_in_string[0:2]+""+entry_date_in_string[2:4]+"20"+entry_date_in_string[4:6]
 
-	
+
 	full_entry_date_in_date = datetime.datetime.strptime(full_entry_date_in_string, "%d%m%Y").date()
 
 	if full_entry_date_in_date > datetime.datetime.now().date():
@@ -293,7 +292,7 @@ def record_patient(args):
 
 	#Let's record a patient
 	the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2], age = args['text'].split(' ')[3], sexe = args['text'].split(' ')[4], intervention = args['text'].split(' ')[5], date_entry = full_entry_date_in_date)
-	
+
 	#the_created_report = Report.objects.create(patient = the_created_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'].replace("+", " "), report_type = args['message_type'])
 	the_created_report = Report.objects.create(patient = the_created_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'], report_type = args['message_type'])
 
@@ -302,14 +301,14 @@ def record_patient(args):
 #-----------------------------------------------------------------
 def check_validity_of_id(args):
 	'''This function checks if the patient id is known in the system'''
-	
+
 	concerned_reporter = Reporter.objects.filter(phone_number = args['phone'])
 	if len(concerned_reporter) < 1:
 		#This person is not in the list of reporters
 		args['valide'] = False
 		args['info_to_contact'] = "Vous ne vous etes pas enregistre pour pouvoir donner des rapports."
 		return
-	
+
 	one_concerned_reporter = concerned_reporter[0]
 
 	one_concerned_cds = one_concerned_reporter.cds
@@ -329,7 +328,7 @@ def check_validity_of_id(args):
 
 def check_exit_date(args):
 	'''This function checks if the exit date is valid.'''
-	
+
 	expression = r'^((0[1-9])|([1-2][0-9])|(3[01]))-((0[1-9])|(1[0-2]))-[0-9]{4}$'
 	if re.search(expression, args['text'].split(' ')[2]) is None:
 		args['valide'] = False
@@ -342,12 +341,12 @@ def check_exit_date(args):
 	else:
 		args['valide'] = True
 		args['info_to_contact'] = "La date indiquee est valide."
-		
+
 
 def patient_exit_status(args):
 	'''This function checks if the exit status is valid.'''
-	
-	#The below list will be moved to 
+
+	#The below list will be moved to
 	exit_status = ['Pd','Pg','Pr']
 
 	if args['text'].split(' ')[3].title() not in exit_status:
@@ -391,7 +390,7 @@ def record_track_message(args):
 		args['valide'] = False
 		args['info_to_contact'] = "Vous ne vous etes pas enregistre pour pouvoir donner des rapports."
 		return
-	
+
 	one_concerned_reporter = concerned_reporter[0]
 
 	one_concerned_cds = one_concerned_reporter.cds
@@ -406,7 +405,7 @@ def record_track_message(args):
 	the_created_report = Report.objects.create(patient = one_concerned_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'], report_type = args['message_type'])
 
 	#exit_date = datetime.datetime.strptime(args['text'].split('+')[2], '%Y-%m-%d')
-	
+
 
 
 	day_month_year = args['text'].split(' ')[2].split("-")
@@ -416,6 +415,6 @@ def record_track_message(args):
 
 	args['valide'] = True
 	args['info_to_contact'] = "Votre rapport a ete bien enregistre. Merci."
-	
 
-	
+
+
