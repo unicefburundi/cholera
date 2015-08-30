@@ -6,18 +6,42 @@
     <div class="row">
         <form action="" method="post" id="post-form">
         {% csrf_token %}
-        <select id = "selectbox1">
-          <option>Please Select Province</option>
-          {% for province in provinces %}
-            <option value = "{{province.id}}"> {{province.name}} </option>
-          {% endfor %}
-        </select>
-        <select id = "selectbox2">
-          <option>Select a District</option>
-        </select>
-        <select id = "selectbox3">
-          <option>Select a CDS</option>
-        </select>
+        <div class="col-md-10">
+            <div class="row">
+            <div class="col-md-4">
+                <select id = "selectbox1" class="form-control">
+                  <div><option>Please Select Province</option>
+                  {% for province in provinces %}
+                    <option value = "{{province.id}}"> {{province.name}} </option>
+                  {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select id = "selectbox2" class="form-control">
+                  <option>Select a District</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select id = "selectbox3" class="form-control">
+                  <option>Select a CDS</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <div>Start Date: <input type="text" id="start_date" class="datePicker"></div>
+                <div>End Date: <input type="text" id="end_date" class="datePicker"></div>
+            </div>
+        </div>
+        </div>
+        <div class="col-md-2">
+            <div class="row">
+                <button class ="btn btn-default">Download</button>
+            </div>
+            <div class="row">
+                <button type="submit" value="Filter" class ="btn btn-primary" >Filter</button>
+            </div>
+        </div>
     </form>
     </div>
     <div class="row">
