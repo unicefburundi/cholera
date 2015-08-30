@@ -16,17 +16,6 @@ class PhoneNumber(models.Model):
             return self.number
 
 
-class Patient(models.Model):
-    patient_id = models.CharField(unique=True, max_length=50)
-    colline_name = models.CharField(max_length=50)
-    age = models.CharField(max_length=10)
-    sexe = models.CharField(max_length=10)
-    intervention = models.CharField(max_length=50)
-    date_entry = models.DateField(blank=True)
-
-    def __unicode__(self):
-            return self.patient_id
-
 class Province(models.Model):
     name = models.CharField(unique=True, max_length=20)
     code = models.IntegerField(unique=True)
@@ -61,6 +50,17 @@ class CDS(models.Model):
     def __unicode__(self):
         return self.name
 
+class Patient(models.Model):
+    patient_id = models.CharField(unique=True, max_length=50)
+    colline_name = models.CharField(max_length=50)
+    cds = models.ForeignKey(CDS)
+    age = models.CharField(max_length=10)
+    sexe = models.CharField(max_length=10)
+    intervention = models.CharField(max_length=50)
+    date_entry = models.DateField(blank=True)
+
+    def __unicode__(self):
+            return self.patient_id
 
 class Reporter(models.Model):
     phone_number = models.CharField(max_length=12)
@@ -96,6 +96,4 @@ class Temporary(models.Model):
     def __unicode__(self):
         return self.phone_number
 
-class SearchModel(models.Model):
-    pass
 

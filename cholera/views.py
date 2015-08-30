@@ -45,3 +45,24 @@ def statistics(request):
     RequestConfig(request, paginate={"per_page":25}).configure(all_patients)
     return render(request, 'statistics.html', {'form' : formset, 'all_patients':all_patients })
 
+def get_statistics(request):
+    form = SearchForm()
+    results = PatientTable(Patient.objects.all())
+    if request.method == 'POST':
+        # import ipdb; ipdb.set_trace()
+        if request.POST.get('province') !='':
+            if request.POST.get('districts') != '':
+                if request.POST.get('cds') != '':
+                    results = PatientTable(Patient.objects.filter(cds=request.POST.get('cds')))
+                    RequestConfig(request, paginate={"per_page": 25}).configure(results)
+                    return render(request, 'statistics.html', { 'form':form, 'results' : results})
+                results = PatientTable(Patient.objects.filter(cds__district=request.POST.get('districts')))
+                RequestConfig(request, paginate={"per_page": 25}).configure(results)
+                return render(request, 'statistics.html', { 'form':form, 'results' : results})
+            results = PatientTable(Patient.objects.filter(cds__district__province=request.POST.get('province')))
+
+            RequestConfig(request, paginate={"per_page": 25}).configure(results)
+        return render(request, 'statistics.html', { 'form':form, 'results' : results})
+
+    RequestConfig(request, paginate={"per_page": 25}).configure(results)
+    return render(request, 'statistics.html', { 'form':form, 'results' : results})

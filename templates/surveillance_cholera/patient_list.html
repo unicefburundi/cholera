@@ -5,6 +5,7 @@
         <thead>
               <tr>
                 <th>Patient Id</th>
+                <th>CDS</th>
                 <th>Colline</th>
                 <th>Age</th>
                 <th>Sexe</th>
@@ -16,6 +17,7 @@
             <tr>
                 {% with cds.id as code  %}
                     <td><a href="{% url 'patient_detail' pk=code %}">{{ cds.patient_id }}</a></td>
+                    <td>{{cds.cds}}</td>
                     <td>{{ cds.colline_name}}</td>
                     <td>{{cds.age}}</td>
                     <td>{{cds.sexe}}</td>

@@ -5,6 +5,8 @@ $(document).ready(function(){
             $.ajax({
                 url: request_url,
                 success: function(data){
+                    $('select[name=districts]').val(''); // remove the value from the input
+                    console.log(data); // log the returned json to the console
                     $.each(data[0], function(key, value){
                         $('select[name=districts]').append('<option value="' + key + '">' + value +'</option>');
                     })
@@ -18,6 +20,8 @@ $(document).ready(function(){
             $.ajax({
                 url: request_url,
                 success: function(data){
+                    $('select[id=id_cds]').val(''); // remove the value from the input
+                    console.log(data); // log the returned json to the console
                     $.each(data[0], function(key, value){
                         $('select[id=id_cds]').append('<option value="' + key + '">' + value +'</option>');
                     })

@@ -4,7 +4,7 @@
 {% block content %}
     <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
     <div class="row">
-        <form action="" method="post" id="post-form">
+        <form action="{% url 'get_statistics' %}" method="post" id="post-form">
         {% csrf_token %}
         <div class="row">
         <div class="col-lg-2"></div>

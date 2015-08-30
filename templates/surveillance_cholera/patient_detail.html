@@ -1,7 +1,7 @@
 {% extends "base_layout.html" %}
 {% block content %}
 {% if object %}
-<h2>Patient numero : {{ object.patient_id}}</h2>
+<h2>Patient numero : {{ object.patient_id}} sur le CDS {{ object.cds}} </h2>
 <div class="container">
     <div class="row">
         <div class="col-md-2">
@@ -11,6 +11,7 @@
                 <thead>
                     <tr>
                         <th>Patient ID</th>
+                        <th>CDS</th>
                         <th>Sex</th>
                         <th>Age</th>
                         <th>Colline Name</th>
@@ -19,7 +20,8 @@
                     </tr>
                 </thead>
                 <tr>
-                    <td> {{ object.patient_id}}</td>
+                    <td>{{ object.patient_id}}</td>
+                    <td>{{ object.cds}}</td>
                     <td>{{ object.sexe}}</td>
                     <td>{{ object.age}}</td>
                     <td>{{ object.colline_name}}</td>
