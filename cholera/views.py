@@ -4,7 +4,6 @@ from surveillance_cholera.models import Patient, CDS,District, Province
 from django_tables2   import RequestConfig
 from django.contrib.auth.decorators import login_required
 from surveillance_cholera.tables import PatientTable
-from django.http import JsonResponse
 from django.http import HttpResponse
 
 
@@ -12,7 +11,7 @@ def home(request):
     return render(request, 'base_layout.html')
 
 def get_cdss(request, district_id):
-    opt2_html = ""
+    opt2_html = "<option value=''>All CDS</option>"
     try:
         district = District.objects.get(pk=district_id)
         cdss = CDS.objects.filter(district=district)
@@ -23,7 +22,7 @@ def get_cdss(request, district_id):
     return HttpResponse(opt2_html)
 
 def get_districts(request, province_id):
-    opt2_html = ""
+    opt2_html = "<option value=''>All Districts</option>"
     try:
         province = Province.objects.get(pk=province_id)
         districts = District.objects.filter(province=province)
