@@ -1,27 +1,19 @@
+'use strict';
+
 $(document).ready(function(){
-    $('select[name=province]').change(function(){
-            province_id = $(this).val();
-            request_url = '/get_districts/' + province_id + '/';
-            $.ajax({
-                url: request_url,
-                success: function(data){
-                    $.each(data[0], function(key, value){
-                        $('select[name=districts]').append('<option value="' + key + '">' + value +'</option>');
-                    })
-                }
-            });
-            return false; //<---- move it here
+    $('#selectbox1').on("change", function(){
+    $.get("/get_districts/"+$('#selectbox1').val(),
+            function (data){
+              $('#selectbox2').html(data);
+            }
+        , "html")
         });
-    $('select[name=districts]').change(function(){
-            district_id = $(this).val();
-            request_url = '/get_cdss/' + district_id + '/';
-            $.ajax({
-                url: request_url,
-                success: function(data){
-                    $.each(data[0], function(key, value){
-                        $('select[id=id_cds]').append('<option value="' + key + '">' + value +'</option>');
-                    })
-                }
-            })
-        })
-    });
+    $('#selectbox2').on("change", function(){
+    $.get("/get_cdss/"+$('#selectbox2').val(),
+            function (data){
+              $('#selectbox3').html(data);
+            }
+        , "html")
+        });
+
+});
