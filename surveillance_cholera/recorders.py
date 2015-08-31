@@ -291,6 +291,12 @@ def record_patient(args):
 
 	full_entry_date_in_string = entry_date_in_string[0:2]+""+entry_date_in_string[2:4]+"20"+entry_date_in_string[4:6]
 
+	try:
+		datetime.datetime.strptime(full_entry_date_in_string, "%d%m%Y").date()
+	except:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. La date d arrivee du patient n est pas valide."
+		return
 
 	full_entry_date_in_date = datetime.datetime.strptime(full_entry_date_in_string, "%d%m%Y").date()
 

@@ -36,11 +36,10 @@ def ask_update_on_patient(request):
 				an_object['message'] = "Vous n avez donne aucune nouvelle sur le patient "+short_patient_id
 
 				necessary_data.append(an_object)
-
-			#r = requests.post("https://api.rapidpro.io/api/v1/broadcasts.json?Authorization: Token ddbb0679611e8e2168c84279082a71c4d14ba305", data={
+				#r = requests.post("https://api.rapidpro.io/api/v1/broadcasts.json?Authorization: Token c2195bdeeca5819f1ded643f0152c0e8bf9a8474", data={
   #"urns": [
-    #"tel:+25779278861",
-    #"tel:+25776458001"],
+  	#"tel:0000090779"],
   #"text": "My first message" 
 #})
+
 	return render(request, 'test_temporary.html',locals())
