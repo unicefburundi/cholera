@@ -21,7 +21,9 @@
                 </thead>
                 <tr>
                     <td>{{ object.patient_id}}</td>
-                    <td>{{ object.cds}}</td>
+                    {% with patient.cds.id as cds_id  %}
+                        <td><a href="{% url 'cds_detail' pk=cds_id %}">{{ object.cds}}</a></td>
+                    {% endwith %}
                     <td>{{ object.sexe}}</td>
                     <td>{{ object.age}}</td>
                     <td>{{ object.colline_name}}</td>

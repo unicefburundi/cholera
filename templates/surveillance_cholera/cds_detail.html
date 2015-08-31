@@ -13,6 +13,8 @@
                 <p> {{object.code}}</p>
                 <dt>District : </dt>
                 <p> {{object.district}}</p>
+                <dt>Province : </dt>
+                <p> {{object.district.province.name}}</p>
             </dl>
         </div>
         <div class="col-md-9">
@@ -23,18 +25,26 @@
                         <th>ID du Patient</th>
                         <th>Colline</th>
                         <th>Intervention</th>
+                        <th>CDS</th>
+                        <th>Sex</th>
+                        <th>Age</th>
+                        <th>Date Entry</th>
                     </tr>
                 </thead>
+                {% for patient in patients %}
                 <tr>
-                    <td> <a href="/">125904</a> </td>
-                    <td>Butaganzwa</td>
-                    <td>Hospitalized</td>
+                    <td> {{patient.patient_id }} </td>
+                    <td>{{patient.colline_name  }}</td>
+                    <td>{{patient.intervention }}</td>
+                    {% with patient.cds.id as cds_id  %}
+                    <td><a href="{% url 'cds_detail' pk=cds_id %}">{{patient.cds }}</a></td>
+                    {% endwith %}
+                    <td>{{patient.sexe }}</td>
+                    <td>{{patient.age }}</td>
+                    <td>{{patient.date_entry }}</td>
                 </tr>
-                <tr>
-                    <td> <a href="/">125734</a> </td>
-                    <td>Butaganzwa</td>
-                    <td>Refered</td>
-                </tr>
+                {% endfor %}
+
             </table>
         </div>
     </div>
