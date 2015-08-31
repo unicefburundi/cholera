@@ -22,19 +22,18 @@
                     <tr>
                         <th>Name of the CDS</th>
                         <th>Code</th>
-                        <th>Number of cases</th>
+                        <th>District</th>
                     </tr>
                 </thead>
+                {% for cds in cdss %}
                 <tr>
-                    <td> <a href="/">BubanzaI</a> </td>
-                    <td>120204</td>
-                    <td>6</td>
+                {% with cds.id as cds_id  %}
+                    <td> <a href="{% url 'cds_detail' pk=cds_id %}">{{cds.name }}</a> </td>
+                {% endwith %}
+                    <td>{{cds.code  }}</td>
+                    <td>{{cds.district }}</td>
                 </tr>
-                <tr>
-                    <td> <a href="/">BubanzaII</a> </td>
-                    <td>120224</td>
-                    <td>2</td>
-                </tr>
+                {% endfor %}
             </table>
         </div>
     </div>

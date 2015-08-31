@@ -23,6 +23,12 @@ class CDSListView(ListView):
 class CDSDetailView(DetailView):
     model = CDS
 
+    def get_context_data(self, **kwargs):
+        context = super(CDSDetailView, self).get_context_data(**kwargs)
+        city = Patient.objects.filter(cds=self.kwargs['pk'])
+        context['patients'] = city
+        return context
+
 class ProvinceListView(ListView):
     model = Province
     paginate_by = 25
@@ -36,6 +42,12 @@ class ProvinceListView(ListView):
 
 class ProvinceDetailView(DetailView):
     model = Province
+
+    def get_context_data(self, **kwargs):
+        context = super(ProvinceDetailView, self).get_context_data(**kwargs)
+        districts = District.objects.filter(province=self.kwargs['pk'])
+        context['districts'] = districts
+        return context
 
 class DistrictListView(ListView):
     model = District
@@ -54,6 +66,12 @@ class DistrictListView(ListView):
 
 class DistrictDetailView(DetailView):
     model = District
+
+    def get_context_data(self, **kwargs):
+        context = super(DistrictDetailView, self).get_context_data(**kwargs)
+        cdss = CDS.objects.filter(district=self.kwargs['pk'])
+        context['cdss'] = cdss
+        return context
 
 class PatientListView(ListView):
     model = Patient

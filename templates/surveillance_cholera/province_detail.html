@@ -20,19 +20,18 @@
                     <tr>
                         <th>Name of the District</th>
                         <th>Code</th>
-                        <th>Number of cases</th>
+                        <th>Province</th>
                     </tr>
                 </thead>
+                {% for district in districts %}
                 <tr>
-                    <td> <a href="/">BubanzaI</a> </td>
-                    <td>120204</td>
-                    <td>6</td>
+                {% with district.id as district_id  %}
+                    <td> <a href="{% url 'district_detail' pk=district_id %}">{{district.name }}</a> </td>
+                {% endwith %}
+                    <td>{{district.code  }}</td>
+                    <td>{{district.province }}</td>
                 </tr>
-                <tr>
-                    <td> <a href="/">BubanzaII</a> </td>
-                    <td>120224</td>
-                    <td>2</td>
-                </tr>
+                {% endfor %}
             </table>
         </div>
     </div>

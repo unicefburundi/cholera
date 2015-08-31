@@ -65,11 +65,9 @@
                             <a href="{% url 'province_list' %}">Province</a>
                         </li>
                         {% endif %}
-                        {% if user|has_group:'Central' %}
                         <li>
                             <a href="{% url 'patient_list' %}">Patient</a>
                         </li>
-                        {% endif %}
                         <li><a href="{% url 'statistics' %}">Statistics</a></li>
                         <li>
                                 <a class="page-scroll navbar-right" href="{% url 'auth_logout' %}">Logout</a>
