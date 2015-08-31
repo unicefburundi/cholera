@@ -127,6 +127,16 @@ def complete_registration(args):
 		the_one_existing_temp = the_existing_temp[0]
 		if (the_one_existing_temp.supervisor_phone_number == the_sup_phone_number_without_spaces):
 			#The confirmation of the phone number of the supervisor pass
+
+			#Let's check if this reporter is not already registered for this CDS
+			check_duplication = Reporter.objects.filter(phone_number = the_one_existing_temp.phone_number,cds = the_one_existing_temp.cds)
+			if len(check_duplication) > 0:
+				#This reporter is doing registration twice on the same CDS
+				args['valide'] = False
+				args['info_to_contact'] = "Vous vous etes deja enregistre sur ce meme CDS. Merci."
+				the_one_existing_temp.delete()
+				return
+
 			Reporter.objects.create(phone_number = the_one_existing_temp.phone_number,cds = the_one_existing_temp.cds,supervisor_phone_number = the_one_existing_temp.supervisor_phone_number)
 
 			the_one_existing_temp.delete()
