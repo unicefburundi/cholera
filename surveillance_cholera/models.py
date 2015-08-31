@@ -58,6 +58,8 @@ class Patient(models.Model):
     sexe = models.CharField(max_length=10)
     intervention = models.CharField(max_length=50)
     date_entry = models.DateField(blank=True)
+    exit_date = models.DateField(blank=True, null=True)
+    exit_status = models.CharField(max_length=10, blank=True, null = True)
 
     def __unicode__(self):
             return self.patient_id

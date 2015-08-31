@@ -433,6 +433,13 @@ def record_track_message(args):
 	day_month_year = args['text'].split(' ')[2].split("-")
 	year_month_day = day_month_year[2]+"-"+day_month_year[1]+"-"+day_month_year[0]
 
+
+	#Let's update the patient
+	one_concerned_patient.exit_date = year_month_day
+	one_concerned_patient.exit_status = args['text'].split(' ')[3]
+	one_concerned_patient.save()
+
+
 	TrackPatientMessage.objects.create(exit_date = year_month_day, exit_status = args['text'].split(' ')[3], report = the_created_report)
 
 	args['valide'] = True
