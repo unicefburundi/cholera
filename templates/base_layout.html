@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load staticfiles extras_utils %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,18 +50,26 @@
                         <li>
                                 <a href="{% url 'profile' slug=user.username %}"> {{user.username}} </a>
                         </li>
+                        {% if user|has_group:'CDS' or user|has_group:'BDS' or user|has_group:'BPS' or user|has_group:'Central' %}
                         <li>
                             <a href="{% url 'cds_list' %}">CDS</a>
                         </li>
+                        {% endif %}
+                        {% if user|has_group:'BDS' or user|has_group:'BPS' or user|has_group:'Central'   %}
                         <li>
                             <a href="{% url 'district_list' %}">District</a>
                         </li>
+                        {% endif %}
+                        {% if  user|has_group:'BPS' or user|has_group:'Central'  %}
                         <li>
                             <a href="{% url 'province_list' %}">Province</a>
                         </li>
+                        {% endif %}
+                        {% if user|has_group:'Central' %}
                         <li>
                             <a href="{% url 'patient_list' %}">Patient</a>
                         </li>
+                        {% endif %}
                         <li><a href="{% url 'statistics' %}">Statistics</a></li>
                         <li>
                                 <a class="page-scroll navbar-right" href="{% url 'auth_logout' %}">Logout</a>
