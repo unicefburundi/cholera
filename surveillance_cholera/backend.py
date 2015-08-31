@@ -93,7 +93,8 @@ def handel_rapidpro_request(request):
 		else:
 			#This contact is confirming the phone number of his supervisor
 			complete_registration(incoming_data)
-			response['ok'] = False
+			#response['ok'] = False
+			response['ok'] = incoming_data['valide']
 			response['info_to_contact'] = incoming_data['info_to_contact']
 			return response
 	
