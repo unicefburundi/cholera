@@ -2,11 +2,11 @@ from django.shortcuts import render
 from surveillance_cholera.forms import SearchForm
 from surveillance_cholera.models import Patient, CDS,District, Province
 from django_tables2   import RequestConfig
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from surveillance_cholera.tables import PatientTable
 from django.http import JsonResponse
 import datetime
-
+from surveillance_cholera.templatetags.extras_utils import format_to_time
 
 def home(request):
     return render(request, 'base_layout.html')
@@ -46,29 +46,7 @@ def statistics(request):
     RequestConfig(request, paginate={"per_page":25}).configure(all_patients)
     return render(request, 'statistics.html', {'form' : formset, 'all_patients':all_patients })
 
-def format_to_time(date):
-    d = datetime.datetime.strptime(date, '%m/%d/%Y')
-    return d
 
-def not_in_cds_group(user):
-    if user:
-        return user.groups.filter(name='CDS').count() == 0
-    return False
-
-def not_in_bds_group(user):
-    if user:
-        return user.groups.filter(name='BDS').count() == 0
-    return False
-
-def not_in_bps_group(user):
-    if user:
-        return user.groups.filter(name='BPS').count() == 0
-    return False
-
-def not_in_central_group(user):
-    if user:
-        return user.groups.filter(name='Central').count() == 0
-    return False
 
 def get_statistics(request):
     form = SearchForm()
