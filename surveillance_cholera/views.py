@@ -13,10 +13,10 @@ class CDSListView(ListView):
         user = UserProfile.objects.get(user=self.request.user.id)
         if user.level == 'CDS':
             qs = CDS.objects.filter(code=int(user.moh_facility))
-        if user.level == 'BSD':
-            qs = CDS.objects.filter(district=int(user.moh_facility))
+        if user.level == 'BDS':
+            qs = CDS.objects.filter(district__code=int(user.moh_facility))
         if user.level == 'BPS':
-            qs = CDS.objects.filter(district__province=int(user.moh_facility))
+            qs = CDS.objects.filter(district__province__code=int(user.moh_facility))
         return qs
 
 
@@ -57,10 +57,10 @@ class DistrictListView(ListView):
         # import ipdb; ipdb.set_trace()
         qs = District.objects.all()
         user = UserProfile.objects.get(user=self.request.user.id)
-        if user.level == 'BSD':
+        if user.level == 'BDS':
             qs = District.objects.filter(code=int(user.moh_facility))
         if user.level == 'BPS':
-            qs = District.objects.filter(province=int(user.moh_facility))
+            qs = District.objects.filter(province__code=int(user.moh_facility))
         return qs
 
 
@@ -82,11 +82,11 @@ class PatientListView(ListView):
         qs = Patient.objects.all()
         user = UserProfile.objects.get(user=self.request.user.id)
         if user.level == 'CDS':
-            qs = Patient.objects.filter(cds=int(user.moh_facility))
-        if user.level == 'BSD':
-            qs = Patient.objects.filter(cds__district=int(user.moh_facility))
+            qs = Patient.objects.filter(cds__code=int(user.moh_facility))
+        if user.level == 'BDS':
+            qs = Patient.objects.filter(cds__district__code=int(user.moh_facility))
         if user.level == 'BPS':
-            qs = Patient.objects.filter(cds__district__province=int(user.moh_facility))
+            qs = Patient.objects.filter(cds__district__province__code=int(user.moh_facility))
         return qs
 
 class PatientDetailView(DetailView):
