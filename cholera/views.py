@@ -5,6 +5,7 @@ from django_tables2   import RequestConfig
 from django.contrib.auth.decorators import login_required
 from surveillance_cholera.tables import PatientTable
 from django.http import JsonResponse
+import datetime
 
 
 def home(request):
@@ -37,7 +38,7 @@ def statistics(request):
         if formset.is_valid() :
             datum = formset.cleaned_data
             if datum['cds']:
-                results = PatientTable(Patient.objects.filter(date__range=[datum['start_date'], datum['end_date']], ))
+                results = PatientTable(Patient.objects.filter(date__range=[datum['start_date'], datum['end_date']] ))
                 RequestConfig(request, paginate={"per_page": 25}).configure(results)
                 return render(request, 'statistics.html', {'results' : results})
 
@@ -45,23 +46,35 @@ def statistics(request):
     RequestConfig(request, paginate={"per_page":25}).configure(all_patients)
     return render(request, 'statistics.html', {'form' : formset, 'all_patients':all_patients })
 
+def format_to_time(date):
+    d = datetime.datetime.strptime(date, '%m/%d/%Y')
+    return d
+
 def get_statistics(request):
     form = SearchForm()
     results = PatientTable(Patient.objects.all())
     if request.method == 'POST':
         # import ipdb; ipdb.set_trace()
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        if request.POST.get('start_date') == '':
+            start_date = u'01/01/2012'
+        if request.POST.get('end_date') == '':
+            end_date = datetime.date.today().strftime('%m/%d/%Y')
         if request.POST.get('province') !='':
             if request.POST.get('districts') != '':
                 if request.POST.get('cds') != '':
-                    results = PatientTable(Patient.objects.filter(cds=request.POST.get('cds')))
+                    results = PatientTable(Patient.objects.filter(cds=request.POST.get('cds'), date_entry__range=[format_to_time(start_date), format_to_time(end_date)]))
                     RequestConfig(request, paginate={"per_page": 25}).configure(results)
                     return render(request, 'statistics.html', { 'form':form, 'results' : results})
-                results = PatientTable(Patient.objects.filter(cds__district=request.POST.get('districts')))
+                results = PatientTable(Patient.objects.filter(cds__district=request.POST.get('districts'),date_entry__range=[format_to_time(start_date), format_to_time(end_date)]))
                 RequestConfig(request, paginate={"per_page": 25}).configure(results)
                 return render(request, 'statistics.html', { 'form':form, 'results' : results})
-            results = PatientTable(Patient.objects.filter(cds__district__province=request.POST.get('province')))
-
+            results = PatientTable(Patient.objects.filter(cds__district__province=request.POST.get('province'),date_entry__range=[format_to_time(start_date), format_to_time(end_date)]))
             RequestConfig(request, paginate={"per_page": 25}).configure(results)
+            return render(request, 'statistics.html', { 'form':form, 'results' : results})
+        results = PatientTable(Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]))
+        RequestConfig(request, paginate={"per_page": 25}).configure(results)
         return render(request, 'statistics.html', { 'form':form, 'results' : results})
 
     RequestConfig(request, paginate={"per_page": 25}).configure(results)

@@ -53,7 +53,7 @@ class CDS(models.Model):
 class Patient(models.Model):
     patient_id = models.CharField(unique=True, max_length=50)
     colline_name = models.CharField(max_length=50)
-    cds = models.ForeignKey(CDS)
+    cds = models.ForeignKey(CDS, null=True, blank=True)
     age = models.CharField(max_length=10)
     sexe = models.CharField(max_length=10)
     intervention = models.CharField(max_length=50)
