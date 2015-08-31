@@ -127,6 +127,16 @@ def complete_registration(args):
 		the_one_existing_temp = the_existing_temp[0]
 		if (the_one_existing_temp.supervisor_phone_number == the_sup_phone_number_without_spaces):
 			#The confirmation of the phone number of the supervisor pass
+
+			#Let's check if this reporter is not already registered for this CDS
+			check_duplication = Reporter.objects.filter(phone_number = the_one_existing_temp.phone_number,cds = the_one_existing_temp.cds)
+			if len(check_duplication) > 0:
+				#This reporter is doing registration twice on the same CDS
+				args['valide'] = False
+				args['info_to_contact'] = "Vous vous etes deja enregistre sur ce meme CDS. Merci."
+				the_one_existing_temp.delete()
+				return
+
 			Reporter.objects.create(phone_number = the_one_existing_temp.phone_number,cds = the_one_existing_temp.cds,supervisor_phone_number = the_one_existing_temp.supervisor_phone_number)
 
 			the_one_existing_temp.delete()
@@ -281,6 +291,12 @@ def record_patient(args):
 
 	full_entry_date_in_string = entry_date_in_string[0:2]+""+entry_date_in_string[2:4]+"20"+entry_date_in_string[4:6]
 
+	try:
+		datetime.datetime.strptime(full_entry_date_in_string, "%d%m%Y").date()
+	except:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. La date d arrivee du patient n est pas valide."
+		return
 
 	full_entry_date_in_date = datetime.datetime.strptime(full_entry_date_in_string, "%d%m%Y").date()
 
@@ -291,7 +307,13 @@ def record_patient(args):
 		return
 
 	#Let's record a patient
-	the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2], age = args['text'].split(' ')[3], sexe = args['text'].split(' ')[4], intervention = args['text'].split(' ')[5], date_entry = full_entry_date_in_date)
+	
+	#The below line is the best one. The one i activate now is for concordance with A's code.
+	#the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2], age = args['text'].split(' ')[3], sexe = args['text'].split(' ')[4], intervention = args['text'].split(' ')[5], date_entry = full_entry_date_in_date)
+
+
+	the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2], age = args['text'].split(' ')[3], sexe = args['text'].split(' ')[4], intervention = args['text'].split(' ')[5], date_entry = full_entry_date_in_date, cds = one_concerned_cds)
+
 
 	#the_created_report = Report.objects.create(patient = the_created_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'].replace("+", " "), report_type = args['message_type'])
 	the_created_report = Report.objects.create(patient = the_created_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'], report_type = args['message_type'])

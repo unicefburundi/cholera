@@ -36,8 +36,11 @@ Then::
 
 Run syncdb::
 
-    python manage.py syncdb
-    python manage.py migrate
+    python manage.py migrate sites
+    python manage.py migrate auth
+    python manage.py migrate authentication surveillance_cholera
+    python manage.py migrate syncdb
+    
 
 You should now be able to run the development server::
 
