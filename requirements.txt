@@ -26,3 +26,4 @@ xlrd==0.9.4
 xlwt==1.0.0
 django-angular
 django-extensions
+json2xls
