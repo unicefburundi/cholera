@@ -1,13 +1,33 @@
 from django import forms
-from django.utils.translation import ugettext as _
 from surveillance_cholera.models import *
-from datetime import date
 
 
 class SearchForm(forms.Form):
-    PROVINCES = Province.objects.values_list('id','name').distinct()
-    province = forms.ChoiceField(widget = forms.Select(), choices=[('', '---------')] + [(str(i),n) for i,n in PROVINCES])
+    def __init__(self,  request=None, *args, **kwargs):
+        user = None
+        # import ipdb; ipdb.set_trace()
+        # request = kwargs.get('request', None)
+        super (SearchForm,self).__init__( *args,**kwargs)
+        PROVINCES = Province.objects.values_list('id','name').distinct()
+        if request != None:
+            user = UserProfile.objects.get(user=request.user)
+            level = user.level
+            moh_facility = user.moh_facility
+
+            if level == 'BPS':
+                PROVINCES= Province.objects.filter(code=moh_facility).values_list('id','name').distinct()
+            if level=='BDS':
+                district = District.objects.get(code=moh_facility)
+                PROVINCES = Province.objects.filter(code=district.province).values_list('id','name').distinct()
+            if level=='CDS':
+                cds= CDS.objects.get(code=moh_facility)
+                PROVINCES = Province.objects.filter(code=cds.district.province).values_list('id','name').distinct()
+        self.base_fields['province'] =  forms.ChoiceField(widget = forms.Select(), choices=[('', '---------')] + [(str(i),n) for i,n in PROVINCES])
+
+
+
     districts = forms.ChoiceField(widget = forms.Select(), choices=[('', '---------')],  required=False)
+
     cds = forms.ChoiceField(widget = forms.Select(), choices=[('', '---------')], required=False)
     start_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
     end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
