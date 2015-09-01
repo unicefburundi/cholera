@@ -9,6 +9,7 @@ from django_tables2 import  RequestConfig
 ###########
 
 def get_cds_data(moh_facility):
+    facility = {'name': CDS.objects.get(id=moh_facility).name}
     total ={'total': Patient.objects.filter(cds=moh_facility).count()}
     deces= {'deces' : Patient.objects.filter(cds=moh_facility, intervention='DD').count()}
     sorties = {'sorties' : Patient.objects.filter(cds=moh_facility, intervention='PR').count()}
@@ -16,35 +17,24 @@ def get_cds_data(moh_facility):
     nc = {'nc' : Patient.objects.filter(cds=moh_facility, exit_status=None).count()}
 
     elemet = {}
-    for i in [total,deces,sorties,hospi,nc]:
+    for i in [total,deces,sorties,hospi,nc, facility]:
             elemet.update(i)
-    return [elemet]
+    return elemet
 
 def get_district_data(moh_facility):
-    total ={'total': Patient.objects.filter(cds__district=moh_facility).count()}
-    deces= {'deces' : Patient.objects.filter(cds__district=moh_facility, intervention='DD').count()}
-    sorties = {'sorties' : Patient.objects.filter(cds__district=moh_facility, intervention='PR').count()}
-    hospi = {'hospi' : Patient.objects.filter(cds__district=moh_facility, intervention='HOSPI').count()}
-    nc = {'nc' : Patient.objects.filter(cds__district=moh_facility, exit_status=None).count()}
-
-    elemet = {}
-    for i in [total,deces,sorties,hospi,nc]:
-            elemet.update(i)
-    return [elemet]
+    elemet = []
+    for i in CDS.objects.filter(district=moh_facility):
+        elemet.append(get_cds_data(i.id))
+    return elemet
 
 def get_province_data(moh_facility):
-    total ={'total': Patient.objects.filter(cds__district__province=moh_facility).count()}
-    deces= {'deces' : Patient.objects.filter(cds__district__province=moh_facility, intervention='DD').count()}
-    sorties = {'sorties' : Patient.objects.filter(cds__district__province=moh_facility, intervention='PR').count()}
-    hospi = {'hospi' : Patient.objects.filter(cds__district__province=moh_facility, intervention='HOSPI').count()}
-    nc = {'nc' : Patient.objects.filter(cds__district__province=moh_facility, exit_status=None).count()}
-
-    elemet = {}
-    for i in [total,deces,sorties,hospi,nc]:
-            elemet.update(i)
-    return [elemet]
+    elemet = []
+    for i in CDS.objects.filter(district__province=moh_facility):
+        elemet.append(get_cds_data(i.id))
+    return elemet
 
 class PatientTable(tables.Table):
+    name = tables.Column()
     total = tables.Column()
     nc = tables.Column()
     hospi = tables.Column()
@@ -79,7 +69,7 @@ class CDSDetailView(DetailView):
         moh_facility = self.kwargs['pk']
         patients = Patient.objects.filter(cds=moh_facility)
         context['patients'] = patients
-        data = get_cds_data(moh_facility)
+        data = [get_cds_data(moh_facility)]
         statistics = PatientTable(data)
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
