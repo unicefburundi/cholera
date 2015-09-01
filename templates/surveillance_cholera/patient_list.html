@@ -11,18 +11,22 @@
                 <th>Sexe</th>
                 <th>Intervention</th>
                 <th>Entry Date</th>
+                <th>Exit Date</th>
+                <th>Exit Status</th>
               </tr>
             </thead>
-        {% for cds in object_list %}
+        {% for patient in object_list %}
             <tr>
-                {% with cds.id as code  %}
-                    <td><a href="{% url 'patient_detail' pk=code %}">{{ cds.patient_id }}</a></td>
-                    <td>{{cds.cds}}</td>
-                    <td>{{ cds.colline_name}}</td>
-                    <td>{{cds.age}}</td>
-                    <td>{{cds.sexe}}</td>
-                    <td>{{cds.intervention}}</td>
-                    <td>{{cds.date_entry}}</td>
+                {% with patient.id as code  %}
+                    <td><a href="{% url 'patient_detail' pk=code %}">{{ patient.patient_id }}</a></td>
+                    <td>{{patient.cds}}</td>
+                    <td>{{ patient.colline_name}}</td>
+                    <td>{{patient.age}}</td>
+                    <td>{{patient.sexe}}</td>
+                    <td>{{patient.intervention}}</td>
+                    <td>{{patient.date_entry}}</td>
+                    <td>{{patient.exit_date}}</td>
+                    <td>{{patient.exit_status}}</td>
                 {% endwith %}
             </tr>
         {% endfor %}
