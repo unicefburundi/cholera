@@ -2,8 +2,6 @@
 {% load staticfiles %}
 {% load render_table from django_tables2 %}
 {% block content %}
-    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
-    <div class="row">
         <form action="{% url 'get_statistics' %}" method="post" id="post-form">
         {% csrf_token %}
         <div class="row">
