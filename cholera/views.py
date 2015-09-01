@@ -87,6 +87,6 @@ def get_statistics(request):
         results = PatientTable(all_patients.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]))
         RequestConfig(request, paginate={"per_page": 25}).configure(results)
         return render(request, 'statistics.html', { 'form':form, 'results' : results})
-
+    results = PatientTable(all_patients)
     RequestConfig(request, paginate={"per_page": 25}).configure(results)
     return render(request, 'statistics.html', { 'form':form, 'results' : results})
