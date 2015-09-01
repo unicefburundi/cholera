@@ -5,8 +5,6 @@ from surveillance_cholera.models import *
 class SearchForm(forms.Form):
     def __init__(self,  request=None, *args, **kwargs):
         user = None
-        # import ipdb; ipdb.set_trace()
-        # request = kwargs.get('request', None)
         super (SearchForm,self).__init__( *args,**kwargs)
         PROVINCES = Province.objects.values_list('id','name').distinct()
         if request != None:
@@ -25,12 +23,13 @@ class SearchForm(forms.Form):
         self.base_fields['province'] =  forms.ChoiceField(widget = forms.Select(), choices=[('', '---------')] + [(str(i),n) for i,n in PROVINCES])
 
 
-
-    districts = forms.ChoiceField(widget = forms.Select(), choices=[('', '---------')],  required=False)
-
-    cds = forms.ChoiceField(widget = forms.Select(), choices=[('', '---------')], required=False)
     start_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
     end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
+    cds = forms.ChoiceField(widget = forms.Select(), choices=[('', '---------')], required=False)
+    districts = forms.ChoiceField(widget = forms.Select(), choices=[('', '---------')],  required=False)
+
+
+
 
     # def clean(self, *args, **kwargs):
 

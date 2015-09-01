@@ -3,6 +3,17 @@ from surveillance_cholera.models import CDS, Province, District, Patient, Report
 from authentication.models import UserProfile
 
 
+def get_data(moh_facility):
+    total ={'total': Patient.objects.filter(cds=moh_facility).count()}
+    deces= {'deces' : Patient.objects.filter(cds=moh_facility, intervention='DD').count()}
+    sorties = {'sorties' : Patient.objects.filter(cds=moh_facility, intervention='PR').count()}
+    hospi = {'hospi' : Patient.objects.filter(cds=moh_facility, intervention='HOSPI').count()}
+    nc = {'nc' : Patient.objects.filter(cds=moh_facility, exit_status=None).count()}
+
+    elemet = {}
+    for i in [total,deces,sorties,hospi,nc]:
+            elemet.update(i)
+
 class CDSListView(ListView):
     model = CDS
     paginate_by = 25
@@ -25,8 +36,10 @@ class CDSDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CDSDetailView, self).get_context_data(**kwargs)
-        city = Patient.objects.filter(cds=self.kwargs['pk'])
-        context['patients'] = city
+        moh_facility = self.kwargs['pk']
+        patients = Patient.objects.filter(cds=moh_facility)
+        context['patients'] = patients
+
         return context
 
 class ProvinceListView(ListView):

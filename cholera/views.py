@@ -53,7 +53,7 @@ def get_statistics(request):
     form = SearchForm(request)
     results = PatientTable(Patient.objects.all())
     if request.method == 'POST':
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
         if request.POST.get('start_date') == '':
