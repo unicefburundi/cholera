@@ -30,8 +30,9 @@ def get_districts(request, province_id):
     return JsonResponse([districts_dict], safe=False)
 
 def get_all_patients(level=None,moh_facility=None):
+    # import ipdb; ipdb.set_trace()
     if level=='CDS':
-        return Patient.objects.filter(cds=moh_facility)
+        return Patient.objects.filter(cds__code=moh_facility)
     if level=='BDS':
         return Patient.objects.filter(cds__district__code=moh_facility)
     if level =='BPS':
@@ -41,26 +42,13 @@ def get_all_patients(level=None,moh_facility=None):
 
 @login_required
 def statistics(request):
-    datum = None
-    formset = SearchForm(request=request)
-    # import ipdb; ipdb.set_trace()
-    if request.method == 'POST':
-        formset = SearchForm(request.POST, request=request)
-        if formset.is_valid() :
-            datum = formset.cleaned_data
-            if datum['cds']:
-                results = PatientTable(Patient.objects.filter(date__range=[datum['start_date'], datum['end_date']] ))
-                RequestConfig(request, paginate={"per_page": 25}).configure(results)
-                return render(request, 'statistics.html', {'results' : results})
-
-    all_patients = PatientTable(Patient.objects.all())
-    RequestConfig(request, paginate={"per_page":25}).configure(all_patients)
-    return render(request, 'statistics.html', {'form' : formset, 'all_patients':all_patients })
+    return get_statistics(request)
 
 
 
 def get_statistics(request):
     form = SearchForm(request)
+    # import ipdb; ipdb.set_trace()
     userprofile = UserProfile.objects.get(user=request.user)
     all_patients = get_all_patients(level=userprofile.level, moh_facility=userprofile.moh_facility)
 
