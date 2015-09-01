@@ -61,7 +61,7 @@ def statistics(request):
 
 def get_statistics(request):
     form = SearchForm(request)
-    userprofile = UserProfile.objects.filter(user=request.user)
+    userprofile = UserProfile.objects.get(user=request.user)
     all_patients = get_all_patients(level=userprofile.level, moh_facility=userprofile.moh_facility)
 
     if request.method == 'POST':
@@ -78,10 +78,10 @@ def get_statistics(request):
                     results = PatientTable(all_patients.filter(cds=request.POST.get('cds'), date_entry__range=[format_to_time(start_date), format_to_time(end_date)]))
                     RequestConfig(request, paginate={"per_page": 25}).configure(results)
                     return render(request, 'statistics.html', { 'form':form, 'results' : results})
-                results = PatientTable(all_patients.filter(cds__district=request.POST.get('districts'),date_entry__range=[format_to_time(start_date), format_to_time(end_date)]))
+                results = PatientTable(all_patients.filter(cds__district__id=request.POST.get('districts'),date_entry__range=[format_to_time(start_date), format_to_time(end_date)]))
                 RequestConfig(request, paginate={"per_page": 25}).configure(results)
                 return render(request, 'statistics.html', { 'form':form, 'results' : results})
-            results = PatientTable(all_patients.filter(cds__district__province=request.POST.get('province'),date_entry__range=[format_to_time(start_date), format_to_time(end_date)]))
+            results = PatientTable(all_patients.filter(cds__district__province__id=request.POST.get('province'),date_entry__range=[format_to_time(start_date), format_to_time(end_date)]))
             RequestConfig(request, paginate={"per_page": 25}).configure(results)
             return render(request, 'statistics.html', { 'form':form, 'results' : results})
         results = PatientTable(all_patients.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]))
