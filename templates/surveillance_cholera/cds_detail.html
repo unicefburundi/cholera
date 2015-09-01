@@ -19,6 +19,11 @@
             </dl>
         </div>
         <div class="col-md-9">
+        <h1>Statistics</h1>
+            {% render_table statistics %}
+        </div>
+    </div>
+        <div class="col-md-9">
             <h1>Patients at  {{ object.name|  capfirst }} CDS  </h1>
             <table class="table table-bordered">
                 <thead>
@@ -53,12 +58,9 @@
 
             </table>
         </div>
-    </div>
+
 </div>
-<div class="row">
-    <h1>Statistics</h1>
-    {% render_table table %}
-</div>
+
 {% else %}
 No Patient in this CDS
 {% endif %}

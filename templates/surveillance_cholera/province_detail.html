@@ -1,4 +1,5 @@
 {% extends "base_layout.html" %}
+{% load render_table from django_tables2 %}
 {% block content %}
 {% if object %}
 <h2>Centre de sante : {{ object.name|  capfirst }}</h2>
@@ -12,6 +13,11 @@
                 <dt>Code of the Province : </dt>
                 <p> {{object.code}}</p>
             </dl>
+        </div>
+        <div class="col-md-9">
+            <h1>Statistics</h1>
+            {% render_table statistics %}
+        </div>
         </div>
         <div class="col-md-9">
             <h1>Districts at  {{ object.name|  capfirst }} Province </h1>
@@ -34,8 +40,9 @@
                 {% endfor %}
             </table>
         </div>
-    </div>
 </div>
+
 {% else %}
+No Patient in this Province
 {% endif %}
 {% endblock content %}

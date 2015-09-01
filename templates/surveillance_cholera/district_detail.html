@@ -1,4 +1,5 @@
 {% extends "base_layout.html" %}
+{% load render_table from django_tables2 %}
 {% block content %}
 {% if object %}
 <h2>Centre de sante : {{ object.name|  capfirst }}</h2>
@@ -16,13 +17,18 @@
             </dl>
         </div>
         <div class="col-md-9">
+            <h1>Statistics</h1>
+            {% render_table statistics %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9">
             <h1>CDS at  {{ object.name|  capfirst }} District  </h1>
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Name of the CDS</th>
                         <th>Code</th>
-                        <th>District</th>
                     </tr>
                 </thead>
                 {% for cds in cdss %}
@@ -31,7 +37,6 @@
                     <td> <a href="{% url 'cds_detail' pk=cds_id %}">{{cds.name }}</a> </td>
                 {% endwith %}
                     <td>{{cds.code  }}</td>
-                    <td>{{cds.district }}</td>
                 </tr>
                 {% endfor %}
             </table>
@@ -39,5 +44,6 @@
     </div>
 </div>
 {% else %}
+No Patient in this District
 {% endif %}
 {% endblock content %}
