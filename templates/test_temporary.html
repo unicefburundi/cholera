@@ -7,7 +7,8 @@
                 <th>Numero du patient</th>
                 <th>Date d arrivee</th>
                 <th>Telephone du rapporteur</th>
-		<th>Message au rapporteur</th>
+		<th>Telephone du superviseur</th>
+		<th>Message au superviseur</th>
               </tr>
             </thead>
 
@@ -16,6 +17,7 @@
                 <td>{{ case.patient_id }}</td>
                 <td>{{ case.entry_date}}</td>
                 <td>{{ case.reporter_phone}}</td>
+		<td>{{ case.supervisor_phone}}</td>
 		<td>{{ case.message}}</td>
             </tr>
         {% endfor %}
