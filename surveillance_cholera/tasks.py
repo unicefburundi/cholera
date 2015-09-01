@@ -2,9 +2,15 @@ from surveillance_cholera.models import Patient, Report
 import datetime
 from django.shortcuts import render
 import requests
+from json2xls import Json2Xls
+import json
 
 def ask_update_on_patient(request):
 	''' This function checks if there is no one or more patient(s) reported to be sick and pass three days without any update '''
+
+	#The below two rows will be putted in local settings
+	token = raw_input('Enter your token: ')
+	contacts_url = 'https://api.rapidpro.io/api/v1/broadcasts.json'
 
 	the_current_date = datetime.datetime.now().date()
 
@@ -14,6 +20,8 @@ def ask_update_on_patient(request):
 
 	if len(filtered_patients) > 0:
 		necessary_data = []
+
+
 
 		for patient in filtered_patients:
 			#Let's check if we had any update on this patient.
@@ -36,8 +44,23 @@ def ask_update_on_patient(request):
 				an_object['message'] = "Vous n avez donne aucune nouvelle sur le patient "+short_patient_id
 
 				necessary_data.append(an_object)
+				
+
+				if the_register.supervisor_phone_number:
+					if the_register.supervisor_phone_number.startswith("+257"):
+						sup_phone_number = "tel:"+the_register.supervisor_phone_number
+					else:
+						sup_phone_number = "tel:+257"+the_register.supervisor_phone_number
+					
+					the_message_to_send = "Vous n avez donne aucune nouvelle sur le patient "+short_patient_id
+					data = {"urns": [sup_phone_number],"text": the_message_to_send}
+					response = requests.post(contacts_url, headers={'Content-type': 'application/json', 'Authorization': 'Token %s' % token}, data = json.dumps(data))
+					print response.content
+
+
+				
 				#r = requests.post("https://api.rapidpro.io/api/v1/broadcasts.json?Authorization: Token c2195bdeeca5819f1ded643f0152c0e8bf9a8474", data={
-  #"urns": [
+ #"urns": [
   	#"tel:0000090779"],
   #"text": "My first message" 
 #})
