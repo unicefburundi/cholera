@@ -1,7 +1,12 @@
 from django.views.generic import ListView, DetailView
 from surveillance_cholera.models import CDS, Province, District, Patient, Report
 from authentication.models import UserProfile
+import django_tables2 as tables
+from django_tables2 import  RequestConfig
 
+###########
+# CDS              ##
+###########
 
 def get_data(moh_facility):
     total ={'total': Patient.objects.filter(cds=moh_facility).count()}
@@ -13,13 +18,24 @@ def get_data(moh_facility):
     elemet = {}
     for i in [total,deces,sorties,hospi,nc]:
             elemet.update(i)
+    return [elemet]
+
+class PatientTable(tables.Table):
+    total = tables.Column()
+    nc = tables.Column()
+    hospi = tables.Column()
+    sorties = tables.Column()
+    deces = tables.Column()
+
+    class Meta:
+        attrs = {"class": "table table-bordered table-hover"}
+
 
 class CDSListView(ListView):
     model = CDS
     paginate_by = 25
 
     def get_queryset(self):
-        # import ipdb; ipdb.set_trace()
         qs = CDS.objects.all()
         user = UserProfile.objects.get(user=self.request.user.id)
         if user.level == 'CDS':
@@ -39,7 +55,10 @@ class CDSDetailView(DetailView):
         moh_facility = self.kwargs['pk']
         patients = Patient.objects.filter(cds=moh_facility)
         context['patients'] = patients
-
+        data = get_data(moh_facility)
+        table = PatientTable(data)
+        RequestConfig(self.request).configure(table)
+        context['table'] = table
         return context
 
 class ProvinceListView(ListView):
