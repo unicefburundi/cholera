@@ -7,6 +7,8 @@
     <script type="text/javascript" src="{% static 'js/libs/jquery.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/libs/jquery-ui.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}">
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    <div class="row">
     <script type="text/javascript">
       // Change JQueryUI plugin names to fix name collision with Bootstrap.
       $.widget.bridge('uitooltip', $.ui.tooltip);
@@ -23,6 +25,19 @@
 
     <!-- Custom CSS -->
     <link href="{% static 'css/scrolling-nav.css' %}" rel="stylesheet">
+    <style>
+        .row.vdivide [class*='col-']:not(:last-child):after {
+          background: #e0e0e0;
+          width: 1px;
+          content: "";
+          display:block;
+          position: absolute;
+          top:0;
+          bottom: 0;
+          right: 0;
+          min-height: 70px;
+        }
+    </style>
     {% endblock css_section %}
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
     <title>Cholera - {% block page_title %}App{% endblock page_title %} </title>

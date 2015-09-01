@@ -1,4 +1,5 @@
 {% extends "base_layout.html" %}
+{% load render_table from django_tables2 %}
 {% block content %}
 {% if object %}
 <h2>Centre de sante : {{ object.name|  capfirst }}</h2>
@@ -18,6 +19,11 @@
             </dl>
         </div>
         <div class="col-md-9">
+        <h1>Statistics</h1>
+            {% render_table statistics %}
+        </div>
+    </div>
+        <div class="col-md-9">
             <h1>Patients at  {{ object.name|  capfirst }} CDS  </h1>
             <table class="table table-bordered">
                 <thead>
@@ -29,26 +35,33 @@
                         <th>Sex</th>
                         <th>Age</th>
                         <th>Date Entry</th>
+                        <th>Exit Date</th>
+                        <th>Exit Status</th>
                     </tr>
                 </thead>
                 {% for patient in patients %}
                 <tr>
-                    <td> {{patient.patient_id }} </td>
+                {% with patient.id as patient_id  %}
+                    <td><a href="{% url 'patient_detail' pk=patient_id %}">{{patient.patient_id }}</a></td>
+                    {% endwith %}
                     <td>{{patient.colline_name  }}</td>
                     <td>{{patient.intervention }}</td>
-                    {% with patient.cds.id as cds_id  %}
-                    <td><a href="{% url 'cds_detail' pk=cds_id %}">{{patient.cds }}</a></td>
-                    {% endwith %}
+
+                    <td>{{patient.cds }}</td>
                     <td>{{patient.sexe }}</td>
                     <td>{{patient.age }}</td>
                     <td>{{patient.date_entry }}</td>
+                    <td>{{ object.exit_date}}</td>
+                    <td>{{ object.exit_status}}</td>
                 </tr>
                 {% endfor %}
 
             </table>
         </div>
-    </div>
+
 </div>
+
 {% else %}
+No Patient in this CDS
 {% endif %}
 {% endblock content %}

@@ -127,6 +127,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.template.context_processors.static',
     'django.template.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
+    'surveillance_cholera.context_processors.search_form',
     )
 
 #smartmin

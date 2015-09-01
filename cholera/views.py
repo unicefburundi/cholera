@@ -7,6 +7,7 @@ from surveillance_cholera.tables import PatientTable
 from django.http import JsonResponse
 import datetime
 from surveillance_cholera.templatetags.extras_utils import format_to_time
+from authentication.models import UserProfile
 
 def home(request):
     return render(request, 'base_layout.html')
@@ -31,10 +32,10 @@ def get_districts(request, province_id):
 @login_required
 def statistics(request):
     datum = None
-    formset = SearchForm()
+    formset = SearchForm(request=request)
     # import ipdb; ipdb.set_trace()
     if request.method == 'POST':
-        formset = SearchForm(request.POST)
+        formset = SearchForm(request.POST, request=request)
         if formset.is_valid() :
             datum = formset.cleaned_data
             if datum['cds']:
@@ -49,7 +50,7 @@ def statistics(request):
 
 
 def get_statistics(request):
-    form = SearchForm()
+    form = SearchForm(request)
     results = PatientTable(Patient.objects.all())
     if request.method == 'POST':
         # import ipdb; ipdb.set_trace()

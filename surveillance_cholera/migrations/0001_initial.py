@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('authentication', '0006_userprofile_moh_facility'),
+        ('authentication', '__first__'),
     ]
 
     operations = [
@@ -17,6 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=40)),
                 ('code', models.CharField(unique=True, max_length=6)),
+                ('status', models.CharField(blank=True, max_length=4, null=True, help_text='Either Public, Conf, Ass, Prive  or Hospital status.', choices=[(b'Pub', b'Public'), (b'Con', b'Conf'), (b'Priv', b'Prive'), (b'Ass', b'Ass'), (b'HPub', b'HPublic'), (b'HCon', b'HConf'), (b'HPrv', b'HPrive')])),
             ],
         ),
         migrations.CreateModel(
@@ -36,6 +37,10 @@ class Migration(migrations.Migration):
                 ('age', models.CharField(max_length=10)),
                 ('sexe', models.CharField(max_length=10)),
                 ('intervention', models.CharField(max_length=50)),
+                ('date_entry', models.DateField(blank=True)),
+                ('exit_date', models.DateField(null=True, blank=True)),
+                ('exit_status', models.CharField(max_length=10, null=True, blank=True)),
+                ('cds', models.ForeignKey(blank=True, to='surveillance_cholera.CDS', null=True)),
             ],
         ),
         migrations.CreateModel(
