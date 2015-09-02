@@ -1,8 +1,7 @@
 from jsonview.decorators import json_view
 from django.views.decorators.csrf import csrf_exempt
-import urllib2
 from django.conf import settings
-from surveillance_cholera.models import Reporter, Temporary
+from surveillance_cholera.models import  Temporary
 import re
 from recorders import *
 
@@ -16,7 +15,7 @@ def identify_message(args):
 		args['message_type'] = getattr(settings,'KNOWN_PREFIXES','')[incoming_prefix]
 	else:
 		args['message_type'] = "UNKNOWN_MESSAGE"
-		
+
 def check_session(args):
 	'''This function checks if there is an already created session'''
 	reporter_phone_number = args['phone']
@@ -45,8 +44,8 @@ def eliminate_unnecessary_spaces(args):
 	print("The text after sub "+the_new_message)
 	args['text'] = the_new_message
 
-	
-	
+
+
 
 @csrf_exempt
 @json_view
@@ -68,7 +67,7 @@ def handel_rapidpro_request(request):
 	#Let's assume that the incoming data is valide
 	incoming_data['valide'] = True
 	incoming_data['info'] = "The default information."
-	
+
 
 	#Let's instantiate the variable this function will return
 	response = {}
@@ -97,8 +96,8 @@ def handel_rapidpro_request(request):
 			response['ok'] = incoming_data['valide']
 			response['info_to_contact'] = incoming_data['info_to_contact']
 			return response
-	
-	
+
+
 	if(incoming_data['message_type']=='SELF_REGISTRATION'):
 			#The contact who sent the current message is doing self registration  in the group of reporters
 			temporary_record_reporter(incoming_data)
@@ -121,4 +120,4 @@ def handel_rapidpro_request(request):
 
 
 	return response
-	
+

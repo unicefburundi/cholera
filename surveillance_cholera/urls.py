@@ -19,8 +19,5 @@ urlpatterns = patterns('',
     #Patients
     url(r'^patient/$', PatientListView.as_view(), name='patient_list'),
     url(r'^patient/(?P<pk>\d+)/$', PatientDetailView.as_view(), name='patient_detail'),
-    #Reports
-    url(r'^report/$', ReportListView.as_view(), name='report_list')
-
 
 )
