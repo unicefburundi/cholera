@@ -18,46 +18,17 @@
                 <p> {{object.district.province.name}}</p>
             </dl>
         </div>
-        <div class="col-md-9">
-        <h1>Statistics</h1>
+        <div class="col-md-8">
+        <h3>Sumary of patiens at {{ object.name|  capfirst }} CDS</h3>
             {% render_table statistics %}
         </div>
-    </div>
-        <div class="col-md-9">
-            <h1>Patients at  {{ object.name|  capfirst }} CDS  </h1>
-            <table class="table table-bordered" data-toggle="table" data-search="true" >
-                <thead>
-                    <tr>
-                        <th>ID du Patient</th>
-                        <th>Colline</th>
-                        <th>Intervention</th>
-                        <th>CDS</th>
-                        <th>Sex</th>
-                        <th>Age</th>
-                        <th>Date Entry</th>
-                        <th>Exit Date</th>
-                        <th>Exit Status</th>
-                    </tr>
-                </thead>
-                {% for patient in patients %}
-                <tr>
-                {% with patient.id as patient_id  %}
-                    <td><a href="{% url 'patient_detail' pk=patient_id %}">{{patient.patient_id }}</a></td>
-                    {% endwith %}
-                    <td>{{patient.colline_name  }}</td>
-                    <td>{{patient.intervention }}</td>
-
-                    <td>{{patient.cds }}</td>
-                    <td>{{patient.sexe }}</td>
-                    <td>{{patient.age }}</td>
-                    <td>{{patient.date_entry }}</td>
-                    <td>{{ object.exit_date}}</td>
-                    <td>{{ object.exit_status}}</td>
-                </tr>
-                {% endfor %}
+        <div class="col-md-1">
+            <h3><a href="{% url 'patient_list' %}">Details</a></h3>
 
             </table>
         </div>
+    </div>
+
 
 </div>
 

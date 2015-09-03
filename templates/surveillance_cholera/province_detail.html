@@ -14,32 +14,18 @@
                 <p> {{object.code}}</p>
             </dl>
         </div>
-        <div class="col-md-9">
-            <h1>Statistics</h1>
+        <div class="col-md-8">
+        <h3>Sumary of patiens at {{ object.name|  capfirst }} Province</h3>
             {% render_table statistics %}
         </div>
-        </div>
-        <div class="col-md-9">
-            <h1>Districts at  {{ object.name|  capfirst }} Province </h1>
-            <table class="table table-bordered"  data-toggle="table" data-search="true">
-                <thead>
-                    <tr>
-                        <th>Name of the District</th>
-                        <th>Code</th>
-                        <th>Province</th>
-                    </tr>
-                </thead>
-                {% for district in districts %}
-                <tr>
-                {% with district.id as district_id  %}
-                    <td> <a href="{% url 'district_detail' pk=district_id %}">{{district.name }}</a> </td>
-                {% endwith %}
-                    <td>{{district.code  }}</td>
-                    <td>{{district.province }}</td>
-                </tr>
-                {% endfor %}
+        <div class="col-md-1">
+            <h3><a href="{% url 'patient_list' %}">Details</a></h3>
+
             </table>
         </div>
+    </div>
+
+
 </div>
 
 {% else %}
