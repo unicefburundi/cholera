@@ -40,5 +40,5 @@ class SearchForm(forms.Form):
         super (SearchForm,self).__init__( *args,**kwargs)
 
 
-    start_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
+    start_date = forms.DateField(input_formats=['%d/%m/%Y'], widget=forms.TextInput(attrs={'class':'datePicker'}))
     end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
