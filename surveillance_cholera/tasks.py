@@ -4,12 +4,20 @@ from django.shortcuts import render
 import requests
 from json2xls import Json2Xls
 import json
+from django.conf import settings
 
 def ask_update_on_patient(request):
 	''' This function checks if there is no one or more patient(s) reported to be sick and pass three days without any update '''
 
-	#The below two rows will be putted in local settings
-	token = raw_input('Enter your token: ')
+	
+	#token = raw_input('Enter your token: ')
+
+	token = getattr(settings,'TOKEN','')
+	if not token:
+		print("...token...")
+		print(token)
+		return render(request, 'test_temporary.html',locals())
+
 	contacts_url = 'https://api.rapidpro.io/api/v1/broadcasts.json'
 
 	the_current_date = datetime.datetime.now().date()
@@ -39,6 +47,7 @@ def ask_update_on_patient(request):
 				an_object['patient_id'] = patient.patient_id
 				an_object['entry_date'] = patient.date_entry
 				an_object['reporter_phone'] = the_reporter_s_phone_number
+				an_object['supervisor_phone'] = the_register.supervisor_phone_number
 				short_patient_id = patient.patient_id[6:]
 				#an_object['message'] = "Vous n avez donne aucune nouvelle sur le patient "+patient.patient_id
 				an_object['message'] = "Vous n avez donne aucune nouvelle sur le patient "+short_patient_id
