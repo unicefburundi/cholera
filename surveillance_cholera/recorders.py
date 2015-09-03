@@ -73,7 +73,7 @@ def check_supervisor_phone_number(args):
 
 def check_supervisor_phone_number_not_for_this_contact(args):
 	'''This function checks if the contact didn't send his/her phone number in the place of the supervisor phone number'''
-	if args['phone'] == args['text'].split(' ')[2]:
+	if args['phone'] == args['text'].split(' ')[2] or args['phone'][3:] == args['text'].split(' ')[2]:
 		args['valide'] = False
 		args['info_to_contact'] = "Erreur. Le numero de telephone du superviseur ne peut pas etre le tien."
 	else:
