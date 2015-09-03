@@ -43,7 +43,7 @@ def statistics(request):
     return get_statistics(request)
 
 
-
+@login_required
 def get_statistics(request):
     form = SearchForm(request)
     userprofile = UserProfile.objects.get(user=request.user)
