@@ -65,7 +65,7 @@ ROOT_URLCONF = 'cholera.urls'
 WSGI_APPLICATION = 'cholera.wsgi.application'
 
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'en-US'
 
 TIME_ZONE = 'Africa/Bujumbura'
 
