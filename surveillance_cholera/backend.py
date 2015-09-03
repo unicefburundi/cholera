@@ -68,6 +68,10 @@ def handel_rapidpro_request(request):
 	incoming_data['valide'] = True
 	incoming_data['info'] = "The default information."
 
+	#Because RapidPro sends the contact phone number by replacing "+" by "%2B"
+	#let's rewrite the phone number in a right way.
+	incoming_data['phone'] = incoming_data['phone'].replace("%2B","+")
+
 
 	#Let's instantiate the variable this function will return
 	response = {}

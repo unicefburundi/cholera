@@ -9,7 +9,7 @@ class Person(models.Model):
             return self.user.user.username
 
 class PhoneNumber(models.Model):
-    number = models.CharField(max_length=12)
+    number = models.CharField(max_length=100)
     person = models.ForeignKey(Person)
 
     def __unicode__(self):
@@ -65,9 +65,9 @@ class Patient(models.Model):
             return self.patient_id
 
 class Reporter(models.Model):
-    phone_number = models.CharField(max_length=12)
+    phone_number = models.CharField(max_length=100)
     cds = models.ForeignKey(CDS)
-    supervisor_phone_number = models.CharField(max_length=12)
+    supervisor_phone_number = models.CharField(max_length=100)
 
     def __unicode__(self):
         return self.phone_number
@@ -91,9 +91,9 @@ class Temporary(models.Model):
     '''
     This model will be used to temporary store a reporter who doesn't finish his self registration
     '''
-    phone_number = models.CharField(max_length=12)
+    phone_number = models.CharField(max_length=100)
     cds = models.ForeignKey(CDS)
-    supervisor_phone_number = models.CharField(max_length=12)
+    supervisor_phone_number = models.CharField(max_length=100)
 
     def __unicode__(self):
         return self.phone_number
