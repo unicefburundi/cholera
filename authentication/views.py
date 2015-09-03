@@ -5,6 +5,18 @@ from authentication.models import UserProfile
 from authentication.forms import UserProfileForm
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
+from surveillance_cholera.models import *
+
+def get_name_of_mohfacility(level='',code=''):
+    if level=='CDS':
+        return CDS.objects.get(code=code)
+    if level=='BDS':
+        return District.objects.get(code=code)
+    if level=='BPS':
+        return Province.objects.get(code=code)
+    if level=='CEN':
+        return 'Central'
+
 
 class UserProfileDetailView(DetailView):
     model = get_user_model()
@@ -12,9 +24,10 @@ class UserProfileDetailView(DetailView):
     template_name = "registration/user_detail.html"
 
     def get_object(self, queryset=None):
+        # import ipdb; ipdb.set_trace()
         user = super(UserProfileDetailView, self).get_object(queryset)
-        UserProfile.objects.get_or_create(user=user)
-        return user
+        userprofile = UserProfile.objects.get(user=user)
+        return {'user':user, 'facility':get_name_of_mohfacility(level=userprofile.level, code=userprofile.moh_facility)}
 
 
 

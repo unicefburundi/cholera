@@ -1,33 +1,37 @@
 {% extends "base_layout.html" %}
 
 {% block content %}
-<h2>{{ object.username|  capfirst }} ' s Profile</h2>
+<h2>{{ object.user.username|  capfirst }} ' s Profile</h2>
 <div class="container">
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
             <dl  class="dl-horizontal">
             <dt>Username :</dt>
-                <p>{{ object.userprofile.user.username }}</p>
-            {% if object.userprofile.user.first_name%}
+                <p>{{ object.user.userprofile.user.username }}</p>
+            {% if object.user.userprofile.user.first_name%}
             <dt>First name :</dt>
-                <p>{{ object.userprofile.user.first_name }}</p>
+                <p>{{ object.user.userprofile.user.first_name }}</p>
             {% endif %}
-            {% if object.userprofile.user.last_name%}
+            {% if object.user.userprofile.user.last_name%}
             <dt>Last name :</dt>
-                <p>{{ object.userprofile.user.last_name }}</p>
+                <p>{{ object.user.userprofile.user.last_name }}</p>
             {% endif %}
-            {% if object.userprofile.telephone%}
+            {% if object.user.userprofile.telephone%}
             <dt>Telephone :</dt>
-                <p>{{ object.userprofile.telephone }}</p>
+                <p>{{ object.user.userprofile.telephone }}</p>
             {% endif %}
-            {% if object.userprofile.level%}
+            {% if object.user.userprofile.level%}
             <dt>Level :</dt>
-                <p>{{ object.userprofile.level }}</p>
+                <p>{{ object.user.userprofile.level }}</p>
             {% endif %}
-            {% if object.userprofile.moh_facility%}
-            <dt>Moh_facility :</dt>
-                <p>{{ object.userprofile.moh_facility }}</p>
+            {% if object.user.userprofile.moh_facility%}
+            <dt>MoH facility code : </dt>
+                <p>{{ object.user.userprofile.moh_facility }}</p>
+            {% endif %}
+            {% if object.facility%}
+            <dt>{{ object.user.userprofile.level }} name :  </dt>
+                <p>  {{ object.facility }}</p>
             {% endif %}
         </dl>
         </div>
