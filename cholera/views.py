@@ -21,7 +21,6 @@ def get_cdss(request, district_id):
     return JsonResponse([cds_dict], safe=False)
 
 def get_districts(request, province_id):
-    # import ipdb; ipdb.set_trace()
     province = Province.objects.get(pk=province_id)
     districts = District.objects.filter(province=province)
     districts_dict = {}
@@ -30,7 +29,6 @@ def get_districts(request, province_id):
     return JsonResponse([districts_dict], safe=False)
 
 def get_all_patients(level=None,moh_facility=None):
-    # import ipdb; ipdb.set_trace()
     if level=='CDS':
         return Patient.objects.filter(cds__code=moh_facility)
     if level=='BDS':
@@ -48,12 +46,10 @@ def statistics(request):
 
 def get_statistics(request):
     form = SearchForm(request)
-    # import ipdb; ipdb.set_trace()
     userprofile = UserProfile.objects.get(user=request.user)
     all_patients = get_all_patients(level=userprofile.level, moh_facility=userprofile.moh_facility)
 
     if request.method == 'POST':
-        # import ipdb; ipdb.set_trace()
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
         if request.POST.get('start_date') == '':

@@ -151,7 +151,7 @@ GROUP_PERMISSIONS = {
 #-----------------------------------------------------------------------------------
 LOGIN_URL = reverse_lazy("login")
 LOGOUT_URL = reverse_lazy("logout")
-LOGIN_REDIRECT_URL = reverse_lazy("edit_profile")
+LOGIN_REDIRECT_URL = reverse_lazy("get_statistics")
 LOGOUT_REDIRECT_URL = reverse_lazy("home")
 
 #-----------------------------------------------------------------------------------

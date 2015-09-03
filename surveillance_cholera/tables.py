@@ -4,9 +4,20 @@ from surveillance_cholera.models import CDS, Patient
 class CDSTable(tables.Table):
     class Meta:
         model = CDS
-        attrs = {"class": "table table-bordered table-condensed"}
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-show-toggle":"true", "data-show-export":"true"}
 
 class PatientTable(tables.Table):
     class Meta:
         model = Patient
-        attrs = {"class": "table table-bordered table-condensed"}
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-show-toggle":"true", "data-show-export":"true"}
+
+class PatientsTable(tables.Table):
+    name = tables.Column()
+    total = tables.Column()
+    nc = tables.Column()
+    hospi = tables.Column()
+    sorties = tables.Column()
+    deces = tables.Column()
+
+    class Meta:
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-show-toggle":"true", "data-show-export":"true"}
