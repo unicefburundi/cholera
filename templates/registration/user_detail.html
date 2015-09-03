@@ -38,7 +38,7 @@
         <div class="col-md-3"></div>
     </div>
 </div>
-{% if object.username == user.username %}
+{% if object.user.username == user.username %}
 <p><a href='{% url "edit_profile" %}'>Edit my profile</a></p>
 {% endif %}
 {% endblock %}

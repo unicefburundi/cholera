@@ -74,3 +74,4 @@ def get_statistics(request):
     results = PatientTable(all_patients)
     RequestConfig(request, paginate={"per_page": 25}).configure(results)
     return render(request, 'statistics.html', { 'form':form, 'results' : results})
+

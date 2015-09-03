@@ -72,8 +72,15 @@
                     <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
                     {% if user.is_authenticated %}
                         <li>
-                            <a href="{% url 'profile' slug=user.username %}"> {{user.username}} </a>
+                            <a href="{% url 'profile' slug=user.username %}"> {{user.username}} Profile</a>
                         </li>
+                        {% if user|has_group:'CDS' %}
+                            <li><a href="{% url 'cds_detail' pk=myfacility.id %}">{{myfacility}}</a></li>
+                          {% elif  user|has_group:'BDS' %}
+                            <li><a href="{% url 'district_detail' pk=myfacility.id %}">{{myfacility}}</a></li>
+                          {% elif  user|has_group:'BPS' %}
+                            <li><a href="{% url 'province_detail' pk=myfacility.id %}">{{myfacility}}</a></li>
+                        {% endif %}
                         <li><a href="{% url 'statistics' %}">Search Patients</a></li>
                         <li role="presentation" class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -84,7 +91,7 @@
                               <li><a href="{% url 'district_list' %}">BDS</a></li>
                               <li><a href="{% url 'cds_list' %}">CDS</a></li>
                               <li role="separator" class="divider"></li>
-                              <li><a href="{% url 'patient_list' %}">Patients</a></li>
+                              <li><a href="{% url 'patient_list' %}">My Patients</a></li>
                             </ul>
                         </li>
                         <li>

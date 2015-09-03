@@ -5,17 +5,9 @@ from authentication.models import UserProfile
 from authentication.forms import UserProfileForm
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
-from surveillance_cholera.models import *
+from surveillance_cholera.context_processors import get_name_of_mohfacility
 
-def get_name_of_mohfacility(level='',code=''):
-    if level=='CDS':
-        return CDS.objects.get(code=code)
-    if level=='BDS':
-        return District.objects.get(code=code)
-    if level=='BPS':
-        return Province.objects.get(code=code)
-    if level=='CEN':
-        return 'Central'
+
 
 
 class UserProfileDetailView(DetailView):
@@ -52,7 +44,6 @@ class UserProfileEditView(UpdateView):
 
         form = UserProfileForm(request.POST, instance=profile)
         if form.is_valid():
-            # import ipdb; ipdb.set_trace()
             self.object = form.save()
             return HttpResponseRedirect(self.get_success_url())
         else:

@@ -26,7 +26,7 @@
     </div>
     <div class="row">
         {% if results %}
-        <h1>Results of the Search</h1>
+        <h3> Search patients at {{mylevel}} level : {{myfacility}} </h3>
             {% render_table results %}
         {% elif all_patients %}
         <h1>All Patients</h1>
