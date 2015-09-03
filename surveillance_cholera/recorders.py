@@ -71,6 +71,21 @@ def check_supervisor_phone_number(args):
 		args['valide'] = True
 		args['info_to_contact'] = "Le numero de telephone du superviseur est bien ecrit."
 
+def check_supervisor_phone_number_not_for_this_contact(args):
+	'''This function checks if the contact didn't send his/her phone number in the place of the supervisor phone number'''
+	print("args['phone']")
+	print(args['phone'])
+	print("args['phone'][4:]")
+	print(args['phone'][4:])
+	print("args['text'].split(' ')[2]")
+	print(args['text'].split(' ')[2])
+	if args['phone'] == args['text'].split(' ')[2] or args['phone'][4:] == args['text'].split(' ')[2]:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. Le numero de telephone du superviseur ne peut pas etre le tien."
+	else:
+		args['valide'] = True
+		args['info_to_contact'] = "Le numero de telephone du superviseur est bien note."
+
 def save_temporary_the_reporter(args):
 	same_existing_temp = Temporary.objects.filter(phone_number = args['phone'])
 	if len(same_existing_temp) > 0:
@@ -107,6 +122,11 @@ def temporary_record_reporter(args):
 
 	#Let's check is the supervisor phone number is valid
 	check_supervisor_phone_number(args)
+	if not args['valide']:
+		return
+
+	#Let's check if the contact didn't send his/her number in the place of the supervisor number
+	check_supervisor_phone_number_not_for_this_contact(args)
 	if not args['valide']:
 		return
 
