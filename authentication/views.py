@@ -5,6 +5,10 @@ from authentication.models import UserProfile
 from authentication.forms import UserProfileForm
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
+from surveillance_cholera.context_processors import get_name_of_mohfacility
+
+
+
 
 class UserProfileDetailView(DetailView):
     model = get_user_model()
@@ -12,9 +16,10 @@ class UserProfileDetailView(DetailView):
     template_name = "registration/user_detail.html"
 
     def get_object(self, queryset=None):
+        # import ipdb; ipdb.set_trace()
         user = super(UserProfileDetailView, self).get_object(queryset)
-        UserProfile.objects.get_or_create(user=user)
-        return user
+        userprofile = UserProfile.objects.get(user=user)
+        return {'user':user, 'facility':get_name_of_mohfacility(level=userprofile.level, code=userprofile.moh_facility)}
 
 
 
@@ -39,7 +44,6 @@ class UserProfileEditView(UpdateView):
 
         form = UserProfileForm(request.POST, instance=profile)
         if form.is_valid():
-            # import ipdb; ipdb.set_trace()
             self.object = form.save()
             return HttpResponseRedirect(self.get_success_url())
         else:

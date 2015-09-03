@@ -1,4 +1,5 @@
 {% extends "base_layout.html" %}
+{% load extras_utils %}
 {% block content %}
 {% if object_list %}
     <div class="container">
@@ -16,7 +17,11 @@
         {% for cds in object_list %}
             <tr>
                 {% with cds.id as code  %}
-                    <td><a href="{% url 'district_detail' pk=code %} " class="btn btn_link">{{ cds.name }}</a></td>
+                    {% if user|has_group:'Central' %}
+                        <td><a href="{% url 'district_detail' pk=code %} " class="btn btn_link">{{ cds.name }}</a></td>
+                        {% else %}
+                        <td>{{ cds.name }}</td>
+                    {% endif %}
                     <td>{{ cds.code}}</td>
                     <td>{{ cds.province}}</td>
                 {% endwith %}

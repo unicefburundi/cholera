@@ -16,32 +16,18 @@
                 <p> {{object.province}}</p>
             </dl>
         </div>
-        <div class="col-md-9">
-            <h1>Statistics</h1>
+        <div class="col-md-8">
+        <h3>Sumary of patiens at {{ object.name|  capfirst }} District</h3>
             {% render_table statistics %}
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-9">
-            <h1>CDS at  {{ object.name|  capfirst }} District  </h1>
-            <table class="table table-bordered" data-toggle="table" data-search="true">
-                <thead>
-                    <tr>
-                        <th>Name of the CDS</th>
-                        <th>Code</th>
-                    </tr>
-                </thead>
-                {% for cds in cdss %}
-                <tr>
-                {% with cds.id as cds_id  %}
-                    <td> <a href="{% url 'cds_detail' pk=cds_id %}">{{cds.name }}</a> </td>
-                {% endwith %}
-                    <td>{{cds.code  }}</td>
-                </tr>
-                {% endfor %}
+        <div class="col-md-1">
+            <h3><a href="{% url 'patient_list' %}">Details</a></h3>
+
             </table>
         </div>
     </div>
+
+
 </div>
 {% else %}
 No Patient in this District

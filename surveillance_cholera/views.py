@@ -53,16 +53,6 @@ class CDSListView(ListView):
     model = CDS
     paginate_by = 25
 
-    def get_queryset(self):
-        qs = CDS.objects.all()
-        user = UserProfile.objects.get(user=self.request.user.id)
-        if user.level == 'CDS':
-            qs = CDS.objects.filter(code=int(user.moh_facility))
-        if user.level == 'BDS':
-            qs = CDS.objects.filter(district__code=int(user.moh_facility))
-        if user.level == 'BPS':
-            qs = CDS.objects.filter(district__province__code=int(user.moh_facility))
-        return qs
 
 
 class CDSDetailView(DetailView):
@@ -83,12 +73,6 @@ class ProvinceListView(ListView):
     model = Province
     paginate_by = 25
 
-    def get_queryset(self):
-        qs = Province.objects.all()
-        user = UserProfile.objects.get(user=self.request.user.id)
-        if user.level == 'BPS':
-            qs = Province.objects.filter(code=int(user.moh_facility))
-        return qs
 
 class ProvinceDetailView(DetailView):
     model = Province
@@ -108,15 +92,6 @@ class DistrictListView(ListView):
     model = District
     paginate_by = 25
 
-    def get_queryset(self):
-        # import ipdb; ipdb.set_trace()
-        qs = District.objects.all()
-        user = UserProfile.objects.get(user=self.request.user.id)
-        if user.level == 'BDS':
-            qs = District.objects.filter(code=int(user.moh_facility))
-        if user.level == 'BPS':
-            qs = District.objects.filter(province__code=int(user.moh_facility))
-        return qs
 
 
 class DistrictDetailView(DetailView):
@@ -138,7 +113,6 @@ class PatientListView(ListView):
     paginate_by = 25
 
     def get_queryset(self):
-        # import ipdb; ipdb.set_trace()
         qs = Patient.objects.all()
         user = UserProfile.objects.get(user=self.request.user.id)
         if user.level == 'CDS':
