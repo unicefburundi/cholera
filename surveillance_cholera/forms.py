@@ -44,7 +44,13 @@ class SearchForm(forms.Form):
     end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
 
 class PatientSearchForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(PatientSearchForm, self).__init__(*args, **kwargs)
+        for key in self.fields:
+            self.fields[key].required = False
+
     class Meta:
         # Provide an association between the ModelForm and a model
         model = Patient
-        exclude = ('patient_id','date_entry', 'exit_date')
+        exclude = ('patient_id','date_entry', 'exit_date', 'cds')

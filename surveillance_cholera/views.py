@@ -8,6 +8,8 @@ from surveillance_cholera.forms import PatientSearchForm
 from django.contrib.auth.decorators import login_required
 from surveillance_cholera.tables import PatientTable
 from cholera.views import get_all_patients
+from django.db.models import Q
+
 ###########
 # CDS              ##
 ###########
@@ -144,7 +146,15 @@ def get_patients_by_code(request, code=''):
         all_patients = all_patients.filter(cds__district__code=code)
     if len(code)>4 :
         all_patients = all_patients.filter(cds__code=code)
+    if request.method == 'POST':
+        form = PatientSearchForm(request.POST)
+        if form.is_valid():
+            intervention = form.cleaned_data['intervention']
+            sexe = form.cleaned_data['sexe']
+            age = form.cleaned_data['age']
+            colline_name = form.cleaned_data['colline_name']
+            all_patients = all_patients.filter(Q(intervention=intervention) & Q(sexe=sexe) & Q(age=age) & Q(colline_name=colline_name) | Q(sexe=sexe) )
 
     results = PatientTable(all_patients)
     RequestConfig(request, paginate={"per_page": 25}).configure(results)
-    return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results})
+    return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': code})

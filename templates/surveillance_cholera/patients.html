@@ -2,33 +2,41 @@
 {% load staticfiles %}
 {% load render_table from django_tables2 %}
 {% block content %}
-        <form action="" method="post" id="post-form">
+        <form action="" method="post" id="post-form" class="form-inline">
         {% csrf_token %}
         <div class="row">
         <div class="col-lg-1"></div>
         <div class="col-lg-9">
-            <div class="form-group list-group">
-              {% if form %}
-                <ul>
-                    {% for field in form %}
-                    <li>{{ field.label_tag }} {{ field }}</li>
-                    {% for error in field.errors %}
-                      <p  style="color: red;">{{ error }}</p>
-                    {% endfor %}
-                </ul>
-                {% endfor %}
-            {% endif %}
+        {% if form %}
+            <div class="form-group ">
+                <label for="colline_name">Colline name</label>
+                {{form.colline_name}}
           </div>
+          <div class="form-group ">
+                <label for="age">age</label>
+                {{form.age}}
+          </div>
+          <div class="form-group ">
+                <label for="sexe">sexe</label>
+                {{form.sexe}}
+          </div>
+          <div class="form-group ">
+                <label for="intervention">intervention</label>
+                {{form.intervention}}
+          </div>
+        {% endif %}
         </div>
         <div class="col-lg-2">
-            <button type="submit" class="btn btn-default">Filter</button>
+            <button type="submit" class="btn btn-primary">Filter</button>
         </div>
         </div>
     </form>
     </div>
     <div class="row">
         {% if results %}
-        <h3> Cholera patients at {{mylevel}} : {{myfacility}} </h3>
+        {% with moh_facility as moh  %}
+            <h3> Cholera patients at <a href="{% url 'get_by_code' moh %}">{{moh_facility}}</a> facility </h3>
+        {% endwith %}
             {% render_table results %}
         {% elif all_patients %}
         <h1>All Patients</h1>

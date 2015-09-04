@@ -19,7 +19,7 @@ class PatientsTable(tables.Table):
     hospi = tables.Column()
     sorties = tables.Column()
     deces = tables.Column()
-    detail = tables.LinkColumn('get_patients_by_code', args=[A('detail')], orderable=False, empty_values=())
+    detail = tables.LinkColumn('get_patients_by_code', args=[A('detail')], orderable=False, empty_values=(), verbose_name='Click for details')
 
     class Meta:
         attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true"}
@@ -31,7 +31,7 @@ class Patients2Table(tables.Table):
     hospi = tables.Column()
     sorties = tables.Column()
     deces = tables.Column()
-    detail = tables.LinkColumn('get_patients_by_code', args=[A('detail')], orderable=False, empty_values=())
+    detail = tables.LinkColumn('get_patients_by_code', args=[A('detail')], orderable=False, empty_values=(), verbose_name='Click for details')
 
     class Meta:
         attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true"}
