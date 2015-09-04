@@ -65,7 +65,7 @@ ROOT_URLCONF = 'cholera.urls'
 WSGI_APPLICATION = 'cholera.wsgi.application'
 
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-US'
 
 TIME_ZONE = 'Africa/Bujumbura'
 
@@ -152,7 +152,7 @@ GROUP_PERMISSIONS = {
 #-----------------------------------------------------------------------------------
 LOGIN_URL = reverse_lazy("login")
 LOGOUT_URL = reverse_lazy("logout")
-LOGIN_REDIRECT_URL = reverse_lazy("get_statistics")
+LOGIN_REDIRECT_URL = reverse_lazy("home")
 LOGOUT_REDIRECT_URL = reverse_lazy("home")
 
 #-----------------------------------------------------------------------------------

@@ -23,7 +23,7 @@
       $.widget.bridge('uibutton', $.ui.button);
       // on page load
       $(function() {
-      $( ".datePicker" ).datepicker();
+      $( ".datePicker" ).datepicker({ dateFormat: 'dd/mm/yy' });
       });
     </script>
     {% block css_section %}
@@ -75,13 +75,12 @@
                             <a href="{% url 'profile' slug=user.username %}"> {{user.username}} Profile</a>
                         </li>
                         {% if user|has_group:'CDS' %}
-                            <li><a href="{% url 'cds_detail' pk=myfacility.id %}">{{myfacility}}</a></li>
+                            <li><a href="{% url 'cds_detail' pk=myfacility.id %}">Statistics</a></li>
                           {% elif  user|has_group:'BDS' %}
-                            <li><a href="{% url 'district_detail' pk=myfacility.id %}">{{myfacility}}</a></li>
+                            <li><a href="{% url 'district_detail' pk=myfacility.id %}">Statistics</a></li>
                           {% elif  user|has_group:'BPS' %}
-                            <li><a href="{% url 'province_detail' pk=myfacility.id %}">{{myfacility}}</a></li>
+                            <li><a href="{% url 'province_detail' pk=myfacility.id %}">Statistics</a></li>
                         {% endif %}
-                        <li><a href="{% url 'statistics' %}">Search Patients</a></li>
                         <li role="presentation" class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                               Facilities <span class="caret"></span>

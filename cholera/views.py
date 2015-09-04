@@ -8,6 +8,8 @@ from django.http import JsonResponse
 import datetime
 from surveillance_cholera.templatetags.extras_utils import format_to_time
 from authentication.models import UserProfile
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 def home(request):
     return render(request, 'base_layout.html')
@@ -74,4 +76,15 @@ def get_statistics(request):
     results = PatientTable(all_patients)
     RequestConfig(request, paginate={"per_page": 25}).configure(results)
     return render(request, 'statistics.html', { 'form':form, 'results' : results})
+
+def get_by_code(request, code=''):
+    if len(code)<=2 :
+        url = reverse('province_detail', kwargs={'pk': Province.objects.get(code=code).id})
+        return HttpResponseRedirect(url)
+    if len(code)>2 and len(code)<=4 :
+        url = reverse('district_detail', kwargs={'pk': District.objects.get(code=code).id})
+        return HttpResponseRedirect(url)
+    if len(code)>4 :
+        url = reverse('cds_detail', kwargs={'pk': CDS.objects.get(code=code).id})
+        return HttpResponseRedirect(url)
 
