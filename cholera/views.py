@@ -57,7 +57,7 @@ def get_statistics(request):
         if request.POST.get('start_date') == '':
             start_date = u'01/01/2012'
         if request.POST.get('end_date') == '':
-            end_date = datetime.date.today().strftime('%m/%d/%Y')
+            end_date = datetime.date.today().strftime('%d/%m/%Y')
         if request.POST.get('province') !='':
             if request.POST.get('districts') != '':
                 if request.POST.get('cds') != '':
@@ -88,3 +88,6 @@ def get_by_code(request, code=''):
         url = reverse('cds_detail', kwargs={'pk': CDS.objects.get(code=code).id})
         return HttpResponseRedirect(url)
 
+def landing(request):
+    code = UserProfile.objects.get(user=request.user).moh_facility
+    return get_by_code(request=request,code=str(code))

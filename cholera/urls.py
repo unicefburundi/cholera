@@ -6,6 +6,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
     url(r'^$', 'cholera.views.home', name='home'),
+    url(r'^landing/$', 'cholera.views.landing', name='landing'),
     url(r'^get_cdss/(?P<district_id>\d+)/$', 'cholera.views.get_cdss', name="get_cdss"),
     url(r'^get_districts/(?P<province_id>\d+)/$', 'cholera.views.get_districts', name="get_districts"),
     url(r'^get_by_code/(?P<code>\d+)/$', 'cholera.views.get_by_code', name="get_by_code"),

@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from surveillance_cholera.tables import PatientTable
 from cholera.views import get_all_patients
 from django.db.models import Q
+import datetime
+from surveillance_cholera.templatetags.extras_utils import format_to_time
 
 ###########
 # CDS              ##
@@ -54,14 +56,9 @@ def get_province_data(moh_facility_id):
         elemet.append(get_per_district_data(i.id))
     return elemet
 
-
-
-
 class CDSListView(ListView):
     model = CDS
     paginate_by = 25
-
-
 
 class CDSDetailView(DetailView):
     model = CDS
@@ -99,8 +96,6 @@ class ProvinceDetailView(DetailView):
 class DistrictListView(ListView):
     model = District
     paginate_by = 25
-
-
 
 class DistrictDetailView(DetailView):
     model = District
@@ -159,6 +154,16 @@ def get_patients_by_code(request, code=''):
                 all_patients = all_patients.filter(Q(colline_name=form.cleaned_data['colline_name']))
             if form.cleaned_data['exit_status'] !='':
                 all_patients = all_patients.filter(Q(exit_status=form.cleaned_data['exit_status']))
+            # import ipdb; ipdb.set_trace()
+            # if form.cleaned_data['start_date'] == None:
+            #     start_date = datetime.datetime(2012,1,1)
+            # else:
+            #     start_date = form.cleaned_data['start_date']
+            # if form.cleaned_data['end_date'] == None:
+            #     end_date = datetime.date.today()
+            # else:
+            #     end_date = form.cleaned_data['end_date']
+            #     all_patients = all_patients.filter(date_entry__range=[form.cleaned_data['start_date'], form.cleaned_data['end_date']])
 
     results = PatientTable(all_patients)
     RequestConfig(request, paginate={"per_page": 25}).configure(results)
