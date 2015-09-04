@@ -88,13 +88,3 @@ def get_by_code(request, code=''):
         url = reverse('cds_detail', kwargs={'pk': CDS.objects.get(code=code).id})
         return HttpResponseRedirect(url)
 
-def get_patients_by_code(request, code=''):
-    if len(code)<=2 :
-        url = reverse('province_detail', kwargs={'pk': Province.objects.get(code=code).id})
-        return HttpResponseRedirect(url)
-    if len(code)>2 and len(code)<=4 :
-        url = reverse('district_detail', kwargs={'pk': District.objects.get(code=code).id})
-        return HttpResponseRedirect(url)
-    if len(code)>4 :
-        url = reverse('cds_detail', kwargs={'pk': CDS.objects.get(code=code).id})
-        return HttpResponseRedirect(url)

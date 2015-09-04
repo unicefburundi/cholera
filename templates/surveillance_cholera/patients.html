@@ -1,0 +1,38 @@
+{% extends "base_layout.html" %}
+{% load staticfiles %}
+{% load render_table from django_tables2 %}
+{% block content %}
+        <form action="" method="post" id="post-form">
+        {% csrf_token %}
+        <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-9">
+            <div class="form-group list-group">
+              {% if form %}
+                <ul>
+                    {% for field in form %}
+                    <li>{{ field.label_tag }} {{ field }}</li>
+                    {% for error in field.errors %}
+                      <p  style="color: red;">{{ error }}</p>
+                    {% endfor %}
+                </ul>
+                {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-lg-2">
+            <button type="submit" class="btn btn-default">Filter</button>
+        </div>
+        </div>
+    </form>
+    </div>
+    <div class="row">
+        {% if results %}
+        <h3> Cholera patients at {{mylevel}} : {{myfacility}} </h3>
+            {% render_table results %}
+        {% elif all_patients %}
+        <h1>All Patients</h1>
+            {% render_table all_patients %}
+        {% endif %}
+    </div>
+{% endblock content %}

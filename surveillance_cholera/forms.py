@@ -42,3 +42,9 @@ class SearchForm(forms.Form):
 
     start_date = forms.DateField(input_formats=['%d/%m/%Y'], widget=forms.TextInput(attrs={'class':'datePicker'}))
     end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
+
+class PatientSearchForm(forms.ModelForm):
+    class Meta:
+        # Provide an association between the ModelForm and a model
+        model = Patient
+        exclude = ('patient_id','date_entry', 'exit_date')

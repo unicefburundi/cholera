@@ -3,7 +3,11 @@ from surveillance_cholera.models import CDS, Province, District, Patient
 from authentication.models import UserProfile
 from django_tables2 import  RequestConfig
 from surveillance_cholera.tables import PatientsTable, Patients2Table
-
+from django.shortcuts import render
+from surveillance_cholera.forms import PatientSearchForm
+from django.contrib.auth.decorators import login_required
+from surveillance_cholera.tables import PatientTable
+from cholera.views import get_all_patients
 ###########
 # CDS              ##
 ###########
@@ -127,3 +131,20 @@ class PatientListView(ListView):
 
 class PatientDetailView(DetailView):
     model = Patient
+
+
+@login_required
+def get_patients_by_code(request, code=''):
+    userprofile = UserProfile.objects.get(user=request.user)
+    all_patients = get_all_patients(level=userprofile.level, moh_facility=userprofile.moh_facility)
+    form = PatientSearchForm()
+    if len(code)<=2 :
+        all_patients = all_patients.filter(cds__district__province__code=code)
+    if len(code)>2 and len(code)<=4 :
+        all_patients = all_patients.filter(cds__district__code=code)
+    if len(code)>4 :
+        all_patients = all_patients.filter(cds__code=code)
+
+    results = PatientTable(all_patients)
+    RequestConfig(request, paginate={"per_page": 25}).configure(results)
+    return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results})
