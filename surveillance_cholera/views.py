@@ -2,7 +2,7 @@ from django.views.generic import ListView, DetailView
 from surveillance_cholera.models import CDS, Province, District, Patient
 from authentication.models import UserProfile
 from django_tables2 import  RequestConfig
-from surveillance_cholera.tables import PatientsTable
+from surveillance_cholera.tables import PatientsTable, Patients2Table
 
 ###########
 # CDS              ##
@@ -85,7 +85,7 @@ class ProvinceDetailView(DetailView):
         districts = District.objects.filter(province=moh_facility)
         context['districts'] = districts
         data = get_province_data(moh_facility)
-        statistics = PatientsTable(data)
+        statistics = Patients2Table(data)
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
         return context
