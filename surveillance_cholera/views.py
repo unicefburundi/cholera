@@ -24,6 +24,7 @@ def get_per_cds_data(moh_facility):
 
 def get_per_district_data(moh_facility):
     facility = {'name': District.objects.get(id=moh_facility).name}
+    detail = {'detail':  District.objects.get(id=moh_facility).code}
     total ={'total': Patient.objects.filter(cds__district=moh_facility).count()}
     deces= {'deces' : Patient.objects.filter(cds__district=moh_facility, intervention='DD').count()}
     sorties = {'sorties' : Patient.objects.filter(cds__district=moh_facility, intervention='PR').count()}
@@ -31,7 +32,7 @@ def get_per_district_data(moh_facility):
     nc = {'nc' : Patient.objects.filter(cds__district=moh_facility, exit_status=None).count()}
 
     elemet = {}
-    for i in [total,deces,sorties,hospi,nc, facility]:
+    for i in [total,deces,sorties,hospi,nc, facility, detail]:
             elemet.update(i)
     return elemet
 
