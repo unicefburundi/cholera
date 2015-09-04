@@ -44,6 +44,12 @@ class SearchForm(forms.Form):
     end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
 
 class PatientSearchForm(forms.ModelForm):
+    start_date = forms.DateField(input_formats=['%d/%m/%Y'], widget=forms.TextInput(attrs={'class':'datePicker'}))
+    end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
+    exit_status = forms.ChoiceField(widget = forms.Select(), choices=[('','-----'),('Pr', 'Reference'), ('Pd', 'Deces'), ('Pg', 'Gueris')])
+    sexe = forms.ChoiceField(widget = forms.Select(), choices=[('','-----'),('M', 'Male'), ('F', 'Female')])
+    intervention = forms.ChoiceField(widget = forms.Select(), choices=[('','-----'),('HOSPI', 'Hospitalisation'), ('DD', 'Deces'), ('PR', 'Reference'), ('DESH', 'Non Hospitalise')])
+    age = forms.ChoiceField(widget = forms.Select(), choices=[('','-----'),('A1', 'Inf 5ans'), ('A2', 'Sup 5ans')])
 
     def __init__(self, *args, **kwargs):
         super(PatientSearchForm, self).__init__(*args, **kwargs)
