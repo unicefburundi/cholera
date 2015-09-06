@@ -143,6 +143,7 @@ def get_patients_by_code(request, code=''):
         all_patients = all_patients.filter(cds__code=code)
     if request.method == 'POST':
         form = PatientSearchForm(request.POST)
+        # import ipdb; ipdb.set_trace()
         if form.is_valid():
             if form.cleaned_data['intervention'] !='':
                 all_patients = all_patients.filter(Q(intervention=form.cleaned_data['intervention']))
@@ -154,16 +155,11 @@ def get_patients_by_code(request, code=''):
                 all_patients = all_patients.filter(Q(colline_name=form.cleaned_data['colline_name']))
             if form.cleaned_data['exit_status'] !='':
                 all_patients = all_patients.filter(Q(exit_status=form.cleaned_data['exit_status']))
-            # import ipdb; ipdb.set_trace()
-            # if form.cleaned_data['start_date'] == None:
-            #     start_date = datetime.datetime(2012,1,1)
-            # else:
-            #     start_date = form.cleaned_data['start_date']
-            # if form.cleaned_data['end_date'] == None:
-            #     end_date = datetime.date.today()
-            # else:
-            #     end_date = form.cleaned_data['end_date']
-            #     all_patients = all_patients.filter(date_entry__range=[form.cleaned_data['start_date'], form.cleaned_data['end_date']])
+            if form.cleaned_data['start_date'] == None:
+                form.cleaned_data['start_date']= datetime.datetime(2012,1,1)
+            if form.cleaned_data['end_date'] == None:
+                form.cleaned_data['end_date'] = datetime.date.today()
+                all_patients = all_patients.filter(date_entry__range=[form.cleaned_data['start_date'], form.cleaned_data['end_date']])
 
     results = PatientTable(all_patients)
     RequestConfig(request, paginate={"per_page": 25}).configure(results)

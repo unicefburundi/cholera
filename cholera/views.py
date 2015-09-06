@@ -78,11 +78,15 @@ def get_statistics(request):
     return render(request, 'statistics.html', { 'form':form, 'results' : results})
 
 def get_by_code(request, code=''):
+    # import ipdb; ipdb.set_trace()
+    if code=='None':
+        url = reverse('home')
+        return HttpResponseRedirect(url)
     if len(code)<=2 :
         url = reverse('province_detail', kwargs={'pk': Province.objects.get(code=code).id})
         return HttpResponseRedirect(url)
     if len(code)>2 and len(code)<=4 :
-        url = reverse('district_detail', kwargs={'pk': District.objects.get(code=code).id})
+        url = reverse('district_detail', kwargs={'pk': District.objects.get(code=str(code)).id})
         return HttpResponseRedirect(url)
     if len(code)>4 :
         url = reverse('cds_detail', kwargs={'pk': CDS.objects.get(code=code).id})

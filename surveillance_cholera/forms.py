@@ -60,3 +60,8 @@ class PatientSearchForm(forms.ModelForm):
         # Provide an association between the ModelForm and a model
         model = Patient
         exclude = ('patient_id','date_entry', 'exit_date', 'cds')
+
+    def clean(self):
+        cleaned_data=super(PatientSearchForm, self).clean()
+        # import ipdb; ipdb.set_trace()
+        pass
