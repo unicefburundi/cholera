@@ -143,7 +143,6 @@ def get_patients_by_code(request, code=''):
         all_patients = all_patients.filter(cds__code=code)
     if request.method == 'POST':
         form = PatientSearchForm(request.POST)
-        # import ipdb; ipdb.set_trace()
         if form.is_valid():
             if form.cleaned_data['intervention'] !='':
                 all_patients = all_patients.filter(Q(intervention=form.cleaned_data['intervention']))
@@ -159,7 +158,11 @@ def get_patients_by_code(request, code=''):
                 form.cleaned_data['start_date']= datetime.datetime(2012,1,1)
             if form.cleaned_data['end_date'] == None:
                 form.cleaned_data['end_date'] = datetime.date.today()
-                all_patients = all_patients.filter(date_entry__range=[form.cleaned_data['start_date'], form.cleaned_data['end_date']])
+
+            results = PatientTable(all_patients.filter(date_entry__range=[form.cleaned_data['start_date'], form.cleaned_data['end_date']]))
+            RequestConfig(request, paginate={"per_page": 25}).configure(results)
+            return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': code})
+
 
     results = PatientTable(all_patients)
     RequestConfig(request, paginate={"per_page": 25}).configure(results)
