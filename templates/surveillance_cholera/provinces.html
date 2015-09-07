@@ -1,26 +1,18 @@
 {% extends "base_layout.html" %}
 {% load render_table from django_tables2 %}
 {% block content %}
-{% if object %}
-<h2>Centre de sante : {{ object.name|  capfirst }}</h2>
+{% if statistics %}
+<h2></h2>
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-            <h1>Description </h1>
-            <dl class="dl-horizontal">
-                <dt>Name of the Province : </dt>
-                <p> {{object.name}}</p>
-                <dt>Code of the Province : </dt>
-                <p> {{object.code}}</p>
-            </dl>
         </div>
         <div class="col-md-8">
-        <h3>Analytics of patients at  {{ object.name|  capfirst }} Province</h3>
+        <h3>Analytics of patients by Provinces</h3>
             {% render_table statistics %}
         </div>
         <div class="col-md-1">
             <h3><a href="{% url 'patient_list' %}">Details</a></h3>
-
             </table>
         </div>
     </div>

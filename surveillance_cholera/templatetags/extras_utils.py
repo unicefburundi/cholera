@@ -1,5 +1,6 @@
 from django import template
 import datetime
+from surveillance_cholera.models import Patient
 
 register = template.Library()
 @register.filter(name='has_group')
@@ -29,3 +30,13 @@ def not_in_central_group(user):
     if user:
         return user.groups.filter(name='Central').count() == 0
     return False
+
+def get_all_patients(level=None,moh_facility=None):
+    if level=='CDS':
+        return Patient.objects.filter(cds__code=moh_facility)
+    if level=='BDS':
+        return Patient.objects.filter(cds__district__code=moh_facility)
+    if level =='BPS':
+        return Patient.objects.filter(cds__district__province__code=moh_facility)
+    else:
+        return Patient.objects.all()

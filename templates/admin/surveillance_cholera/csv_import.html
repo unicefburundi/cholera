@@ -1,0 +1,52 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+{% load admin_urls %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_label|capfirst|escape }}</a>
+&rsaquo; {% if has_change_permission %}<a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %}
+&rsaquo; {% if add %}{% trans 'Import CSV' %}{% endif %}
+</div>
+{% endblock %}
+
+{% block content_title %}<h1>{% trans "Import CSV" %}</h1>{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    <ul class="object-tools">
+      <li><a href="{% url opts|admin_urlname:"csvtemplate" %}">{% trans "Download the CSV template" %}</a></li>
+    </ul>
+    <form method="post" enctype="multipart/form-data">
+      <div>
+        {% if form.non_field_errors %}
+          <p class="errornote">
+          {% blocktrans count counter=form.non_field_errors|length %}There was an error while importing the CSV:{% plural %}There were some errors while importing the CSV:{% endblocktrans %}
+          </p>
+          {{ form.non_field_errors }}
+        {% endif %}
+        {% csrf_token %}
+        <fieldset class="module align">
+          {% for field in form %}
+            <div class="form-row field-{{ field.name }}{% if field.errors %} error{% endif %}">
+              <div class="field-box field-{{ field.name}}">
+                {{ field.errors }}
+                {% if field.is_checkbox %}
+                    {{ field }}{{ field.label_tag }}
+                {% else %}
+                    {{ field.label_tag }}
+                    {{ field }}
+                {% endif %}
+                {% if field.help_text %}
+                    <p class="help">{{ field.help_text|safe }}</p>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </fieldset>
+        <div class="submit-row"><input type="submit" class="default" value="Upload"></div>
+      </div>
+    </form>
+  </div>
+{% endblock %}
