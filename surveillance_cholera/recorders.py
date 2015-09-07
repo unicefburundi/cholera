@@ -371,13 +371,16 @@ def check_validity_of_id(args):
 def check_exit_date(args):
 	'''This function checks if the exit date is valid.'''
 
-	expression = r'^((0[1-9])|([1-2][0-9])|(3[01]))-((0[1-9])|(1[0-2]))-[0-9]{4}$'
+	#expression = r'^((0[1-9])|([1-2][0-9])|(3[01]))-((0[1-9])|(1[0-2]))-[0-9]{4}$'
+	expression = r'^((0[1-9])|([1-2][0-9])|(3[01]))((0[1-9])|(1[0-2]))[0-9]{2}$'
 	if re.search(expression, args['text'].split(' ')[2]) is None:
 		args['valide'] = False
 		args['info_to_contact'] = "La date indiquee n est pas valide."
 		return
-
-	if datetime.datetime.strptime(args['text'].split(' ')[2], '%d-%m-%Y') > datetime.datetime.now():
+	
+	exit_date = args['text'].split(' ')[2][0:2]+"-"+args['text'].split(' ')[2][2:4]+"-20"+args['text'].split(' ')[2][4:]
+	#if datetime.datetime.strptime(args['text'].split(' ')[2], '%d-%m-%Y') > datetime.datetime.now():
+	if datetime.datetime.strptime(exit_date, '%d-%m-%Y') > datetime.datetime.now():
 		args['valide'] = False
 		args['info_to_contact'] = "La date indiquee n est pas valide."
 	else:
@@ -415,7 +418,7 @@ def record_track_message(args):
 	#Let's check if the exit date is valid
 	check_exit_date(args)
 	print(args['valide'])
-	if not args['valide']:`
+	if not args['valide']:
 		return
 
 	#Let's check if the exit status is valid
@@ -450,8 +453,10 @@ def record_track_message(args):
 
 
 
-	day_month_year = args['text'].split(' ')[2].split("-")
-	year_month_day = day_month_year[2]+"-"+day_month_year[1]+"-"+day_month_year[0]
+	#day_month_year = args['text'].split(' ')[2].split("-")
+	day_month_year = args['text'].split(' ')[2][0:2]+"-"+args['text'].split(' ')[2][2:4]+"-20"+args['text'].split(' ')[2][4:]
+	#year_month_day = day_month_year[2]+"-"+day_month_year[1]+"-"+day_month_year[0]
+	year_month_day = "20"+args['text'].split(' ')[2][4:]+"-"+args['text'].split(' ')[2][2:4]+"-"+args['text'].split(' ')[2][0:2]
 
 
 	#Let's update the patient
