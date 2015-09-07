@@ -193,7 +193,7 @@ def check_patient_age(args):
 	The_patient_age = args['text'].split(' ')[3]
 
 	#The below list will be putted in localsettings
-	valid_ages = ['A1','A2']
+	valid_ages = ['A1','A2','a1','a2']
 
 	if(The_patient_age not in valid_ages):
 		args['valide'] = False
@@ -207,7 +207,7 @@ def check_gender(args):
 	the_patient_gender = args['text'].split(' ')[4]
 
 	#The bellow list will be putted in localsettings
-	gender_values = ['F','M']
+	gender_values = ['F','M','f','m']
 
 	if(the_patient_gender not in gender_values):
 		args['valide'] = False
@@ -332,7 +332,7 @@ def record_patient(args):
 	#the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2], age = args['text'].split(' ')[3], sexe = args['text'].split(' ')[4], intervention = args['text'].split(' ')[5], date_entry = full_entry_date_in_date)
 
 
-	the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2], age = args['text'].split(' ')[3], sexe = args['text'].split(' ')[4], intervention = args['text'].split(' ')[5], date_entry = full_entry_date_in_date, cds = one_concerned_cds)
+	the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2].title(), age = args['text'].split(' ')[3].title(), sexe = args['text'].split(' ')[4].title(), intervention = args['text'].split(' ')[5].title(), date_entry = full_entry_date_in_date, cds = one_concerned_cds)
 
 
 	#the_created_report = Report.objects.create(patient = the_created_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'].replace("+", " "), report_type = args['message_type'])
@@ -415,7 +415,7 @@ def record_track_message(args):
 	#Let's check if the exit date is valid
 	check_exit_date(args)
 	print(args['valide'])
-	if not args['valide']:
+	if not args['valide']:`
 		return
 
 	#Let's check if the exit status is valid
@@ -456,11 +456,11 @@ def record_track_message(args):
 
 	#Let's update the patient
 	one_concerned_patient.exit_date = year_month_day
-	one_concerned_patient.exit_status = args['text'].split(' ')[3]
+	one_concerned_patient.exit_status = args['text'].split(' ')[3].title()
 	one_concerned_patient.save()
 
 
-	TrackPatientMessage.objects.create(exit_date = year_month_day, exit_status = args['text'].split(' ')[3], report = the_created_report)
+	TrackPatientMessage.objects.create(exit_date = year_month_day, exit_status = args['text'].split(' ')[3].title(), report = the_created_report)
 
 	args['valide'] = True
 	args['info_to_contact'] = "Votre rapport a ete bien enregistre. Merci."
