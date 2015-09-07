@@ -44,7 +44,7 @@ class SearchForm(forms.Form):
     end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
 
 class PatientSearchForm(forms.ModelForm):
-    start_date = forms.DateField(input_formats=['%d/%m/%Y'], widget=forms.TextInput(attrs={'class':'datePicker'}))
+    start_date = forms.DateField( widget=forms.TextInput(attrs={'class':'datePicker'}))
     end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
     exit_status = forms.ChoiceField(widget = forms.Select(), choices=[('','-----'),('Pr', 'Reference'), ('Pd', 'Deces'), ('Pg', 'Gueris')])
     sexe = forms.ChoiceField(widget = forms.Select(), choices=[('','-----'),('M', 'Male'), ('F', 'Female')])
@@ -63,5 +63,9 @@ class PatientSearchForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data=super(PatientSearchForm, self).clean()
-        # import ipdb; ipdb.set_trace()
         pass
+
+class StatisticsSearchForm(forms.ModelForm):
+    start_date = forms.DateField( widget=forms.TextInput(attrs={'class':'datePicker'}))
+    end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
+
