@@ -29,7 +29,8 @@ def get_per_cds_statistics(moh_facility_id):
             elemet.update(i)
     return elemet
 
-def get_per_district_statistics(moh_facility_id):
+def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
+
     facility = {'name': District.objects.get(id=moh_facility_id).name}
     detail = {'detail':  District.objects.get(id=moh_facility_id).code}
     total ={'total': Patient.objects.filter(cds__district=moh_facility_id).count()}
@@ -61,6 +62,7 @@ class CDSListView(ListView):
 
 class CDSDetailView(DetailView):
     model = CDS
+
 
     def get_context_data(self, **kwargs):
         context = super(CDSDetailView, self).get_context_data(**kwargs)

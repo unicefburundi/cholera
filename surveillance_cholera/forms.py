@@ -65,7 +65,4 @@ class PatientSearchForm(forms.ModelForm):
         cleaned_data=super(PatientSearchForm, self).clean()
         pass
 
-class StatisticsSearchForm(forms.ModelForm):
-    start_date = forms.DateField( widget=forms.TextInput(attrs={'class':'datePicker'}))
-    end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
 
