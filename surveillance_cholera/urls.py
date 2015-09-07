@@ -1,7 +1,7 @@
-from django.conf.urls import *
+from django.conf.urls import patterns, url
 from surveillance_cholera.backend import handel_rapidpro_request
-from .views import *
-from .tasks import *
+from surveillance_cholera.views import CDSListView, CDSDetailView, DistrictListView, DistrictDetailView, ProvinceListView, ProvinceDetailView, PatientListView, PatientDetailView, get_patients_by_code
+from surveillance_cholera.tasks import ask_update_on_patient
 
 urlpatterns = patterns('',
     # dashboard view for viewing all poll reports in one place

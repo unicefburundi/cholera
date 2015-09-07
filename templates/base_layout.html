@@ -80,6 +80,8 @@
                             <li><a href="{% url 'district_detail' pk=myfacility.id %}">Statistics</a></li>
                           {% elif  user|has_group:'BPS' %}
                             <li><a href="{% url 'province_detail' pk=myfacility.id %}">Statistics</a></li>
+                          {% elif user|has_group:'Central' %}
+                            <li><a href="{% url 'landing' %}">Statistics</a></li>
                         {% endif %}
                         <li role="presentation" class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">

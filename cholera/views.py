@@ -1,15 +1,30 @@
 from django.shortcuts import render
 from surveillance_cholera.forms import SearchForm
-from surveillance_cholera.models import Patient, CDS,District, Province
+from surveillance_cholera.models import CDS,District, Province, Patient
 from django_tables2   import RequestConfig
 from django.contrib.auth.decorators import login_required
-from surveillance_cholera.tables import PatientTable
+from surveillance_cholera.tables import PatientTable, Patients3Table
 from django.http import JsonResponse
 import datetime
-from surveillance_cholera.templatetags.extras_utils import format_to_time
+from surveillance_cholera.templatetags.extras_utils import format_to_time, get_all_patients
 from authentication.models import UserProfile
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+
+def get_province_statistics(province):
+    elemet = {}
+    facility = {'name': province.name}
+    detail = {'detail':  province.code}
+    total ={'total': Patient.objects.filter(cds__district__province=province.id).count()}
+    deces= {'deces' : Patient.objects.filter(cds__district__province=province.id, intervention='DD').count()}
+    sorties = {'sorties' : Patient.objects.filter(cds__district__province=province.id, intervention='PR').count()}
+    hospi = {'hospi' : Patient.objects.filter(cds__district__province=province.id, intervention='HOSPI').count()}
+    nc = {'nc' : Patient.objects.filter(cds__district__province=province.id, exit_status=None).count()}
+
+    for i in [total,deces,sorties,hospi,nc, facility, detail]:
+        elemet.update(i)
+
+    return elemet
 
 def home(request):
     return render(request, 'base_layout.html')
@@ -30,15 +45,6 @@ def get_districts(request, province_id):
         districts_dict[district.id] = district.name
     return JsonResponse([districts_dict], safe=False)
 
-def get_all_patients(level=None,moh_facility=None):
-    if level=='CDS':
-        return Patient.objects.filter(cds__code=moh_facility)
-    if level=='BDS':
-        return Patient.objects.filter(cds__district__code=moh_facility)
-    if level =='BPS':
-        return Patient.objects.filter(cds__district__province__code=moh_facility)
-    else:
-        return Patient.objects.all()
 
 @login_required
 def statistics(request):
@@ -80,8 +86,10 @@ def get_statistics(request):
 def get_by_code(request, code=''):
     # import ipdb; ipdb.set_trace()
     if code=='None':
-        url = reverse('home')
-        return HttpResponseRedirect(url)
+        results = [get_province_statistics(i) for i in Province.objects.all() ]
+        statistics = Patients3Table(results)
+        RequestConfig(request, paginate={"per_page": 25}).configure(statistics)
+        return render(request, 'surveillance_cholera/provinces.html', {  'statistics' : statistics})
     if len(code)<=2 :
         url = reverse('province_detail', kwargs={'pk': Province.objects.get(code=code).id})
         return HttpResponseRedirect(url)

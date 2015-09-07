@@ -10,13 +10,12 @@ from surveillance_cholera.tables import PatientTable
 from cholera.views import get_all_patients
 from django.db.models import Q
 import datetime
-from surveillance_cholera.templatetags.extras_utils import format_to_time
 
 ###########
 # CDS              ##
 ###########
 
-def get_per_cds_data(moh_facility_id):
+def get_per_cds_statistics(moh_facility_id):
     facility = {'name': CDS.objects.get(id=moh_facility_id).name}
     detail = {'detail':  CDS.objects.get(id=moh_facility_id).code}
     total ={'total': Patient.objects.filter(cds=moh_facility_id).count()}
@@ -30,7 +29,7 @@ def get_per_cds_data(moh_facility_id):
             elemet.update(i)
     return elemet
 
-def get_per_district_data(moh_facility_id):
+def get_per_district_statistics(moh_facility_id):
     facility = {'name': District.objects.get(id=moh_facility_id).name}
     detail = {'detail':  District.objects.get(id=moh_facility_id).code}
     total ={'total': Patient.objects.filter(cds__district=moh_facility_id).count()}
@@ -47,13 +46,13 @@ def get_per_district_data(moh_facility_id):
 def get_district_data(moh_facility_id):
     elemet = []
     for i in CDS.objects.filter(district=moh_facility_id):
-        elemet.append(get_per_cds_data(i.id))
+        elemet.append(get_per_cds_statistics(i.id))
     return elemet
 
 def get_province_data(moh_facility_id):
     elemet = []
     for i in District.objects.filter(province=moh_facility_id):
-        elemet.append(get_per_district_data(i.id))
+        elemet.append(get_per_district_statistics(i.id))
     return elemet
 
 class CDSListView(ListView):
@@ -68,7 +67,7 @@ class CDSDetailView(DetailView):
         cds_id = self.kwargs['pk']
         patients = Patient.objects.filter(cds=cds_id)
         context['patients'] = patients
-        data = [get_per_cds_data(cds_id)]
+        data = [get_per_cds_statistics(cds_id)]
         statistics = PatientsTable(data)
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
