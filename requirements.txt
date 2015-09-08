@@ -40,3 +40,4 @@ xlrd==0.9.4
 xlwt==1.0.0
 xlwt-future==0.8.0
 git+https://github.com/fusionbox/django-importcsvadmin.git
+

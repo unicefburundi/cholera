@@ -103,6 +103,11 @@ def save_temporary_the_reporter(args):
 			the_supervisor_phone_number = args['text'].split(' ')[2]
 			the_supervisor_phone_number_no_space = the_supervisor_phone_number.replace(" ", "")
 
+			if len(the_supervisor_phone_number_no_space) == 8:
+				the_supervisor_phone_number_no_space = "+257"+the_supervisor_phone_number_no_space
+			if len(the_supervisor_phone_number_no_space) == 11:
+				the_supervisor_phone_number_no_space = "+"+the_supervisor_phone_number_no_space
+
 			Temporary.objects.create(phone_number = the_phone_number,cds = the_concerned_cds,supervisor_phone_number = the_supervisor_phone_number_no_space)
 			args['valide'] = True
 			args['info_to_contact'] = "Merci. Veuillez confirmer le numero du superviseur s il vous plait."
@@ -193,7 +198,7 @@ def check_patient_age(args):
 	The_patient_age = args['text'].split(' ')[3]
 
 	#The below list will be putted in localsettings
-	valid_ages = ['A1','A2']
+	valid_ages = ['A1','A2','a1','a2']
 
 	if(The_patient_age not in valid_ages):
 		args['valide'] = False
@@ -207,7 +212,7 @@ def check_gender(args):
 	the_patient_gender = args['text'].split(' ')[4]
 
 	#The bellow list will be putted in localsettings
-	gender_values = ['F','M']
+	gender_values = ['F','M','f','m']
 
 	if(the_patient_gender not in gender_values):
 		args['valide'] = False
@@ -332,7 +337,7 @@ def record_patient(args):
 	#the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2], age = args['text'].split(' ')[3], sexe = args['text'].split(' ')[4], intervention = args['text'].split(' ')[5], date_entry = full_entry_date_in_date)
 
 
-	the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2], age = args['text'].split(' ')[3], sexe = args['text'].split(' ')[4], intervention = args['text'].split(' ')[5], date_entry = full_entry_date_in_date, cds = one_concerned_cds)
+	the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2].title(), age = args['text'].split(' ')[3].title(), sexe = args['text'].split(' ')[4].title(), intervention = args['text'].split(' ')[5].title(), date_entry = full_entry_date_in_date, cds = one_concerned_cds)
 
 
 	#the_created_report = Report.objects.create(patient = the_created_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'].replace("+", " "), report_type = args['message_type'])
@@ -371,13 +376,16 @@ def check_validity_of_id(args):
 def check_exit_date(args):
 	'''This function checks if the exit date is valid.'''
 
-	expression = r'^((0[1-9])|([1-2][0-9])|(3[01]))-((0[1-9])|(1[0-2]))-[0-9]{4}$'
+	#expression = r'^((0[1-9])|([1-2][0-9])|(3[01]))-((0[1-9])|(1[0-2]))-[0-9]{4}$'
+	expression = r'^((0[1-9])|([1-2][0-9])|(3[01]))((0[1-9])|(1[0-2]))[0-9]{2}$'
 	if re.search(expression, args['text'].split(' ')[2]) is None:
 		args['valide'] = False
 		args['info_to_contact'] = "La date indiquee n est pas valide."
 		return
-
-	if datetime.datetime.strptime(args['text'].split(' ')[2], '%d-%m-%Y') > datetime.datetime.now():
+	
+	exit_date = args['text'].split(' ')[2][0:2]+"-"+args['text'].split(' ')[2][2:4]+"-20"+args['text'].split(' ')[2][4:]
+	#if datetime.datetime.strptime(args['text'].split(' ')[2], '%d-%m-%Y') > datetime.datetime.now():
+	if datetime.datetime.strptime(exit_date, '%d-%m-%Y') > datetime.datetime.now():
 		args['valide'] = False
 		args['info_to_contact'] = "La date indiquee n est pas valide."
 	else:
@@ -450,17 +458,19 @@ def record_track_message(args):
 
 
 
-	day_month_year = args['text'].split(' ')[2].split("-")
-	year_month_day = day_month_year[2]+"-"+day_month_year[1]+"-"+day_month_year[0]
+	#day_month_year = args['text'].split(' ')[2].split("-")
+	day_month_year = args['text'].split(' ')[2][0:2]+"-"+args['text'].split(' ')[2][2:4]+"-20"+args['text'].split(' ')[2][4:]
+	#year_month_day = day_month_year[2]+"-"+day_month_year[1]+"-"+day_month_year[0]
+	year_month_day = "20"+args['text'].split(' ')[2][4:]+"-"+args['text'].split(' ')[2][2:4]+"-"+args['text'].split(' ')[2][0:2]
 
 
 	#Let's update the patient
 	one_concerned_patient.exit_date = year_month_day
-	one_concerned_patient.exit_status = args['text'].split(' ')[3]
+	one_concerned_patient.exit_status = args['text'].split(' ')[3].title()
 	one_concerned_patient.save()
 
 
-	TrackPatientMessage.objects.create(exit_date = year_month_day, exit_status = args['text'].split(' ')[3], report = the_created_report)
+	TrackPatientMessage.objects.create(exit_date = year_month_day, exit_status = args['text'].split(' ')[3].title(), report = the_created_report)
 
 	args['valide'] = True
 	args['info_to_contact'] = "Votre rapport a ete bien enregistre. Merci."
