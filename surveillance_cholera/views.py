@@ -1,12 +1,12 @@
 from django.views.generic import ListView, DetailView
-from surveillance_cholera.models import CDS, Province, District, Patient
+from surveillance_cholera.models import CDS, Province, District, Patient, Report
 from authentication.models import UserProfile
 from django_tables2 import  RequestConfig
 from surveillance_cholera.tables import PatientsTable, Patients2Table
 from django.shortcuts import render
 from surveillance_cholera.forms import PatientSearchForm, SearchForm
 from django.contrib.auth.decorators import login_required
-from surveillance_cholera.tables import PatientTable
+from surveillance_cholera.tables import PatientTable, ReportTable
 from cholera.views import get_all_patients
 from django.db.models import Q
 import datetime
@@ -14,7 +14,7 @@ from django.views.generic import FormView
 from surveillance_cholera.templatetags.extras_utils import format_to_time
 
 ###########
-# CDS              ##
+# CDS             ##
 ###########
 
 def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
@@ -35,6 +35,44 @@ def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
     for i in [total,deces,sorties,hospi,nc, facility, detail]:
             elemet.update(i)
     return elemet
+
+
+
+class CDSListView(ListView):
+    model = CDS
+    paginate_by = 25
+
+class CDSDetailView(DetailView):
+    model = CDS
+
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CDSDetailView, self).get_context_data(*args, **kwargs)
+        cds_id = self.kwargs['pk']
+        data = [get_per_cds_statistics(cds_id)]
+        statistics = PatientsTable(data)
+        RequestConfig(self.request).configure(statistics)
+        context['statistics'] = statistics
+        context['form'] = SearchForm()
+        return context
+
+class CDSFormView(FormView, CDSDetailView):
+    models = CDS
+    form_class = SearchForm
+    template_name = 'surveillance_cholera/cds_detail.html'
+
+    def post(self, request, *args, **kwargs):
+        form = SearchForm(request)
+        data = [get_per_cds_statistics(kwargs['pk'], request.POST.get('start_date'), request.POST.get('end_date'))]
+        statistics = PatientsTable(data)
+        RequestConfig(request).configure(statistics)
+
+        return render(request, 'surveillance_cholera/cds_detail.html', {'form':form, 'statistics':statistics, 'object': CDS.objects.get(pk=kwargs['pk'])} )
+
+
+###########
+# District        ##
+###########
 
 def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
     if start_date == '':
@@ -61,30 +99,6 @@ def get_district_data(moh_facility_id, start_date='', end_date=''):
         elemet.append(get_per_cds_statistics(i.id, start_date, end_date))
     return elemet
 
-def get_province_data(moh_facility_id, start_date='', end_date=''):
-    elemet = []
-    for i in District.objects.filter(province=moh_facility_id):
-        elemet.append(get_per_district_statistics(i.id, start_date, end_date))
-    return elemet
-
-class CDSListView(ListView):
-    model = CDS
-    paginate_by = 25
-
-class CDSDetailView(DetailView):
-    model = CDS
-
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(CDSDetailView, self).get_context_data(*args, **kwargs)
-        cds_id = self.kwargs['pk']
-        data = [get_per_cds_statistics(cds_id)]
-        statistics = PatientsTable(data)
-        RequestConfig(self.request).configure(statistics)
-        context['statistics'] = statistics
-        context['form'] = SearchForm()
-        return context
-
 class DistrictListView(ListView):
     model = District
     paginate_by = 25
@@ -101,6 +115,29 @@ class DistrictDetailView(DetailView):
         context['statistics'] = statistics
         context['form'] = SearchForm()
         return context
+
+class DistrictFormView(FormView, DistrictDetailView):
+    models = District
+    form_class = SearchForm
+    template_name = 'surveillance_cholera/district_detail.html'
+
+    def post(self, request, *args, **kwargs):
+        form = SearchForm(request)
+        data = get_district_data(kwargs['pk'], request.POST.get('start_date'), request.POST.get('end_date'))
+        statistics = PatientsTable(data)
+        RequestConfig(request).configure(statistics)
+
+        return render(request, 'surveillance_cholera/district_detail.html', {'form':form, 'statistics':statistics, 'object': District.objects.get(pk=kwargs['pk'])} )
+
+###########
+# Province      ##
+###########
+
+def get_province_data(moh_facility_id, start_date='', end_date=''):
+    elemet = []
+    for i in District.objects.filter(province=moh_facility_id):
+        elemet.append(get_per_district_statistics(i.id, start_date, end_date))
+    return elemet
 
 class ProvinceListView(ListView):
     model = Province
@@ -121,6 +158,10 @@ class ProvinceDetailView(DetailView):
         return context
 
 
+###########
+# Patient        ##
+###########
+
 class PatientListView(ListView):
     model = Patient
     paginate_by = 25
@@ -139,6 +180,14 @@ class PatientListView(ListView):
 class PatientDetailView(DetailView):
     model = Patient
 
+    def get_context_data(self, **kwargs):
+        context = super(PatientDetailView, self).get_context_data(**kwargs)
+        patient_id = self.kwargs['pk']
+        data = Report.objects.filter(patient__id=patient_id)
+        reports = ReportTable(data)
+        RequestConfig(self.request).configure(reports)
+        context['reports'] = reports
+        return context
 
 @login_required
 def get_patients_by_code(request, code=''):
@@ -178,31 +227,8 @@ def get_patients_by_code(request, code=''):
     RequestConfig(request, paginate={"per_page": 25}).configure(results)
     return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': code})
 
-class CDSFormView(FormView, CDSDetailView):
-    models = CDS
-    form_class = SearchForm
-    template_name = 'surveillance_cholera/cds_detail.html'
 
-    def post(self, request, *args, **kwargs):
-        form = SearchForm(request)
-        data = [get_per_cds_statistics(kwargs['pk'], request.POST.get('start_date'), request.POST.get('end_date'))]
-        statistics = PatientsTable(data)
-        RequestConfig(request).configure(statistics)
 
-        return render(request, 'surveillance_cholera/cds_detail.html', {'form':form, 'statistics':statistics, 'object': CDS.objects.get(pk=kwargs['pk'])} )
-
-class DistrictFormView(FormView, DistrictDetailView):
-    models = District
-    form_class = SearchForm
-    template_name = 'surveillance_cholera/district_detail.html'
-
-    def post(self, request, *args, **kwargs):
-        form = SearchForm(request)
-        data = get_district_data(kwargs['pk'], request.POST.get('start_date'), request.POST.get('end_date'))
-        statistics = PatientsTable(data)
-        RequestConfig(request).configure(statistics)
-
-        return render(request, 'surveillance_cholera/district_detail.html', {'form':form, 'statistics':statistics, 'object': District.objects.get(pk=kwargs['pk'])} )
 
 class ProvinceFormView(FormView, ProvinceDetailView):
     models = Province
