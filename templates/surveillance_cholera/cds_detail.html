@@ -21,15 +21,15 @@
         <div class="col-md-8">
         <h3>Analytics of patients at  {{ object.name|  capfirst }} CDS</h3>
             <div class="row">
-                <form action="" method="post" id="post-form" class="form-inline">
+                <form action="{% url 'cds_statistics' pk=object.id %}" method="post" id="post-form" class="form-inline">
                 {% csrf_token %}
                     <div class="form-group col-md-3">
                         <label for="start_date">Start Date :</label>
-                        {{search_form.start_date}}
+                        {{form.start_date}}
                     </div>
                     <div class="form-group col-md-3">
                         <label for="age">End Date :</label>
-                        {{search_form.end_date}}
+                        {{form.end_date}}
                     </div>
                     <div class="col-md-2">
                         <button type="submit" class="btn btn-primary">Filter</button>

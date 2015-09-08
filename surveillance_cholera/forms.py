@@ -1,7 +1,6 @@
 from django import forms
 from surveillance_cholera.models import *
 
-
 class SearchForm(forms.Form):
     def __init__(self,  request=None, *args, **kwargs):
         user = None
@@ -61,8 +60,5 @@ class PatientSearchForm(forms.ModelForm):
         model = Patient
         exclude = ('patient_id','date_entry', 'exit_date', 'cds')
 
-    def clean(self):
-        cleaned_data=super(PatientSearchForm, self).clean()
-        pass
 
 
