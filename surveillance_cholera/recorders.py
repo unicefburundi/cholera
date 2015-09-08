@@ -103,6 +103,9 @@ def save_temporary_the_reporter(args):
 			the_supervisor_phone_number = args['text'].split(' ')[2]
 			the_supervisor_phone_number_no_space = the_supervisor_phone_number.replace(" ", "")
 
+			if len(the_supervisor_phone_number_no_space) == 8:
+				the_supervisor_phone_number_no_space = "+257"+the_supervisor_phone_number_no_space
+
 			Temporary.objects.create(phone_number = the_phone_number,cds = the_concerned_cds,supervisor_phone_number = the_supervisor_phone_number_no_space)
 			args['valide'] = True
 			args['info_to_contact'] = "Merci. Veuillez confirmer le numero du superviseur s il vous plait."
