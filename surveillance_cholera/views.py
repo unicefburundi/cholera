@@ -25,7 +25,7 @@ def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)])
     facility = {'name': CDS.objects.get(id=moh_facility_id).name}
     detail = {'detail':  CDS.objects.get(id=moh_facility_id).code}
-    total ={'total': patients.filter(cds=moh_facility_id).count()}
+    total ={'total': Patient.objects.filter(cds=moh_facility_id).count()}
     deces= {'deces' : patients.filter(cds=moh_facility_id, intervention='DD').count()}
     sorties = {'sorties' : patients.filter(cds=moh_facility_id, intervention='PR').count()}
     hospi = {'hospi' : patients.filter(cds=moh_facility_id, intervention='HOSPI').count()}
@@ -44,7 +44,7 @@ def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)])
     facility = {'name': District.objects.get(id=moh_facility_id).name}
     detail = {'detail':  District.objects.get(id=moh_facility_id).code}
-    total ={'total': patients.filter(cds__district=moh_facility_id).count()}
+    total ={'total': Patient.objects.filter(cds__district=moh_facility_id).count()}
     deces= {'deces' : patients.filter(cds__district=moh_facility_id, intervention='DD').count()}
     sorties = {'sorties' : patients.filter(cds__district=moh_facility_id, intervention='PR').count()}
     hospi = {'hospi' : patients.filter(cds__district=moh_facility_id, intervention='HOSPI').count()}
@@ -153,7 +153,6 @@ def get_patients_by_code(request, code=''):
         all_patients = all_patients.filter(cds__code=code)
     if request.method == 'POST':
         form = PatientSearchForm(request.POST)
-        # import ipdb; ipdb.set_trace()
         if form.is_valid():
             if form.cleaned_data['intervention'] !='':
                 all_patients = all_patients.filter(Q(intervention=form.cleaned_data['intervention']))

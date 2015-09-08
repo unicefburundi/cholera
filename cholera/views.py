@@ -11,15 +11,16 @@ from authentication.models import UserProfile
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
-def get_province_statistics(province):
+def get_province_statistics(province, start_date='', end_date=''):
     elemet = {}
     facility = {'name': province.name}
     detail = {'detail':  province.code}
+    patients = Patient.objects.filter(date_entry__range=[start_date, end_date])
     total ={'total': Patient.objects.filter(cds__district__province=province.id).count()}
-    deces= {'deces' : Patient.objects.filter(cds__district__province=province.id, intervention='DD').count()}
-    sorties = {'sorties' : Patient.objects.filter(cds__district__province=province.id, intervention='PR').count()}
-    hospi = {'hospi' : Patient.objects.filter(cds__district__province=province.id, intervention='HOSPI').count()}
-    nc = {'nc' : Patient.objects.filter(cds__district__province=province.id, exit_status=None).count()}
+    deces= {'deces' : patients.filter(cds__district__province=province.id, intervention='DD').count()}
+    sorties = {'sorties' : patients.filter(cds__district__province=province.id, intervention='PR').count()}
+    hospi = {'hospi' : patients.filter(cds__district__province=province.id, intervention='HOSPI').count()}
+    nc = {'nc' : patients.filter(cds__district__province=province.id, exit_status=None).count()}
 
     for i in [total,deces,sorties,hospi,nc, facility, detail]:
         elemet.update(i)
@@ -83,13 +84,13 @@ def get_statistics(request):
     RequestConfig(request, paginate={"per_page": 25}).configure(results)
     return render(request, 'statistics.html', { 'form':form, 'results' : results})
 
-def get_by_code(request, code=''):
-    # import ipdb; ipdb.set_trace()
+def get_by_code(request, code='', start_date='', end_date=''):
     if code=='None':
-        results = [get_province_statistics(i) for i in Province.objects.all() ]
+        form = SearchForm
+        results = [get_province_statistics(i, format_to_time(start_date), format_to_time(end_date)) for i in Province.objects.all() ]
         statistics = Patients3Table(results)
         RequestConfig(request, paginate={"per_page": 25}).configure(statistics)
-        return render(request, 'surveillance_cholera/provinces.html', {  'statistics' : statistics})
+        return render(request, 'surveillance_cholera/provinces.html', {  'statistics' : statistics, 'form':form})
     if len(code)<=2 :
         url = reverse('province_detail', kwargs={'pk': Province.objects.get(code=code).id})
         return HttpResponseRedirect(url)
@@ -102,4 +103,14 @@ def get_by_code(request, code=''):
 
 def landing(request):
     code = UserProfile.objects.get(user=request.user).moh_facility
-    return get_by_code(request=request,code=str(code))
+    start_date = u'01/01/2012'
+    end_date = datetime.date.today().strftime('%d/%m/%Y')
+    if request.method == 'POST':
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        if request.POST.get('start_date') == '':
+            start_date = u'01/01/2012'
+        if request.POST.get('end_date') == '':
+            end_date = datetime.date.today().strftime('%d/%m/%Y')
+
+    return get_by_code(request=request,code=str(code), start_date=start_date, end_date=end_date)

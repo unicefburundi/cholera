@@ -1,5 +1,5 @@
 import django_tables2 as tables
-from surveillance_cholera.models import CDS, Patient
+from surveillance_cholera.models import CDS, Patient, Report
 from django_tables2.utils import A  # alias for Accessor
 
 class CDSTable(tables.Table):
@@ -47,3 +47,8 @@ class Patients3Table(tables.Table):
 
     class Meta:
         attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true"}
+
+class ReportTable(tables.Table):
+    class Meta:
+        model = Report
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-show-toggle":"true", "data-show-export":"true"}
