@@ -105,6 +105,8 @@ def save_temporary_the_reporter(args):
 
 			if len(the_supervisor_phone_number_no_space) == 8:
 				the_supervisor_phone_number_no_space = "+257"+the_supervisor_phone_number_no_space
+			if len(the_supervisor_phone_number_no_space) == 11:
+				the_supervisor_phone_number_no_space = "+"+the_supervisor_phone_number_no_space
 
 			Temporary.objects.create(phone_number = the_phone_number,cds = the_concerned_cds,supervisor_phone_number = the_supervisor_phone_number_no_space)
 			args['valide'] = True
