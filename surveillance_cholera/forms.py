@@ -1,7 +1,6 @@
 from django import forms
 from surveillance_cholera.models import *
 
-
 class SearchForm(forms.Form):
     def __init__(self,  request=None, *args, **kwargs):
         user = None

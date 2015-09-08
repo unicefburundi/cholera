@@ -8,7 +8,7 @@ def has_group(user, group_name):
     return user.groups.filter(name=group_name).exists()
 
 def format_to_time(date):
-    d = datetime.datetime.strptime(date, '%m/%d/%Y')
+    d = datetime.datetime.strptime(date, '%d/%m/%Y')
     return d
 
 def not_in_cds_group(user):

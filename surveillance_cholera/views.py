@@ -4,25 +4,32 @@ from authentication.models import UserProfile
 from django_tables2 import  RequestConfig
 from surveillance_cholera.tables import PatientsTable, Patients2Table
 from django.shortcuts import render
-from surveillance_cholera.forms import PatientSearchForm
+from surveillance_cholera.forms import PatientSearchForm, SearchForm
 from django.contrib.auth.decorators import login_required
 from surveillance_cholera.tables import PatientTable
 from cholera.views import get_all_patients
 from django.db.models import Q
 import datetime
+from django.views.generic import FormView
+from surveillance_cholera.templatetags.extras_utils import format_to_time
 
 ###########
 # CDS              ##
 ###########
 
-def get_per_cds_statistics(moh_facility_id):
+def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
+    if start_date == '':
+        start_date = u'01/01/2012'
+    if end_date == '':
+        end_date = datetime.date.today().strftime('%d/%m/%Y')
+    patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)])
     facility = {'name': CDS.objects.get(id=moh_facility_id).name}
     detail = {'detail':  CDS.objects.get(id=moh_facility_id).code}
-    total ={'total': Patient.objects.filter(cds=moh_facility_id).count()}
-    deces= {'deces' : Patient.objects.filter(cds=moh_facility_id, intervention='DD').count()}
-    sorties = {'sorties' : Patient.objects.filter(cds=moh_facility_id, intervention='PR').count()}
-    hospi = {'hospi' : Patient.objects.filter(cds=moh_facility_id, intervention='HOSPI').count()}
-    nc = {'nc' : Patient.objects.filter(cds=moh_facility_id, exit_status=None).count()}
+    total ={'total': patients.filter(cds=moh_facility_id).count()}
+    deces= {'deces' : patients.filter(cds=moh_facility_id, intervention='DD').count()}
+    sorties = {'sorties' : patients.filter(cds=moh_facility_id, intervention='PR').count()}
+    hospi = {'hospi' : patients.filter(cds=moh_facility_id, intervention='HOSPI').count()}
+    nc = {'nc' : patients.filter(cds=moh_facility_id, exit_status=None).count()}
 
     elemet = {}
     for i in [total,deces,sorties,hospi,nc, facility, detail]:
@@ -30,24 +37,28 @@ def get_per_cds_statistics(moh_facility_id):
     return elemet
 
 def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
-
+    if start_date == '':
+        start_date = u'01/01/2012'
+    if end_date == '':
+        end_date = datetime.date.today().strftime('%d/%m/%Y')
+    patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)])
     facility = {'name': District.objects.get(id=moh_facility_id).name}
     detail = {'detail':  District.objects.get(id=moh_facility_id).code}
-    total ={'total': Patient.objects.filter(cds__district=moh_facility_id).count()}
-    deces= {'deces' : Patient.objects.filter(cds__district=moh_facility_id, intervention='DD').count()}
-    sorties = {'sorties' : Patient.objects.filter(cds__district=moh_facility_id, intervention='PR').count()}
-    hospi = {'hospi' : Patient.objects.filter(cds__district=moh_facility_id, intervention='HOSPI').count()}
-    nc = {'nc' : Patient.objects.filter(cds__district=moh_facility_id, exit_status=None).count()}
+    total ={'total': patients.filter(cds__district=moh_facility_id).count()}
+    deces= {'deces' : patients.filter(cds__district=moh_facility_id, intervention='DD').count()}
+    sorties = {'sorties' : patients.filter(cds__district=moh_facility_id, intervention='PR').count()}
+    hospi = {'hospi' : patients.filter(cds__district=moh_facility_id, intervention='HOSPI').count()}
+    nc = {'nc' : patients.filter(cds__district=moh_facility_id, exit_status=None).count()}
 
     elemet = {}
     for i in [total,deces,sorties,hospi,nc, facility, detail]:
             elemet.update(i)
     return elemet
 
-def get_district_data(moh_facility_id):
+def get_district_data(moh_facility_id, start_date='', end_date=''):
     elemet = []
     for i in CDS.objects.filter(district=moh_facility_id):
-        elemet.append(get_per_cds_statistics(i.id))
+        elemet.append(get_per_cds_statistics(i.id, start_date, end_date))
     return elemet
 
 def get_province_data(moh_facility_id):
@@ -64,15 +75,33 @@ class CDSDetailView(DetailView):
     model = CDS
 
 
-    def get_context_data(self, **kwargs):
-        context = super(CDSDetailView, self).get_context_data(**kwargs)
+    def get_context_data(self, *args, **kwargs):
+        context = super(CDSDetailView, self).get_context_data(*args, **kwargs)
         cds_id = self.kwargs['pk']
-        patients = Patient.objects.filter(cds=cds_id)
-        context['patients'] = patients
         data = [get_per_cds_statistics(cds_id)]
         statistics = PatientsTable(data)
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
+        context['form'] = SearchForm()
+        return context
+
+class DistrictListView(ListView):
+    model = District
+    paginate_by = 25
+
+class DistrictDetailView(DetailView):
+    model = District
+
+    def get_context_data(self, **kwargs):
+        context = super(DistrictDetailView, self).get_context_data(**kwargs)
+        district_id = self.kwargs['pk']
+        cdss = CDS.objects.filter(district=district_id)
+        context['cdss'] = cdss
+        data = get_district_data(district_id)
+        statistics = PatientsTable(data)
+        RequestConfig(self.request).configure(statistics)
+        context['statistics'] = statistics
+        context['form'] = SearchForm()
         return context
 
 class ProvinceListView(ListView):
@@ -94,23 +123,6 @@ class ProvinceDetailView(DetailView):
         context['statistics'] = statistics
         return context
 
-class DistrictListView(ListView):
-    model = District
-    paginate_by = 25
-
-class DistrictDetailView(DetailView):
-    model = District
-
-    def get_context_data(self, **kwargs):
-        context = super(DistrictDetailView, self).get_context_data(**kwargs)
-        district_id = self.kwargs['pk']
-        cdss = CDS.objects.filter(district=district_id)
-        context['cdss'] = cdss
-        data = get_district_data(district_id)
-        statistics = PatientsTable(data)
-        RequestConfig(self.request).configure(statistics)
-        context['statistics'] = statistics
-        return context
 
 class PatientListView(ListView):
     model = Patient
@@ -168,3 +180,29 @@ def get_patients_by_code(request, code=''):
     results = PatientTable(all_patients)
     RequestConfig(request, paginate={"per_page": 25}).configure(results)
     return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': code})
+
+class CDSFormView(FormView, CDSDetailView):
+    models = CDS
+    form_class = SearchForm
+    template_name = 'surveillance_cholera/cds_detail.html'
+
+    def post(self, request, *args, **kwargs):
+        form = SearchForm(request)
+        data = [get_per_cds_statistics(kwargs['pk'], request.POST.get('start_date'), request.POST.get('end_date'))]
+        statistics = PatientsTable(data)
+        RequestConfig(request).configure(statistics)
+
+        return render(request, 'surveillance_cholera/cds_detail.html', {'form':form, 'statistics':statistics, 'object': CDS.objects.get(pk=kwargs['pk'])} )
+
+class DistrictFormView(FormView, DistrictDetailView):
+    models = District
+    form_class = SearchForm
+    template_name = 'surveillance_cholera/district_detail.html'
+
+    def post(self, request, *args, **kwargs):
+        form = SearchForm(request)
+        data = get_district_data(kwargs['pk'], request.POST.get('start_date'), request.POST.get('end_date'))
+        statistics = PatientsTable(data)
+        RequestConfig(request).configure(statistics)
+
+        return render(request, 'surveillance_cholera/district_detail.html', {'form':form, 'statistics':statistics, 'object': District.objects.get(pk=kwargs['pk'])} )
