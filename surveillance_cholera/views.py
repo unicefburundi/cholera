@@ -153,6 +153,7 @@ def get_patients_by_code(request, code=''):
         all_patients = all_patients.filter(cds__code=code)
     if request.method == 'POST':
         form = PatientSearchForm(request.POST)
+        # import ipdb; ipdb.set_trace()
         if form.is_valid():
             if form.cleaned_data['intervention'] !='':
                 all_patients = all_patients.filter(Q(intervention=form.cleaned_data['intervention']))
@@ -165,7 +166,7 @@ def get_patients_by_code(request, code=''):
             if form.cleaned_data['exit_status'] !='':
                 all_patients = all_patients.filter(Q(exit_status=form.cleaned_data['exit_status']))
             if form.cleaned_data['start_date'] == None:
-                form.cleaned_data['start_date']= datetime.datetime(2012,1,1)
+                form.cleaned_data['start_date']= datetime.date(2012,1,1)
             if form.cleaned_data['end_date'] == None:
                 form.cleaned_data['end_date'] = datetime.date.today()
 

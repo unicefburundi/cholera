@@ -60,8 +60,5 @@ class PatientSearchForm(forms.ModelForm):
         model = Patient
         exclude = ('patient_id','date_entry', 'exit_date', 'cds')
 
-    def clean(self):
-        cleaned_data=super(PatientSearchForm, self).clean()
-        pass
 
 
