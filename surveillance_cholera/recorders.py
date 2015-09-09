@@ -159,7 +159,16 @@ def complete_registration(args):
 			if len(check_duplication) > 0:
 				#This reporter is doing registration twice on the same CDS
 				args['valide'] = False
-				args['info_to_contact'] = "Vous vous etes deja enregistre sur ce meme CDS. Merci."
+				args['info_to_contact'] = "Erreur. Vous vous etes deja enregistre sur ce meme CDS. Merci."
+				the_one_existing_temp.delete()
+				return
+	
+			#Let's check if this reporter is not already registered
+			check_duplication1 = Reporter.objects.filter(phone_number = the_one_existing_temp.phone_number)
+			if len(check_duplication1) > 0:
+				#This reporter is doing registration twice
+				args['valide'] = False
+				args['info_to_contact'] = "Erreur. Vous n avez pas le droit de vous enregistrer plus d une seule fois. Merci."
 				the_one_existing_temp.delete()
 				return
 
