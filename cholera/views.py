@@ -48,7 +48,7 @@ def get_districts(request, province_id):
 
 
 @login_required
-def statistics(request):
+def search_patients(request):
     return get_statistics(request)
 
 

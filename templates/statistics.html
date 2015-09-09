@@ -9,12 +9,31 @@
         <div class="col-lg-9">
             <div class="form-group list-group">
               {% if form %}
-                {% for field in form %}
-                    <div>{{ field.label_tag }}: {{ field }}</div>
-                    {% for error in field.errors %}
-                      <p  style="color: red;">{{ error }}</p>
-                    {% endfor %}
-                {% endfor %}
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label for="province">Province :</label>
+                                {{form.province}}
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="district">District :</label>
+                            {{form.district}}
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="cds">CDS :</label>
+                            {{form.cds}}
+                            </div>
+                        </div>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label for="start_date">Start Date :</label>
+                                {{form.start_date}}
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="age">End Date :</label>
+                            {{form.end_date}}
+                            </div>
+                        </div>
             {% endif %}
           </div>
         </div>
