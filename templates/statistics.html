@@ -4,22 +4,19 @@
 {% block content %}
         <form action="{% url 'get_statistics' %}" method="post" id="post-form">
         {% csrf_token %}
-        <div class="row">
         <div class="col-lg-1"></div>
         <div class="col-lg-9">
-            <div class="form-group list-group">
               {% if form %}
                     <div class="row">
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="province">Province :</label>
                                 {{form.province}}
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="district">District :</label>
-                            {{form.district}}
+                            {{form.districts}}
                             </div>
-                        </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="cds">CDS :</label>
                             {{form.cds}}
                             </div>
@@ -34,13 +31,12 @@
                             {{form.end_date}}
                             </div>
                         </div>
-            {% endif %}
           </div>
-        </div>
         <div class="col-lg-2">
             <button type="submit" class="btn btn-default">Filter</button>
         </div>
         </div>
+    {% endif %}
     </form>
     </div>
     <div class="row">
