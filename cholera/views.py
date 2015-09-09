@@ -10,6 +10,7 @@ from surveillance_cholera.templatetags.extras_utils import format_to_time, get_a
 from authentication.models import UserProfile
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 def get_province_statistics(province, start_date='', end_date=''):
     elemet = {}
@@ -17,9 +18,9 @@ def get_province_statistics(province, start_date='', end_date=''):
     detail = {'detail':  province.code}
     patients = Patient.objects.filter(date_entry__range=[start_date, end_date])
     total ={'total': Patient.objects.filter(cds__district__province=province.id).count()}
-    deces= {'deces' : patients.filter(cds__district__province=province.id, intervention='DD').count()}
-    sorties = {'sorties' : patients.filter(cds__district__province=province.id, intervention='PR').count()}
-    hospi = {'hospi' : patients.filter(cds__district__province=province.id, intervention='HOSPI').count()}
+    deces= {'deces' : patients.filter(cds__district__province=province.id, intervention__icontains='DD').count()}
+    sorties = {'sorties' : patients.filter(cds__district__province=province.id, intervention__icontains='PR').count()}
+    hospi = {'hospi' : patients.filter(cds__district__province=province.id, intervention__icontains='HOSPI').count()}
     nc = {'nc' : patients.filter(cds__district__province=province.id, exit_status=None).count()}
 
     for i in [total,deces,sorties,hospi,nc, facility, detail]:
@@ -91,6 +92,7 @@ def get_by_code(request, code='', start_date='', end_date=''):
         form = SearchForm
         results = [get_province_statistics(i, format_to_time(start_date), format_to_time(end_date)) for i in Province.objects.all() ]
         statistics = Patients3Table(results)
+        messages.success(request, 'No retard!')
         RequestConfig(request, paginate={"per_page": 25}).configure(statistics)
         return render(request, 'surveillance_cholera/provinces.html', {  'statistics' : statistics, 'form':form})
     if len(code)<=2 :

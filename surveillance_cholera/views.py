@@ -27,9 +27,9 @@ def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
     facility = {'name': CDS.objects.get(id=moh_facility_id).name}
     detail = {'detail':  CDS.objects.get(id=moh_facility_id).code}
     total ={'total': Patient.objects.filter(cds=moh_facility_id).count()}
-    deces= {'deces' : patients.filter(cds=moh_facility_id, intervention='DD').count()}
-    sorties = {'sorties' : patients.filter(cds=moh_facility_id, intervention='PR').count()}
-    hospi = {'hospi' : patients.filter(cds=moh_facility_id, intervention='HOSPI').count()}
+    deces= {'deces' : patients.filter(cds=moh_facility_id, intervention__icontains='DD').count()}
+    sorties = {'sorties' : patients.filter(cds=moh_facility_id, intervention__icontains='PR').count()}
+    hospi = {'hospi' : patients.filter(cds=moh_facility_id, intervention__icontains='HOSPI').count()}
     nc = {'nc' : patients.filter(cds=moh_facility_id, exit_status=None).count()}
 
     elemet = {}
@@ -85,9 +85,9 @@ def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
     facility = {'name': District.objects.get(id=moh_facility_id).name}
     detail = {'detail':  District.objects.get(id=moh_facility_id).code}
     total ={'total': Patient.objects.filter(cds__district=moh_facility_id).count()}
-    deces= {'deces' : patients.filter(cds__district=moh_facility_id, intervention='DD').count()}
-    sorties = {'sorties' : patients.filter(cds__district=moh_facility_id, intervention='PR').count()}
-    hospi = {'hospi' : patients.filter(cds__district=moh_facility_id, intervention='HOSPI').count()}
+    deces= {'deces' : patients.filter(cds__district=moh_facility_id, intervention__icontains='DD').count()}
+    sorties = {'sorties' : patients.filter(cds__district=moh_facility_id, intervention__icontains='PR').count()}
+    hospi = {'hospi' : patients.filter(cds__district=moh_facility_id, intervention__icontains='HOSPI').count()}
     nc = {'nc' : patients.filter(cds__district=moh_facility_id, exit_status=None).count()}
 
     elemet = {}
