@@ -6,7 +6,6 @@
         {% csrf_token %}
         <div class="col-lg-1"></div>
         <div class="col-lg-9">
-              {% if form %}
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label for="province">Province :</label>
@@ -20,28 +19,25 @@
                             <label for="cds">CDS :</label>
                             {{form.cds}}
                             </div>
-                        </div>
+                    </div>
                     <div class="row">
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="start_date">Start Date :</label>
                                 {{form.start_date}}
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="age">End Date :</label>
                             {{form.end_date}}
-                            </div>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="patient">Patient :</label>
                             {{form.patient}}
                             </div>
-                        </div>
-          </div>
+                    </div>
+        </div>
         <div class="col-lg-2">
-            <button type="submit" class="btn btn-default">Filter</button>
+            <button type="submit" class="btn  btn-primary">Filter</button>
         </div>
-        </div>
-    {% endif %}
     </form>
     </div>
     <div class="row">
