@@ -41,6 +41,7 @@ class SearchForm(forms.Form):
 
     start_date = forms.DateField(input_formats=['%d/%m/%Y'], widget=forms.TextInput(attrs={'class':'datePicker'}))
     end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
+    patient = forms.CharField()
 
 class PatientSearchForm(forms.ModelForm):
     start_date = forms.DateField( widget=forms.TextInput(attrs={'class':'datePicker'}))

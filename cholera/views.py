@@ -48,7 +48,7 @@ def get_districts(request, province_id):
 
 
 @login_required
-def statistics(request):
+def search_patients(request):
     return get_statistics(request)
 
 
@@ -59,6 +59,8 @@ def get_statistics(request):
     all_patients = get_all_patients(level=userprofile.level, moh_facility=userprofile.moh_facility)
 
     if request.method == 'POST':
+        if request.POST.get('patient') !='':
+            all_patients = all_patients.filter(patient_id__icontains=request.POST.get('patient'))
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
         if request.POST.get('start_date') == '':

@@ -41,8 +41,9 @@
             </div>
         </div>
         <div class="col-md-1">
-            <h3><a href="{% url 'patient_list' %}">Details</a></h3>
-
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}"><a href="/">{{ message }}</a></div>
+            {% endfor %}
             </table>
         </div>
     </div>
