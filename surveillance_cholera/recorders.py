@@ -150,7 +150,8 @@ def complete_registration(args):
 		args['info_to_contact'] = "Votre message n est pas considere."
 	else:
 		the_one_existing_temp = the_existing_temp[0]
-		if (the_one_existing_temp.supervisor_phone_number == the_sup_phone_number_without_spaces):
+		#if (the_one_existing_temp.supervisor_phone_number == the_sup_phone_number_without_spaces):
+		if (the_sup_phone_number_without_spaces in the_one_existing_temp.supervisor_phone_number) and (len(the_sup_phone_number_without_spaces) >= 8):
 			#The confirmation of the phone number of the supervisor pass
 
 			#Let's check if this reporter is not already registered for this CDS
