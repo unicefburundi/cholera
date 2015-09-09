@@ -32,7 +32,7 @@ def ask_update_on_patient(request):
     	   #Let's check if we had any update on this patient.
                 updates_reports = Report.objects.filter(patient = patient,report_type = 'TRACK')
 
-                if len(updates_reports) == 0:
+                if len(updates_reports) == 0 and patient.intervention != 'Dd':
                     #We didn't have any update on this patient
                     #Let's identify the phone number of the reporter who registered this patient and ask to him any update on this patient
                     the_registration_report = Report.objects.filter(patient = patient)[0]
