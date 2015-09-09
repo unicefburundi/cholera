@@ -52,8 +52,8 @@
     </div>
     <div class="row">
         {% if results %}
-        {% with moh_facility as moh  %}
-            <h3> Cholera patients at <a href="{% url 'get_by_code' moh %}">{{moh_facility}}</a> facility </h3>
+        {% with moh_facility.code as moh  %}
+            <h3> Cholera patients at <a href="{% url 'get_by_code' moh %}">{{moh_facility.name}}</a> facility </h3>
         {% endwith %}
             {% render_table results %}
         {% elif all_patients %}
