@@ -195,6 +195,10 @@ def check_patient_id(args):
 		args['valide'] = False
 		args['info_to_contact'] = "Erreur. Le numero du patient envoye est tres long."
 		return
+	if len(The_id_patient) < 7:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. Le numero du patient envoye est tres court."
+		return
 	if re.search(expression, The_id_patient) is None:
 		#The patient id is not well written
 		args['valide'] = False
