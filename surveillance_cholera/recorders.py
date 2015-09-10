@@ -345,8 +345,11 @@ def record_patient(args):
 		args['info_to_contact'] = "Erreur. La date d arrivee du patient n est pas valide."
 		return
 
-	#Let's check if the entry date is not lower than 01/01/2010
-	#if full_entry_date_in_date < datetime.datetime.strptime()
+	#Let's check if the entry date is lower than 01/01/2015
+	if full_entry_date_in_date < datetime.datetime.strptime("01012015", "%d%m%Y").date():
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. La date d entree inferieur au 01/01/2015 n est pas permise."
+		return
 
 	#Let's record a patient
 	
