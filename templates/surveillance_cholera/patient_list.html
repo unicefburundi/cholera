@@ -1,7 +1,12 @@
 {% extends "base_layout.html" %}
 {% block content %}
 {% if object_list %}
-
+    <style>
+        .span3 {
+            height: 900px !important;
+            overflow: auto;
+        }​
+    </style>
     <div class="container">
         <div class="row">
         <h1>Patients at {{myfacility}} {{mylevel}}</h1>
@@ -29,7 +34,8 @@
             <button type="submit" class="btn  btn-primary">Filter</button>
         </div>
         </div>
-            <table id="list_cds" class="table table-bordered" data-toggle="table" data-search="true" data-show-export="true">
+            <div class="span3">
+                <table id="list_patient" class="table table-bordered" data-toggle="table" data-search="true" data-show-export="true" >
             <thead>
                   <tr>
                     <th>Patient Id</th>
@@ -59,6 +65,7 @@
                     </tr>
                 {% endfor %}
             </table>
+            </div>
             {# .... **Now the pagination section** .... #}
             {% if is_paginated %}
                 <div class="pagination">
