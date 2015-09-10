@@ -191,10 +191,14 @@ def check_patient_id(args):
 	''' This function checks if the id patient sent is valid. '''
 	The_id_patient = args['text'].split(' ')[1]
 	expression = r'^[0-9]+$'
+	if len(The_id_patient) > 9:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. Le numero du patient envoye est tres long."
+		return
 	if re.search(expression, The_id_patient) is None:
 		#The patient id is not well written
 		args['valide'] = False
-		args['info_to_contact'] = "Le numero du patient n est pas bien ecrit."
+		args['info_to_contact'] = "Erreur. Le numero du patient n est pas bien ecrit."
 	else:
 		args['valide'] = True
 		args['info_to_contact'] = "Le numero du patient est bien ecrit."
@@ -313,7 +317,7 @@ def record_patient(args):
 	print(len(patient))
 	if len(patient) > 0:
 		args['valide'] = False
-		args['info_to_contact'] = "Un patient avec cet identifiant existe deja. Veuillez changer l identifiant du patient."
+		args['info_to_contact'] = "Erreur. Un patient avec cet identifiant existe deja. Veuillez changer l identifiant du patient."
 		return
 
 
@@ -340,6 +344,9 @@ def record_patient(args):
 		args['valide'] = False
 		args['info_to_contact'] = "Erreur. La date d arrivee du patient n est pas valide."
 		return
+
+	#Let's check if the entry date is not lower than 01/01/2010
+	#if full_entry_date_in_date < datetime.datetime.strptime()
 
 	#Let's record a patient
 	
