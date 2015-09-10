@@ -4,5 +4,10 @@
 {% block title %}{% trans "Logged out" %}{% endblock %}
 
 {% block content %}
-<p>{% trans "Successfully logged out" %}.</p>
+
+<div class="col-md-6">
+    <div class="alert alert-success" role="alert">{% trans "Successfully logged out" %}.
+    </div>
+</div>
+<div class="col-md-6"></div>
 {% endblock %}
