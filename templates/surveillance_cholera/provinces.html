@@ -1,13 +1,15 @@
 {% extends "base_layout.html" %}
 {% load render_table from django_tables2 %}
+
+{% block page_title %}
+<h3><i class="glyphicon glyphicon-list-alt"></i> All Provinces</h3>
+{% endblock page_title %}
+
 {% block content %}
 {% if statistics %}
 <h2></h2>
 <div class="container">
     <div class="row">
-        <div class="col-md-2">
-        <h2>All Provinces</h2>
-        </div>
         <div class="col-md-9">
         <h3>Analytics of patients by Provinces</h3>
         <div class="row">
@@ -30,10 +32,7 @@
             {% render_table statistics %}
         </div>
         </div>
-        <div class="col-md-1">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}"><a href="/">{{ message }}</a></div>
-            {% endfor %}
+        <div class="col-md-3">
         </div>
     </div>
 

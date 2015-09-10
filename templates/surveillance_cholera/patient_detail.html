@@ -1,14 +1,16 @@
 {% extends "base_layout.html" %}
 {% load render_table from django_tables2 %}
+
+{% block page_title %}
+<h3><i class="glyphicon glyphicon-list-alt"></i> Patient numero : {{ object.patient_id}} sur le CDS {{ object.cds}}</h3>
+{% endblock page_title %}
+
 {% block content %}
 {% if object %}
-<h2>Patient numero : {{ object.patient_id}} sur le CDS {{ object.cds}} </h2>
-<div class="container">
     <div class="row">
-        <div class="col-md-1">
-        </div>
         <div class="col-md-10">
-            <table class="table table-bordered" data-toggle="table" data-search="true">
+        <h3>Description of the patient</h3>
+            <table class="table table-bordered" data-toggle="table" data-search="true" data-show-export="true">
                 <thead>
                     <tr>
                         <th>Patient ID</th>
@@ -37,14 +39,16 @@
                 </tr>
             </table>
         </div>
-        <div class="col-md-2"></div>
+        <div class="col-md-3"></div>
     </div>
     <div class="row">
     {% if reports %}
-        <h1>Reports related to this patient</h1>
-            {% render_table reports %}
+        <h3>Reports related to this patient</h3>
+            <div class="col-md-10">
+                {% render_table reports %}
+            </div>
+            <div class="col-md-2"></div>
     {% endif %}
     </div>
-</div>
 {% endif %}
 {% endblock content %}

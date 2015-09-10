@@ -41,7 +41,7 @@ def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
 
 class CDSListView(ListView):
     model = CDS
-    paginate_by = 50
+    paginate_by = 25
 
 class CDSDetailView(DetailView):
     model = CDS
@@ -103,7 +103,7 @@ def get_district_data(moh_facility_id, start_date='', end_date=''):
 
 class DistrictListView(ListView):
     model = District
-    paginate_by = 50
+    paginate_by = 25
 
 class DistrictDetailView(DetailView):
     model = District
@@ -144,7 +144,7 @@ def get_province_data(moh_facility_id, start_date='', end_date=''):
 
 class ProvinceListView(ListView):
     model = Province
-    paginate_by = 50
+    paginate_by = 25
 
 
 class ProvinceDetailView(DetailView):
@@ -168,7 +168,7 @@ class ProvinceDetailView(DetailView):
 
 class PatientListView(ListView):
     model = Patient
-    paginate_by = 50
+    paginate_by = 25
 
     def get_queryset(self):
         qs = Patient.objects.all()
@@ -227,12 +227,12 @@ def get_patients_by_code(request, code=''):
                 form.cleaned_data['end_date'] = datetime.date.today()
 
             results = PatientTable(all_patients.filter(date_entry__range=[form.cleaned_data['start_date'], form.cleaned_data['end_date']]))
-            RequestConfig(request, paginate={"per_page": 50}).configure(results)
+            RequestConfig(request, paginate={"per_page": 25}).configure(results)
             return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': moh_facility})
 
 
     results = PatientTable(all_patients)
-    RequestConfig(request, paginate={"per_page": 50}).configure(results)
+    RequestConfig(request, paginate={"per_page": 25}).configure(results)
     return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': moh_facility})
 
 

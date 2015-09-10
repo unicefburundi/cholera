@@ -1,12 +1,14 @@
 {% extends "base_layout.html" %}
 {% load render_table from django_tables2 %}
+
+{% block page_title %}
+<h3><i class="glyphicon glyphicon-list-alt"> </i>Centre de sante : {{ object.name|  capfirst }}</h3>
+{% endblock page_title %}
+
 {% block content %}
 {% if object %}
-<h2>Centre de sante : {{ object.name|  capfirst }}</h2>
-<div class="container">
     <div class="row">
         <div class="col-md-3">
-            <h1>Description </h1>
             <dl class="dl-horizontal">
                 <dt>Name of the CDS : </dt>
                 <p> {{object.name}}</p>
@@ -36,19 +38,15 @@
                     </div>
                 </form>
             </div>
+            <hr>
             <div class="row">
-                {% render_table statistics %}
+                <div class="col-lg-10">
+                    {% render_table statistics %}
+                </div>
+                <div class="col-lg-2"></div>
             </div>
         </div>
-        <div class="col-md-1">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}"><a href="/">{{ message }}</a></div>
-            {% endfor %}
-        </div>
     </div>
-
-
-</div>
 
 {% else %}
 No Patient in this CDS

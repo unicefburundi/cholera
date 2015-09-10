@@ -1,10 +1,12 @@
 {% extends "base_layout.html" %}
 {% load extras_utils %}
+
+{% block page_title %}
+<h3><i class="glyphicon glyphicon-list-alt"></i> Provinces.</h3>
+{% endblock page_title %}
+
 {% block content %}
 {% if object_list %}
-    <div class="container">
-        <h3>Provinces.</h3>
-    <div class="col-md-2"></div>
     <div class="col-md-8">
         <table id="list_cds" class="table table-bordered" data-search="true" data-toggle="table" data-show-export="true">
         <thead>
@@ -44,11 +46,10 @@
         </div>
     {% endif %}
     </div>
-    <div class="col-md-2"></div>
+    <div class="col-md-4"></div>
 
 {% else %}
 
     <p>No Provinces found!!! :(</p>
 {% endif %}
-    </div>
 {% endblock content %}
