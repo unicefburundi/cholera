@@ -1,7 +1,8 @@
 {% load staticfiles extras_utils %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
     <script type="text/javascript" src="{% static 'js/libs/jquery.min.js' %}"></script>
@@ -30,10 +31,7 @@
         <!-- Bootstrap core CSS -->
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap-theme.css' %}" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="{% static 'css/scrolling-nav.css' %}" rel="stylesheet">
-
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
     <style>
         .row.vdivide [class*='col-']:not(:last-child):after {
           background: #e0e0e0;
@@ -49,94 +47,158 @@
     </style>
     {% endblock css_section %}
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-    <title>Cholera - {% block page_title %}App{% endblock page_title %} </title>
-</head>
-<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+    <title>Cholera - {% block bare_title %}App{% endblock bare_title %} </title>
+  </head>
+  <body>
+<!-- Header -->
+<div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-toggle"></span>
+      </button>
+      <a class="navbar-brand" href="/">Control Panel</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-default " role="navigation">
+        <li class="dropdown">
+          <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+            <i class="glyphicon glyphicon-user"></i> Admin <span class="caret"></span></a>
+          <ul id="g-account-menu" class="dropdown-menu" role="menu">
+            <li><a href="{% url 'profile' slug=user.username %}"> {{user.username|capfirst}} Profile</a></li>
+            <li><a href="{% url 'auth_logout' %}"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div><!-- /container -->
+</div>
+<!-- /Header -->
+
+<!-- Main -->
+<div class="container">
+
+  <!-- upper section -->
+  <div class="row">
+  <div class="col-sm-2">
+      <!-- left -->
+      <h3><i class="glyphicon glyphicon-briefcase"></i> Toolbox</h3>
+      <hr>
+
+      <ul class="nav nav-stacked">
+        <li><a href="javascript:;"><i class="glyphicon glyphicon-flash"></i> Alerts</a></li>
+        {% if user|has_group:'CDS' %}
+        <li><a href="{% url 'cds_detail' pk=myfacility.id %}"><i class="glyphicon glyphicon-list-alt"></i> Statistics</a></li>
+          {% elif  user|has_group:'BDS' %}
+        <li><a href="{% url 'district_detail' pk=myfacility.id %}"><i class="glyphicon glyphicon-list-alt"></i> Statistics</a></li>
+          {% elif  user|has_group:'BPS' %}
+        <li><a href="{% url 'province_detail' pk=myfacility.id %}"><i class="glyphicon glyphicon-list-alt"></i> Statistics</a></li>
+          {% elif user|has_group:'Central' %}
+        <li><a href="{% url 'landing' %}"><i class="glyphicon glyphicon-list-alt"></i> Statistics</a></li>
+    {% endif %}
+        <li><a href="javascript:;"><i class="glyphicon glyphicon-list-alt"></i> Facilities</a></li>
+      </ul>
+
+      <hr>
+
+    </div><!-- /span-2 -->
+    <div class="col-sm-10">
+
+      <!-- column 2 -->
+       {% block page_title %}
+          <h3><i class="glyphicon glyphicon-dashboard"></i> Dashboard</h3>
+       {% endblock page_title %}
+        <hr>
         <div class="container">
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand page-scroll" href=" {% url 'home' %}">Cholera Monitor.</a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <ul class="nav navbar-nav">
-                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-                    {% if user.is_authenticated %}
-                        <li>
-                            <a href="{% url 'profile' slug=user.username %}"> {{user.username}} Profile</a>
-                        </li>
-                        {% if user|has_group:'CDS' %}
-                            <li><a href="{% url 'cds_detail' pk=myfacility.id %}">Statistics</a></li>
-                          {% elif  user|has_group:'BDS' %}
-                            <li><a href="{% url 'district_detail' pk=myfacility.id %}">Statistics</a></li>
-                          {% elif  user|has_group:'BPS' %}
-                            <li><a href="{% url 'province_detail' pk=myfacility.id %}">Statistics</a></li>
-                          {% elif user|has_group:'Central' %}
-                            <li><a href="{% url 'landing' %}">Statistics</a></li>
-                        {% endif %}
-                        <li role="presentation" class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                              Facilities <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                              <li><a href="{% url 'province_list' %}">BPS</a></li>
-                              <li><a href="{% url 'district_list' %}">BDS</a></li>
-                              <li><a href="{% url 'cds_list' %}">CDS</a></li>
-                              <li role="separator" class="divider"></li>
-                              <li><a href="{% url 'search_patients' %}">Search Patients</a></li>
-                              <li><a href="{% url 'patient_list' %}">Patient List</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a class="page-scroll navbar-right" href="{% url 'auth_logout' %}">Logout</a>
-                        </li>
-                         {% else %}
-                        <li>
-                            <a class="page-scroll text-right" href="{% url 'auth_login' %}">Login</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
+          {% block content %}
+          <!--  MAIN CONTENT GOES HERE -->
+          {% endblock content %}
         </div>
-        <!-- /.container -->
-    </nav>
+    </div><!--/col-span-10-->
 
-    <!-- Intro Section -->
-        <div class="row">
-            <div class="container">
-                <div class="col-lg-12">
-                    <div class="row">
-                        <div class="container">
-                                {% block content %}
-                                <!--  MAIN CONTENT GOES HERE -->
-                                {% endblock content %}
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <footer>
-                <p class="site-info text-center">
-                           &copy; {% now "Y" %} <span class="separator">|</span> Powered by Open-Source.
-                </p>
-            </footer>
-        </div>
+  </div><!--/row-->
+  <!-- /upper section -->
 
-    {% block js_footer %}
-        <!-- Scrolling Nav JavaScript -->
-        <script src="{% static 'js/jquery.easing.min.js' %}"></script>
-        <script src="{% static 'js/scrolling-nav.js' %}"></script>
-    {% endblock js_footer %}
-</body>
+  <!-- lower section -->
+  <div class="row">
+
+    <div class="col-md-12">
+    <div class="col-md-8">
+      <!--tabs-->
+      <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+          <li class="active"><a href="#profile" data-toggle="tab">Profile</a></li>
+          <li><a href="#messages" data-toggle="tab">Messages</a></li>
+          <li><a href="#settings" data-toggle="tab">Settings</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane active" id="profile">
+            <h4><i class="glyphicon glyphicon-user"></i></h4>
+            Lorem profile dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
+            <p>Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis
+              dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
+              Aliquam in felis sit amet augue.</p>
+          </div>
+          <div class="tab-pane" id="messages">
+            <h4><i class="glyphicon glyphicon-comment"></i></h4>
+            Message ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
+            <p>Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis
+              dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
+              Aliquam in felis sit amet augue.</p>
+          </div>
+          <div class="tab-pane" id="settings">
+            <h4><i class="glyphicon glyphicon-cog"></i></h4>
+            Lorem settings dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
+            <p>Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis
+              dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
+              Aliquam in felis sit amet augue.</p>
+          </div>
+        </div>
+      </div>
+      <!--/tabs-->
+
+      <hr>
+
+        </div><!--/panel content-->
+      </div><!--/panel-->
+
+
+    </div><!--/col-->
+
+  </div><!--/row-->
+
+</div><!--/container-->
+<!-- /Main -->
+
+
+<footer class="text-center">This Bootstrap 3 dashboard layout is compliments of <a href="http://www.bootply.com/85850"><strong>Bootply.com</strong></a></footer>
+
+
+<div class="modal" id="addWidgetModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Add Widget</h4>
+      </div>
+      <div class="modal-body">
+        <p>Add a widget stuff here..</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn">Close</a>
+        <a href="#" class="btn btn-primary">Save changes</a>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dalog -->
+</div><!-- /.modal -->
+
+
+
+
+  <!-- script references -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
 </html>
