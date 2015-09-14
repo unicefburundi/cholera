@@ -44,9 +44,11 @@ def ask_update_on_patient(request):
                     an_object['entry_date'] = patient.date_entry
                     an_object['reporter_phone'] = the_reporter_s_phone_number
                     an_object['supervisor_phone'] = the_register.supervisor_phone_number
-                    short_patient_id = patient.patient_id[6:]
+                    #short_patient_id = patient.patient_id[6:]
+		    short_patient_id = patient.patient_id[5:]
                     #an_object['message'] = "Vous n avez donne aucune nouvelle sur le patient "+patient.patient_id
-                    an_object['message'] = "Vous n avez donne aucune nouvelle sur le patient "+short_patient_id
+                    #an_object['message'] = "Vous n avez donne aucune nouvelle sur le patient "+short_patient_id
+		    an_object['message'] = "Il y a plus de 3 jours sans nouvelles sur le patient "+patient.patient_id+" enregistre par "+an_object['reporter_phone']+"."
 
                     necessary_data.append(an_object)
 
@@ -58,7 +60,8 @@ def ask_update_on_patient(request):
                             sup_phone_number = "tel:+257"+the_register.supervisor_phone_number
                     	print(sup_phone_number)
                     	print(sup_phone_number)
-                    	the_message_to_send = "Vous n avez donne aucune nouvelle sur le patient "+short_patient_id
+                    	#the_message_to_send = "Vous n avez donne aucune nouvelle sur le patient "+short_patient_id
+			the_message_to_send = an_object['message']
                     	data = {"urns": [sup_phone_number],"text": the_message_to_send}
                     	response = requests.post(contacts_url, headers={'Content-type': 'application/json', 'Authorization': 'Token %s' % token}, data = json.dumps(data))
                     	print response.content
