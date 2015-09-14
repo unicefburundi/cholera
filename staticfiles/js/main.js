@@ -27,5 +27,10 @@ $(document).ready(function(){
                     })
                 }
             })
-        })
+        });
+     $('td[name=provinces]').click(function() {
+            province_id = $('td[name=provinces]').val();
+            console.log(province_id);
+            //<---- move it here
+        });
     });
