@@ -1,40 +1,70 @@
 {% extends "base_layout.html" %}
+
+{% block page_title %}
+<h3><i class="glyphicon glyphicon-list-alt"> Patients at {{myfacility}} {{mylevel}}</i></h3>
+{% endblock page_title %}
+
 {% block content %}
 {% if object_list %}
-
-    <div class="container">
         <div class="row">
-        <h1>Patients at {{myfacility}} {{mylevel}}</h1>
-            <table id="list_cds" class="table table-bordered" data-toggle="table" data-search="true" data-show-export="true">
-            <thead>
-                  <tr>
-                    <th>Patient Id</th>
-                    <th>CDS</th>
-                    <th>Colline</th>
-                    <th>Age</th>
-                    <th>Sexe</th>
-                    <th>Intervention</th>
-                    <th>Entry Date</th>
-                    <th>Exit Date</th>
-                    <th>Exit Status</th>
-                  </tr>
-                </thead>
-            {% for patient in object_list %}
-                    <tr>
-                        {% with patient.id as code  %}
-                            <td><a href="{% url 'patient_detail' pk=code %}">{{ patient.patient_id }}</a></td>
-                            <td>{{patient.cds}}</td>
-                            <td>{{ patient.colline_name}}</td>
-                            <td>{{patient.age}}</td>
-                            <td>{{patient.sexe}}</td>
-                            <td>{{patient.intervention}}</td>
-                            <td>{{patient.date_entry}}</td>
-                            <td>{{patient.exit_date}}</td>
-                            <td>{{patient.exit_status}}</td>
-                        {% endwith %}
-                    </tr>
-                {% endfor %}
-            </table>
+            <form action="{% url 'get_statistics' %}" method="post" id="post-form">
+        {% csrf_token %}
+            <div class="col-lg-9">
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label for="start_date">Start Date :</label>
+                            {{search_form.start_date}}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="age">End Date :</label>
+                        {{search_form.end_date}}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="patient">Patient :</label>
+                        {{search_form.patient}}
+                        </div>
+                </div>
+        </div>
+        <div class="col-lg-3">
+            <button type="submit" class="btn  btn-primary">Filter</button>
+        </div>
+        </form>
+        </div>
+            <div class="row ">
+                <div class="col-lg-10">
+                    <table id="list_patient" class="table table-bordered" data-toggle="table"  data-show-export="true" >
+                        <thead>
+                              <tr>
+                                <th>Patient Id</th>
+                                <th>CDS</th>
+                                <th>Colline</th>
+                                <th>Age</th>
+                                <th>Sexe</th>
+                                <th>Intervention</th>
+                                <th>Entry Date</th>
+                                <th>Exit Date</th>
+                                <th>Exit Status</th>
+                              </tr>
+                            </thead>
+                        {% for patient in object_list %}
+                                <tr >
+                                    {% with patient.id as code  %}
+                                        <td><a href="{% url 'patient_detail' pk=code %}">{{ patient.patient_id }}</a></td>
+                                        <td>{{patient.cds}}</td>
+                                        <td>{{ patient.colline_name}}</td>
+                                        <td>{{patient.age}}</td>
+                                        <td>{{patient.sexe}}</td>
+                                        <td>{{patient.intervention}}</td>
+                                        <td>{{patient.date_entry}}</td>
+                                        <td>{{patient.exit_date}}</td>
+                                        <td>{{patient.exit_status}}</td>
+                                    {% endwith %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
             {# .... **Now the pagination section** .... #}
             {% if is_paginated %}
                 <div class="pagination">
@@ -55,6 +85,5 @@
             <h3>Centre de Sante.</h3>
             <p>No Patients found!!! :(</p>
         {% endif %}
-        </div>
     </div>
 {% endblock content %}

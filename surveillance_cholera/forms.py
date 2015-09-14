@@ -43,6 +43,12 @@ class SearchForm(forms.Form):
     end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))
     patient = forms.CharField()
 
+    class Meta:
+        widgets = {
+            'patient': forms.TextInput(attrs={'placeholder': 'What\'s your name?'}),
+        }
+
+
 class PatientSearchForm(forms.ModelForm):
     start_date = forms.DateField( widget=forms.TextInput(attrs={'class':'datePicker'}))
     end_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datePicker'}))

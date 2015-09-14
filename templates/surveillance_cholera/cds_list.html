@@ -1,11 +1,12 @@
 {% extends "base_layout.html" %}
 {% load extras_utils %}
+
+{% block page_title %}
+<h3><i class="glyphicon glyphicon-list-alt"></i> Centres de Sante.</h3>
+{% endblock page_title %}
+
 {% block content %}
 {% if object_list %}
-
-    <div class="container">
-        <h3>Centre de Sante.</h3>
-    <div class="col-md-2"></div>
     <div class="col-md-8">
     <table id="list_cds" class="table table-bordered" data-toggle="table" data-search="true" data-show-export="true">
         <thead>
@@ -48,10 +49,9 @@
         </div>
     {% endif %}
     </div>
-    <div class="col-md-2"></div>
+    <div class="col-md-4"></div>
 
 {% else %}
     <p>No CDS found!!! :(</p>
 {% endif %}
-    </div>
 {% endblock content %}
