@@ -28,7 +28,11 @@
                     </div>
                 </form>
             </div>
+            <hr>
         <div class="row">
+        {% if start_date != None  %}
+            From : <span class="badge">{{start_date}}</span> to : <span class="badge">{{end_date}}</span>
+        {% endif %}
             {% render_table statistics %}
         </div>
         </div>

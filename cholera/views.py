@@ -92,9 +92,8 @@ def get_by_code(request, code='', start_date='', end_date=''):
         form = SearchForm
         results = [get_province_statistics(i, format_to_time(start_date), format_to_time(end_date)) for i in Province.objects.all() ]
         statistics = Patients3Table(results)
-        messages.success(request, 'No retard!')
         RequestConfig(request, paginate={"per_page": 25}).configure(statistics)
-        return render(request, 'surveillance_cholera/provinces.html', {  'statistics' : statistics, 'form':form})
+        return render(request, 'surveillance_cholera/provinces.html', {  'statistics' : statistics, 'form':form, 'start_date':request.POST.get('start_date'), 'end_date':request.POST.get('end_date')})
     if len(code)<=2 :
         url = reverse('province_detail', kwargs={'pk': Province.objects.get(code=code).id})
         return HttpResponseRedirect(url)
