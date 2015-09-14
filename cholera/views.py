@@ -10,7 +10,6 @@ from surveillance_cholera.templatetags.extras_utils import format_to_time, get_a
 from authentication.models import UserProfile
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.contrib import messages
 
 def get_province_statistics(province, start_date='', end_date=''):
     elemet = {}

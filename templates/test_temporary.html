@@ -1,4 +1,9 @@
 {% extends "base_layout.html" %}
+
+{% block page_title %}
+<h3><i class="glyphicon glyphicon-list-alt"></i> Cas de retard de rapportage</h3>
+{% endblock page_title %}
+
 {% block content %}
 {% if necessary_data %}
     <table id="any_update" class="table table-bordered">
@@ -24,7 +29,6 @@
     </table>
 
 {% else %}
-    <h3>Cas de retard de rapportage</h3>
     <p>Pas de cas de depassement de date de mise a jour.</p>
 {% endif %}
 {% endblock content %}
