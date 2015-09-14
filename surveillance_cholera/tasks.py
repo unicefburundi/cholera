@@ -48,7 +48,7 @@ def ask_update_on_patient(request):
 		    short_patient_id = patient.patient_id[5:]
                     #an_object['message'] = "Vous n avez donne aucune nouvelle sur le patient "+patient.patient_id
                     #an_object['message'] = "Vous n avez donne aucune nouvelle sur le patient "+short_patient_id
-		    an_object['message'] = "Il y a plus de 3 jours sans nouvelles sur le patient "+patient.patient_id+" enregistre par "+an_object['reporter_phone']+"."
+		    an_object['message'] = "Il y a plus de 3 jours sans nouvelles sur le patient "+short_patient_id+" enregistre par "+an_object['reporter_phone']+"."
 
                     necessary_data.append(an_object)
 
