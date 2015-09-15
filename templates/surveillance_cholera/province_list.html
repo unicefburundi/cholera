@@ -8,43 +8,29 @@
 {% block content %}
 {% if object_list %}
     <div class="col-md-8">
-        <table id="list_cds" class="table table-bordered" data-search="true" data-toggle="table" data-show-export="true">
-        <thead>
-              <tr>
-                <th>Name</th>
-                <th>Code</th>
-              </tr>
+    <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Code</th>
+                </tr>
             </thead>
-        {% for cds in object_list %}
+    {% for province in object_list %}
             <tr>
-                {% with cds.id as code  %}
+                {% with province.id as code  %}
                 {% if user|has_group:'Central' %}
-                    <td><a href="{% url 'province_detail' pk=code %} " class="btn btn_link">{{ cds.name}}</a></td>
+                    <td><a href="{% url 'province_detail' pk=code %} " class="btn btn_link">{{ province.name}}</a></td>
                     {% else %}
-                    <td>{{ cds.name}}</td>
+                    <td>{{ province.name}}</td>
                 {% endif %}
-                    <td>{{ cds.code }}</td>
+                    <td>{{ province.code }}</td>
 
                 {% endwith %}
             </tr>
         {% endfor %}
     </table>
-    {# .... **Now the pagination section** .... #}
-    {% if is_paginated %}
-        <div class="pagination">
-            <span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
-                <span class="page-current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">next</a>
-                {% endif %}
-            </span>
-        </div>
-    {% endif %}
+    <div class="col-md-6"></div>
+
     </div>
     <div class="col-md-4"></div>
 

@@ -26,7 +26,7 @@ def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)])
     facility = {'name': CDS.objects.get(id=moh_facility_id).name}
     detail = {'detail':  CDS.objects.get(id=moh_facility_id).code}
-    total ={'total': Patient.objects.filter(cds=moh_facility_id).count()}
+    total ={'total': patients.filter(cds=moh_facility_id).count()}
     deces= {'deces' : patients.filter(cds=moh_facility_id, intervention__icontains='DD').count()}
     sorties = {'sorties' : patients.filter(cds=moh_facility_id, intervention__icontains='PR').count()}
     hospi = {'hospi' : patients.filter(cds=moh_facility_id, intervention__icontains='HOSPI').count()}
@@ -69,7 +69,7 @@ class CDSFormView(FormView, CDSDetailView):
         statistics = PatientsTable(data)
         RequestConfig(request).configure(statistics)
 
-        return render(request, 'surveillance_cholera/cds_detail.html', {'form':form, 'statistics':statistics, 'object': CDS.objects.get(pk=kwargs['pk'])} )
+        return render(request, 'surveillance_cholera/cds_detail.html', {'form':form, 'statistics':statistics, 'object': CDS.objects.get(pk=kwargs['pk']),'start_date': request.POST.get('start_date'), 'end_date':request.POST.get('end_date')} )
 
 
 ###########
@@ -84,7 +84,7 @@ def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)])
     facility = {'name': District.objects.get(id=moh_facility_id).name}
     detail = {'detail':  District.objects.get(id=moh_facility_id).code}
-    total ={'total': Patient.objects.filter(cds__district=moh_facility_id).count()}
+    total ={'total': patients.filter(cds__district=moh_facility_id).count()}
     deces= {'deces' : patients.filter(cds__district=moh_facility_id, intervention__icontains='DD').count()}
     sorties = {'sorties' : patients.filter(cds__district=moh_facility_id, intervention__icontains='PR').count()}
     hospi = {'hospi' : patients.filter(cds__district=moh_facility_id, intervention__icontains='HOSPI').count()}
@@ -130,7 +130,7 @@ class DistrictFormView(FormView, DistrictDetailView):
         statistics = PatientsTable(data)
         RequestConfig(request).configure(statistics)
 
-        return render(request, 'surveillance_cholera/district_detail.html', {'form':form, 'statistics':statistics, 'object': District.objects.get(pk=kwargs['pk'])} )
+        return render(request, 'surveillance_cholera/district_detail.html', {'form':form, 'statistics':statistics, 'object': District.objects.get(pk=kwargs['pk']), 'start_date': request.POST.get('start_date'), 'end_date':request.POST.get('end_date')} )
 
 ###########
 # Province      ##
@@ -249,4 +249,4 @@ class ProvinceFormView(FormView, ProvinceDetailView):
         statistics = Patients2Table(data)
         RequestConfig(request).configure(statistics)
 
-        return render(request, 'surveillance_cholera/province_detail.html', {'form':form, 'statistics':statistics, 'object': Province.objects.get(pk=kwargs['pk'])} )
+        return render(request, 'surveillance_cholera/province_detail.html', {'form':form, 'statistics':statistics, 'object': Province.objects.get(pk=kwargs['pk']), 'start_date': request.POST.get('start_date'), 'end_date':request.POST.get('end_date')} )

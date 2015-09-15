@@ -2,7 +2,7 @@
 {% load render_table from django_tables2 %}
 
 {% block page_title %}
-<h3><i class="glyphicon glyphicon-list-alt"></i> District : {{ object.name|  capfirst }}</h3>
+<h3><i class="glyphicon glyphicon-list-alt"></i> Analytics of patients at  {{ object.name|  capfirst }} District</h3>
 {% endblock page_title %}
 
 {% block content %}
@@ -20,7 +20,6 @@
             </dl>
         </div>
         <div class="col-md-9">
-        <h3>Analytics of patients at  {{ object.name|  capfirst }} District</h3>
         <div class="row">
                 <form action="{% url 'district_statistics' pk=object.id %}" method="post" id="post-form" class="form-inline">
                 {% csrf_token %}
@@ -33,12 +32,17 @@
                         {{form.end_date}}
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <button type="submit" class="btn btn-primary">Analyse</button>
                     </div>
                 </form>
             </div>
+            <hr>
             <div class="row">
                 <div class="col-lg-10">
+                {% if start_date != None  %}
+                    {% now "d/m/Y" as current_year %}
+                        Displaying results from : <span class="badge">{{start_date|default:"The Beginning"}}</span> to : <span class="badge">{{end_date|default:current_year}}</span>
+                {% endif %}
                     {% render_table statistics %}
                 </div>
                 <div class="col-lg-2"></div>

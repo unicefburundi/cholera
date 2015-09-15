@@ -1,12 +1,17 @@
 {% extends "base_layout.html" %}
 {% load staticfiles %}
 {% load render_table from django_tables2 %}
+
+{% block page_title %}
+<h3><i class="glyphicon glyphicon-list-alt"></i>{% with moh_facility.code as moh  %} Cholera patients at <a href="{% url 'get_by_code' moh %}">{{moh_facility.name}}</a> facility
+        {% endwith %}</h3>
+{% endblock page_title %}
+
 {% block content %}
         <form action="" method="post" id="post-form" class="form-inline">
         {% csrf_token %}
         <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-9">
+        <div class="col-lg-10">
         {% if form %}
             <div class="row">
             <div class="form-group col-md-4 ">
@@ -23,13 +28,17 @@
               </div>
             </div>
           <div class="row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
                 <label for="intervention">Intervention :</label>
                     {{form.intervention}}
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
                 <label for="exit_status">Exit status :</label>
                     {{form.exit_status}}
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Filter</button>
             </div>
           </div>
           <div class="row">
@@ -44,18 +53,16 @@
           </div>
         {% endif %}
         </div>
-        <div class="col-lg-2">
-            <button type="submit" class="btn btn-primary">Filter</button>
-        </div>
         </div>
     </form>
     </div>
+    <hr>
     <div class="row">
         {% if results %}
-        {% with moh_facility.code as moh  %}
-            <h3> Cholera patients at <a href="{% url 'get_by_code' moh %}">{{moh_facility.name}}</a> facility </h3>
-        {% endwith %}
-            {% render_table results %}
+            <div class="col-md-10">
+                {% render_table results %}
+            </div>
+            <div class="col-md-2"></div>
         {% elif all_patients %}
         <h1>All Patients</h1>
             {% render_table all_patients %}
