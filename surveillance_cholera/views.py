@@ -232,12 +232,12 @@ def get_patients_by_code(request, code=''):
 
             results = PatientTable(all_patients.filter(date_entry__range=[form.cleaned_data['start_date'], form.cleaned_data['end_date']]))
             RequestConfig(request, paginate={"per_page": 25}).configure(results)
-            return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': moh_facility})
+            return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': moh_facility, 'sstart_date':request.session['sstart_date'], 'eend_date':request.session['eend_date']})
 
 
     results = PatientTable(all_patients)
     RequestConfig(request, paginate={"per_page": 25}).configure(results)
-    return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': moh_facility})
+    return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': moh_facility, 'sstart_date':request.session['sstart_date'], 'eend_date':request.session['eend_date']})
 
 
 class ProvinceFormView(FormView, ProvinceDetailView):
