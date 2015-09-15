@@ -204,6 +204,14 @@ def get_patients_by_code(request, code=''):
     if len(code)>4 :
         moh_facility = CDS.objects.get(code=code)
         all_patients = all_patients.filter(cds__code=code)
+    sstart_date = request.session['sstart_date']
+    eend_date = request.session['eend_date']
+    if sstart_date == None or sstart_date == '':
+        sstart_date= datetime.date(2012,1,1).strftime('%d/%m/%Y')
+    if eend_date == None or eend_date == '':
+        eend_date = datetime.date.today().strftime('%d/%m/%Y')
+    all_patients = all_patients.filter(date_entry__range=[format_to_time(sstart_date), format_to_time(eend_date)])
+
     if request.method == 'POST':
         form = PatientSearchForm(request.POST)
         if form.is_valid():
@@ -230,33 +238,6 @@ def get_patients_by_code(request, code=''):
     results = PatientTable(all_patients)
     RequestConfig(request, paginate={"per_page": 25}).configure(results)
     return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': moh_facility})
-
-@login_required
-def get_all_patients_by_code(request, code=''):
-    userprofile = UserProfile.objects.get(user=request.user)
-    all_patients = get_all_patients(level=userprofile.level, moh_facility=userprofile.moh_facility)
-    form = PatientSearchForm()
-    moh_facility = None
-    if len(code)<=2 :
-        moh_facility = Province.objects.get(code=code)
-        all_patients = all_patients.filter(cds__district__province__code=code)
-    if len(code)>2 and len(code)<=4 :
-        moh_facility = District.objects.get(code=code)
-        all_patients = all_patients.filter(cds__district__code=code)
-    if len(code)>4 :
-        moh_facility = CDS.objects.get(code=code)
-        all_patients = all_patients.filter(cds__code=code)
-    sstart_date = request.session['sstart_date']
-    eend_date = request.session['eend_date']
-    if sstart_date == None or sstart_date == '':
-        sstart_date= datetime.date(2012,1,1).strftime('%d/%m/%Y')
-    if eend_date == None or eend_date == '':
-        eend_date = datetime.date.today().strftime('%d/%m/%Y')
-
-    results = PatientTable(all_patients.filter(date_entry__range=[format_to_time(sstart_date), format_to_time(eend_date)]))
-    RequestConfig(request, paginate={"per_page": 25}).configure(results)
-    return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': moh_facility})
-
 
 
 class ProvinceFormView(FormView, ProvinceDetailView):
