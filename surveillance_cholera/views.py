@@ -11,7 +11,8 @@ from cholera.views import get_all_patients
 from django.db.models import Q
 import datetime
 from django.views.generic import FormView
-from surveillance_cholera.templatetags.extras_utils import format_to_time
+from surveillance_cholera.templatetags.extras_utils import format_to_time, DEAD, HOSPI, SORTI
+import operator
 
 ###########
 # CDS             ##
@@ -22,14 +23,14 @@ def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
         start_date = u'01/01/2012'
     if end_date == '':
         end_date = datetime.date.today().strftime('%d/%m/%Y')
-    patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)])
+    patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]).filter(cds=moh_facility_id)
     facility = {'name': CDS.objects.get(id=moh_facility_id).name}
     detail = {'detail':  CDS.objects.get(id=moh_facility_id).code}
-    total ={'total': patients.filter(cds=moh_facility_id).count()}
-    deces= {'deces' : patients.filter(cds=moh_facility_id, intervention__icontains='DD').count()}
-    sorties = {'sorties' : patients.filter(cds=moh_facility_id, intervention__icontains='PR').count()}
-    hospi = {'hospi' : patients.filter(cds=moh_facility_id, intervention__icontains='HOSPI').count()}
-    nc = {'nc' : patients.filter(cds=moh_facility_id, exit_status=None).count()}
+    total ={'total': patients.count()}
+    deces= {'deces' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in DEAD)).count()}
+    sorties = {'sorties' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in SORTI)).count()}
+    hospi = {'hospi' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in HOSPI)).count()}
+    nc = {'nc' : patients.filter(exit_status=None).count()}
 
     elemet = {}
     for i in [total,deces,sorties,hospi,nc, facility, detail]:
@@ -83,14 +84,14 @@ def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
         start_date = u'01/01/2012'
     if end_date == '':
         end_date = datetime.date.today().strftime('%d/%m/%Y')
-    patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)])
+    patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]).filter(cds__district=moh_facility_id)
     facility = {'name': District.objects.get(id=moh_facility_id).name}
     detail = {'detail':  District.objects.get(id=moh_facility_id).code}
-    total ={'total': patients.filter(cds__district=moh_facility_id).count()}
-    deces= {'deces' : patients.filter(cds__district=moh_facility_id, intervention__icontains='DD').count()}
-    sorties = {'sorties' : patients.filter(cds__district=moh_facility_id, intervention__icontains='PR').count()}
-    hospi = {'hospi' : patients.filter(cds__district=moh_facility_id, intervention__icontains='HOSPI').count()}
-    nc = {'nc' : patients.filter(cds__district=moh_facility_id, exit_status=None).count()}
+    total ={'total': patients.count()}
+    deces= {'deces' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in DEAD)).count()}
+    sorties = {'sorties' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in SORTI)).count()}
+    hospi = {'hospi' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in HOSPI)).count()}
+    nc = {'nc' : patients.filter(exit_status=None).count()}
 
     elemet = {}
     for i in [total,deces,sorties,hospi,nc, facility, detail]:

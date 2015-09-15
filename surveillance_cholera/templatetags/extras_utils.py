@@ -1,6 +1,9 @@
 from django import template
 import datetime
 from surveillance_cholera.models import Patient
+DEAD = ['dd', 'deces']
+HOSPI = ['hospi', 'hopi']
+SORTI = ['pr', 'ref', 'desh']
 
 register = template.Library()
 @register.filter(name='has_group')

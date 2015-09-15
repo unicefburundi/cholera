@@ -6,21 +6,22 @@ from django.contrib.auth.decorators import login_required
 from surveillance_cholera.tables import PatientTable, Patients3Table
 from django.http import JsonResponse
 import datetime
-from surveillance_cholera.templatetags.extras_utils import format_to_time, get_all_patients
+from surveillance_cholera.templatetags.extras_utils import format_to_time, get_all_patients, DEAD, HOSPI, SORTI
 from authentication.models import UserProfile
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+import operator
 
 def get_province_statistics(province, start_date='', end_date=''):
     elemet = {}
     facility = {'name': province.name}
     detail = {'detail':  province.code}
-    patients = Patient.objects.filter(date_entry__range=[start_date, end_date])
+    patients = Patient.objects.filter(date_entry__range=[start_date, end_date]).filter(cds__district__province=province.id)
     total ={'total': patients.filter(cds__district__province=province.id).count()}
-    deces= {'deces' : patients.filter(cds__district__province=province.id, intervention__icontains='DD').count()}
-    sorties = {'sorties' : patients.filter(cds__district__province=province.id, intervention__icontains='PR').count()}
-    hospi = {'hospi' : patients.filter(cds__district__province=province.id, intervention__icontains='HOSPI').count()}
-    nc = {'nc' : patients.filter(cds__district__province=province.id, exit_status=None).count()}
+    deces= {'deces' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in DEAD)).count()}
+    sorties = {'sorties' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in SORTI)).count()}
+    hospi = {'hospi' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in HOSPI)).count()}
+    nc = {'nc' : patients.filter( exit_status=None).count()}
 
     for i in [total,deces,sorties,hospi,nc, facility, detail]:
         elemet.update(i)
