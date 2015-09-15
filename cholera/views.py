@@ -87,6 +87,8 @@ def get_statistics(request):
     return render(request, 'statistics.html', { 'form':form, 'results' : results})
 
 def get_by_code(request, code='', start_date='', end_date=''):
+    request.session['sstart_date'] = ''
+    request.session['eend_date'] = ''
     if code=='None':
         form = SearchForm
         results = [get_province_statistics(i, format_to_time(start_date), format_to_time(end_date)) for i in Province.objects.all() ]
@@ -96,14 +98,13 @@ def get_by_code(request, code='', start_date='', end_date=''):
         request.session['eend_date'] = request.POST.get('end_date')
         return render(request, 'surveillance_cholera/provinces.html', {  'statistics' : statistics, 'form':form, 'start_date':request.POST.get('start_date'), 'end_date':request.POST.get('end_date')})
     if len(code)<=2 :
-        url = reverse('province_detail', kwargs={'pk': Province.objects.get(code=code).id})
+        url = reverse('province_detail', kwargs={'pk': Province.objects.get(code=code).id, 'sstart_date': request.POST.get('start_date'), 'eend_date' :request.POST.get('eend_date')})
         return HttpResponseRedirect(url)
     if len(code)>2 and len(code)<=4 :
-        url = reverse('district_detail', kwargs={'pk': District.objects.get(code=str(code)).id})
+        url = reverse('district_detail', kwargs={'pk': District.objects.get(code=str(code)).id, 'sstart_date': request.POST.get('start_date'), 'eend_date' :request.POST.get('eend_date')})
         return HttpResponseRedirect(url)
     if len(code)>4 :
-        url = reverse('cds_detail', kwargs={'pk': CDS.objects.get(code=code).id})
-        return HttpResponseRedirect(url)
+        return render(request, 'surveillance_cholera/cds_detail.html', {'pk':CDS.objects.get(code=code).id})
 
 def landing(request):
     code = UserProfile.objects.get(user=request.user).moh_facility

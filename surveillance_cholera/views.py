@@ -66,6 +66,8 @@ class CDSFormView(FormView, CDSDetailView):
         data = [get_per_cds_statistics(kwargs['pk'], request.POST.get('start_date'), request.POST.get('end_date'))]
         statistics = PatientsTable(data)
         RequestConfig(request).configure(statistics)
+        request.session['sstart_date'] = request.POST.get('start_date')
+        request.session['eend_date'] = request.POST.get('end_date')
 
         return render(request, 'surveillance_cholera/cds_detail.html', {'form':form, 'statistics':statistics, 'object': CDS.objects.get(pk=kwargs['pk']),'start_date': request.POST.get('start_date'), 'end_date':request.POST.get('end_date')} )
 
@@ -126,6 +128,8 @@ class DistrictFormView(FormView, DistrictDetailView):
         data = get_district_data(kwargs['pk'], request.POST.get('start_date'), request.POST.get('end_date'))
         statistics = PatientsTable(data)
         RequestConfig(request).configure(statistics)
+        request.session['sstart_date'] = request.POST.get('start_date')
+        request.session['eend_date'] = request.POST.get('end_date')
 
         return render(request, 'surveillance_cholera/district_detail.html', {'form':form, 'statistics':statistics, 'object': District.objects.get(pk=kwargs['pk']), 'start_date': request.POST.get('start_date'), 'end_date':request.POST.get('end_date')} )
 
@@ -250,5 +254,7 @@ class ProvinceFormView(FormView, ProvinceDetailView):
         data = get_province_data(kwargs['pk'], request.POST.get('start_date'), request.POST.get('end_date'))
         statistics = Patients2Table(data)
         RequestConfig(request).configure(statistics)
+        request.session['sstart_date'] = request.POST.get('start_date')
+        request.session['eend_date'] = request.POST.get('end_date')
 
         return render(request, 'surveillance_cholera/province_detail.html', {'form':form, 'statistics':statistics, 'object': Province.objects.get(pk=kwargs['pk']), 'start_date': request.POST.get('start_date'), 'end_date':request.POST.get('end_date')} )
