@@ -16,7 +16,7 @@ def get_province_statistics(province, start_date='', end_date=''):
     facility = {'name': province.name}
     detail = {'detail':  province.code}
     patients = Patient.objects.filter(date_entry__range=[start_date, end_date])
-    total ={'total': Patient.objects.filter(cds__district__province=province.id).count()}
+    total ={'total': patients.filter(cds__district__province=province.id).count()}
     deces= {'deces' : patients.filter(cds__district__province=province.id, intervention__icontains='DD').count()}
     sorties = {'sorties' : patients.filter(cds__district__province=province.id, intervention__icontains='PR').count()}
     hospi = {'hospi' : patients.filter(cds__district__province=province.id, intervention__icontains='HOSPI').count()}
@@ -28,6 +28,7 @@ def get_province_statistics(province, start_date='', end_date=''):
     return elemet
 
 def home(request):
+    # import ipdb; ipdb.set_trace()
     return render(request, 'base_layout.html')
 
 def get_cdss(request, district_id):

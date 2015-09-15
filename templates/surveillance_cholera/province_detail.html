@@ -29,14 +29,15 @@
                         {{form.end_date}}
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <button type="submit" class="btn btn-primary">Analyse</button>
                     </div>
                 </form>
             </div>
             <hr>
             <div class="row">
             {% if start_date != None  %}
-            From : <span class="badge">{{start_date}}</span> to : <span class="badge">{{end_date}}</span>
+            {% now "d/m/Y" as current_year %}
+                Displaying results from : <span class="badge">{{start_date|default:"The Beginning"}}</span> to : <span class="badge">{{end_date|default:current_year}}</span>
         {% endif %}
                 <div class="col-md-10">
                     {% render_table statistics %}

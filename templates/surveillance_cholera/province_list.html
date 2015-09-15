@@ -15,14 +15,19 @@
                     <th>Code</th>
                 </tr>
             </thead>
-    {% for province in object_list  %}
-                <tr >
-                    <td  class="btn provinces" name="provinces">{{province.name}}</td >
-                    <td  >
-                        <a href="{% url 'province_detail' province.id %}">{{province.code}} </a>
-                    </td>
-                </tr>
-    {% endfor %}
+    {% for province in object_list %}
+            <tr>
+                {% with province.id as code  %}
+                {% if user|has_group:'Central' %}
+                    <td><a href="{% url 'province_detail' pk=code %} " class="btn btn_link">{{ province.name}}</a></td>
+                    {% else %}
+                    <td>{{ province.name}}</td>
+                {% endif %}
+                    <td>{{ province.code }}</td>
+
+                {% endwith %}
+            </tr>
+        {% endfor %}
     </table>
     <div class="col-md-6"></div>
 
