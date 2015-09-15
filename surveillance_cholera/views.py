@@ -12,7 +12,6 @@ from django.db.models import Q
 import datetime
 from django.views.generic import FormView
 from surveillance_cholera.templatetags.extras_utils import format_to_time
-from django.contrib import messages
 
 ###########
 # CDS             ##
@@ -54,7 +53,6 @@ class CDSDetailView(DetailView):
         statistics = PatientsTable(data)
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
-        messages.success(self.request, 'No retard!')
         context['form'] = SearchForm()
         return context
 
@@ -115,7 +113,6 @@ class DistrictDetailView(DetailView):
         statistics = PatientsTable(data)
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
-        messages.success(self.request, 'No retard!')
         context['form'] = SearchForm()
         return context
 
@@ -157,7 +154,6 @@ class ProvinceDetailView(DetailView):
         statistics = Patients2Table(data)
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
-        messages.success(self.request, 'No retard!')
         context['form'] = SearchForm()
         return context
 
