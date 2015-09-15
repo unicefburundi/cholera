@@ -14,42 +14,41 @@
         <div class="col-lg-10">
         {% if form %}
             <div class="row">
-            <div class="form-group col-md-4 ">
-                <label for="colline_name">Colline name :</label>
-                {{form.colline_name}}
+            <div class="form-group col-md-3 ">
+                <label for="intervention">Intervention :</label>
+                    <p>{{form.intervention}}</p>
               </div>
-              <div class="form-group col-md-4">
+              <div class="form-group col-md-3">
                     <label for="age">Age :</label>
-                    {{form.age}}
+                    <p>{{form.age}}</p>
               </div>
-              <div class="form-group col-md-4">
+              <div class="form-group col-md-3">
                     <label for="sexe">Sexe :</label>
-                    {{form.sexe}}
+                    <p>{{form.sexe}}</p>
               </div>
+              <div class="form-group col-md-3">
+                <label for="exit_status">Exit status :</label>
+                    <p>{{form.exit_status}}</p>
+            </div>
             </div>
           <div class="row">
-            <div class="form-group col-md-4">
-                <label for="intervention">Intervention :</label>
-                    {{form.intervention}}
+            <div class="form-group col-md-3">
+                <label for="colline_name">Colline name :</label>
+                    <p>{{form.colline_name}}</p>
             </div>
-            <div class="form-group col-md-4">
-                <label for="exit_status">Exit status :</label>
-                    {{form.exit_status}}
+            <div class="form-group col-md-3">
+                <label for="start_date">Start date :</label>
+                    <p>{{form.start_date}}</p>
             </div>
-            <div class="col-md-2"></div>
-            <div class="col-md-2">
+            <div class="form-group col-md-3">
+                <label for="end_date">End date :</label>
+                    <p>{{form.end_date}}</p>
+            </div>
+            <div class="col-md-3">
                 <button type="submit" class="btn btn-primary">Filter</button>
             </div>
           </div>
           <div class="row">
-            <div class="form-group col-md-6">
-                <label for="start_date">Start date :</label>
-                    {{form.start_date}}
-            </div>
-            <div class="form-group col-md-6">
-                <label for="end_date">End date :</label>
-                    {{form.end_date}}
-            </div>
           </div>
         {% endif %}
         </div>
@@ -59,10 +58,10 @@
     <hr>
     <div class="row">
         {% if results %}
-            <div class="col-md-10">
+            <div class="col-md-11">
                 {% render_table results %}
             </div>
-            <div class="col-md-2"></div>
+            <div class="col-md-1"></div>
         {% elif all_patients %}
         <h1>All Patients</h1>
             {% render_table all_patients %}

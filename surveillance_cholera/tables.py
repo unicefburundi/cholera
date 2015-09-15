@@ -5,12 +5,12 @@ from django_tables2.utils import A  # alias for Accessor
 class CDSTable(tables.Table):
     class Meta:
         model = CDS
-        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-show-toggle":"true", "data-show-export":"true"}
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" ,  "data-show-export":"true"}
 
 class PatientTable(tables.Table):
     class Meta:
         model = Patient
-        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-show-toggle":"true", "data-show-export":"true"}
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" ,  "data-show-export":"true"}
 
 class PatientsTable(tables.Table):
     name = tables.Column(verbose_name="Name of CDS ")
@@ -51,4 +51,4 @@ class Patients3Table(tables.Table):
 class ReportTable(tables.Table):
     class Meta:
         model = Report
-        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-show-toggle":"true", "data-show-export":"true"}
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" ,  "data-show-export":"true"}
