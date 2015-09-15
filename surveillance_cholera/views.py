@@ -54,6 +54,8 @@ class CDSDetailView(DetailView):
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
         context['form'] = SearchForm()
+        self.request.session['sstart_date'] = ''
+        self.request.session['eend_date'] = ''
         return context
 
 class CDSFormView(FormView, CDSDetailView):
@@ -116,6 +118,8 @@ class DistrictDetailView(DetailView):
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
         context['form'] = SearchForm()
+        self.request.session['sstart_date'] = ''
+        self.request.session['eend_date'] = ''
         return context
 
 class DistrictFormView(FormView, DistrictDetailView):
@@ -159,6 +163,8 @@ class ProvinceDetailView(DetailView):
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
         context['form'] = SearchForm()
+        self.request.session['sstart_date'] = ''
+        self.request.session['eend_date'] = ''
         return context
 
 
@@ -198,6 +204,7 @@ def get_patients_by_code(request, code=''):
     userprofile = UserProfile.objects.get(user=request.user)
     all_patients = get_all_patients(level=userprofile.level, moh_facility=userprofile.moh_facility)
     form = PatientSearchForm()
+    # import ipdb; ipdb.set_trace()
     moh_facility = None
     if len(code)<=2 :
         moh_facility = Province.objects.get(code=code)
