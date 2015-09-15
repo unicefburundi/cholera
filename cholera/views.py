@@ -28,7 +28,6 @@ def get_province_statistics(province, start_date='', end_date=''):
     return elemet
 
 def home(request):
-    # import ipdb; ipdb.set_trace()
     return render(request, 'base_layout.html')
 
 def get_cdss(request, district_id):
@@ -93,6 +92,8 @@ def get_by_code(request, code='', start_date='', end_date=''):
         results = [get_province_statistics(i, format_to_time(start_date), format_to_time(end_date)) for i in Province.objects.all() ]
         statistics = Patients3Table(results)
         RequestConfig(request, paginate={"per_page": 25}).configure(statistics)
+        request.session['sstart_date'] = request.POST.get('start_date')
+        request.session['eend_date'] = request.POST.get('end_date')
         return render(request, 'surveillance_cholera/provinces.html', {  'statistics' : statistics, 'form':form, 'start_date':request.POST.get('start_date'), 'end_date':request.POST.get('end_date')})
     if len(code)<=2 :
         url = reverse('province_detail', kwargs={'pk': Province.objects.get(code=code).id})

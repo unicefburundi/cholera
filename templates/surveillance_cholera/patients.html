@@ -3,7 +3,7 @@
 {% load render_table from django_tables2 %}
 
 {% block page_title %}
-<h3><i class="glyphicon glyphicon-list-alt"></i>{% with moh_facility.code as moh  %} Cholera patients at <a href="{% url 'get_by_code' moh %}">{{moh_facility.name}}</a> facility
+<h3><i class="glyphicon glyphicon-list-alt"></i>{% with moh_facility.code as moh  %} Cholera patients at <a href="{% url 'get_by_code' moh %}">{{moh_facility.name}}</a> facility {% now "d/m/Y" as current_year %} between {{sstart_date|default:"the beginning"}} till :{{eend_date|default:current_year}}
         {% endwith %}</h3>
 {% endblock page_title %}
 
