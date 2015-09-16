@@ -17,6 +17,36 @@ class PatientTable(tables.Table):
         exclude = ('id', 'colline_name')
         sequence = ("patient_id", "...", "cds")
 
+    def render_intervention(self, value):
+        if value.upper() in ['DD']:
+            return 'Deces'
+        if value.upper() in ['HOSPI']:
+            return 'Hospitalisation'
+        if value.upper() in ['PR']:
+            return 'Reference'
+        if value.upper() in ['DESH']:
+            return 'Non Hospitalise'
+        else :
+            return value
+
+    def render_age(self, value):
+        if value.upper() in ['A1']:
+            return 'Inf 5 ans'
+        if value.upper() in ['A2']:
+            return 'Sup 5 ans'
+        else:
+            return value
+
+    def render_exit_status(self, value):
+        if value.upper() in ['PR']:
+            return 'Reference'
+        if value.upper() in ['PD']:
+            return 'Deces'
+        if value.upper() in ['PG']:
+            return 'Gueri'
+        else:
+            return value
+
 class PatientsTable(tables.Table):
     name = tables.Column(verbose_name="Name of CDS ")
     total = tables.Column()

@@ -59,10 +59,10 @@
     <hr>
     <div class="row">
         {% if results %}
-            <div class="col-md-11">
+            <div class="col-md-10">
                 {% render_table results %}
             </div>
-            <div class="col-md-1"></div>
+            <div class="col-md-2"></div>
         {% elif all_patients %}
         <h1>All Patients</h1>
             {% render_table all_patients %}
