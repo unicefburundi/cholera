@@ -8,9 +8,14 @@ class CDSTable(tables.Table):
         attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" ,  "data-show-export":"true"}
 
 class PatientTable(tables.Table):
+    province = tables.Column(accessor='cds.district.province')
+    district = tables.Column(accessor='cds.district')
+
     class Meta:
         model = Patient
         attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" ,  "data-show-export":"true"}
+        exclude = ('id', 'colline_name')
+        sequence = ("patient_id", "...", "cds")
 
 class PatientsTable(tables.Table):
     name = tables.Column(verbose_name="Name of CDS ")

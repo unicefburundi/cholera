@@ -21,15 +21,26 @@
                 <form action="{% url 'province_statistics' pk=object.id %}" method="post" id="post-form" class="form-inline">
                 {% csrf_token %}
                     <div class="form-group col-md-3">
-                        <label for="start_date">Start Date :</label>
-                        {{form.start_date}}
+                        <div class="row">
+                            <label for="start_date">Start Date :</label>
+                        </div>
+                        <div class="row">
+                            {{form.start_date}}
+                        </div>
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="age">End Date :</label>
-                        {{form.end_date}}
+                        <div class="row">
+                            <label for="age">End Date :</label>
+                        </div>
+                        <div class="row">
+                            {{form.end_date}}
+                        </div>
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary">Analyse</button>
+                        <div class="row"></div>
+                        <div class="row" style="padding-top: 18px">
+                            <button type="submit" class="btn btn-primary" >Analyse</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -44,9 +55,6 @@
                 </div>
                 <div class="col-md-2"></div>
             </div>
-        </div>
-        <div class="col-md-1">
-
         </div>
     </div>
 {% else %}

@@ -205,7 +205,6 @@ def get_patients_by_code(request, code=''):
     userprofile = UserProfile.objects.get(user=request.user)
     all_patients = get_all_patients(level=userprofile.level, moh_facility=userprofile.moh_facility)
     form = PatientSearchForm()
-    # import ipdb; ipdb.set_trace()
     moh_facility = None
     if len(code)<=2 :
         moh_facility = Province.objects.get(code=code)

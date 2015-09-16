@@ -7,7 +7,6 @@
 
 {% block content %}
 {% if object %}
-<h2></h2>
     <div class="row">
         <div class="col-md-3">
             <dl class="dl-horizontal">
@@ -19,7 +18,7 @@
                 <p> {{object.province}}</p>
             </dl>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-8">
         <div class="row">
                 <form action="{% url 'district_statistics' pk=object.id %}" method="post" id="post-form" class="form-inline">
                 {% csrf_token %}
@@ -32,22 +31,23 @@
                         {{form.end_date}}
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary">Analyse</button>
+                        <div class="row" style="padding-top: 18px">
+                            <button type="submit" class="btn btn-primary" >Analyse</button>
                     </div>
                 </form>
             </div>
-            <hr>
-            <div class="row">
-                <div class="col-lg-10">
-                {% if start_date != None  %}
-                    {% now "d/m/Y" as current_year %}
-                        Displaying results from : <span class="badge">{{start_date|default:"The Beginning"}}</span> to : <span class="badge">{{end_date|default:current_year}}</span>
-                {% endif %}
-                    {% render_table statistics %}
-                </div>
-                <div class="col-lg-2"></div>
-            </div>
         </div>
+    </div>
+    <div class="row">
+    <hr>
+        <div class="col-lg-9">
+        {% if start_date != None  %}
+            {% now "d/m/Y" as current_year %}
+                Displaying results from : <span class="badge">{{start_date|default:"The Beginning"}}</span> to : <span class="badge">{{end_date|default:current_year}}</span>
+        {% endif %}
+            {% render_table statistics %}
+        </div>
+        <div class="col-lg-3"></div>
     </div>
 {% else %}
 No Patient in this District
