@@ -187,8 +187,8 @@ def complete_registration(args):
 
 #-----------------------------------------------------------------
 
-def check_patient_id(args):
-	''' This function checks if the id patient sent is valid. '''
+'''def check_patient_id(args):
+	 This function checks if the id patient sent is valid.
 	The_id_patient = args['text'].split(' ')[1]
 	expression = r'^[0-9]+$'
 	if len(The_id_patient) > 9:
@@ -205,7 +205,18 @@ def check_patient_id(args):
 		args['info_to_contact'] = "Erreur. Le numero du patient n est pas bien ecrit."
 	else:
 		args['valide'] = True
-		args['info_to_contact'] = "Le numero du patient est bien ecrit."
+		args['info_to_contact'] = "Le numero du patient est bien ecrit."'''
+
+def check_patient_entry_date(args):
+	the_entry_date = args['text'].split(' ')[1]
+	if len(the_entry_date) < 6:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. Vous avez envoye peu de valeurs pour la date d entree du patient"
+		return
+	if len(the_entry_date) < 6:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. Vous avez envoye beaucoup de valeurs pour la date d entree du patient"
+		return
 
 def check_colline_name(args):
 	''' This function checks if the colline name is valid. '''
@@ -263,7 +274,12 @@ def record_patient(args):
 		return
 
 	#Let's check if the sent patient id is valid
-	check_patient_id(args)
+	#check_patient_id(args)
+	#if not args['valide']:
+	#	return
+
+	#Let's check if the patient entry date is valid
+	check_patient_entry_date(args)
 	if not args['valide']:
 		return
 
