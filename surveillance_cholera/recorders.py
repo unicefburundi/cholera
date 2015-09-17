@@ -418,9 +418,24 @@ def record_patient(args):
 
 	args['valide'] = True
 	args['info_to_contact'] = "Ce patient a ete bien enregistre avec l identifiant : "+id_patient+". Merci."
+
+
+
+
+
+
+
+
 #-----------------------------------------------------------------
-def check_validity_of_id(args):
-	'''This function checks if the patient id is known in the system'''
+
+
+
+
+
+
+
+'''def check_validity_of_id(args):
+	'This function checks if the patient id is known in the system'
 
 	concerned_reporter = Reporter.objects.filter(phone_number = args['phone'])
 	if len(concerned_reporter) < 1:
@@ -444,7 +459,19 @@ def check_validity_of_id(args):
 		args['info_to_contact'] = "Un patient avec cet identifiant n a pas ete enregistre."
 	else:
 		args['valide'] = True
+		args['info_to_contact'] = "Un patient avec cet identifiant existe." '''
+
+def check_validity_of_id(args):
+	'''This function checks if the patient id is known in the system'''
+	patient_id = args['text'].split(' ')[1]
+	patient = Patient.objects.filter(patient_id = patient_id)
+	if len(patient) < 1:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. Il n y a pas de patient avec cet identifiant."
+	else:
+		args['valide'] = True
 		args['info_to_contact'] = "Un patient avec cet identifiant existe."
+	
 
 def check_exit_date(args):
 	'''This function checks if the exit date is valid.'''
@@ -520,7 +547,8 @@ def record_track_message(args):
 
 	cds_code = one_concerned_cds.code
 
-	concerned_patient = Patient.objects.filter(patient_id = cds_code+""+args['text'].split(' ')[1])
+	#concerned_patient = Patient.objects.filter(patient_id = cds_code+""+args['text'].split(' ')[1])
+	concerned_patient = Patient.objects.filter(patient_id = args['text'].split(' ')[1])
 
 	one_concerned_patient = concerned_patient[0]
 
