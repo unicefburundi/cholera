@@ -355,6 +355,39 @@ def record_patient(args):
 		args['info_to_contact'] = "Erreur. La date d entree inferieur au 01/01/2015 n est pas permise."
 		return
 
+
+	#====================================Patient is changed how it is==========================================
+	#The patient id is now made by two parts.
+	#The first part primary key of the cds
+	#The second part is number of patient in that cds	
+
+	id_patient = ""
+
+	#The first part of the patient id must have at minimum 3 caracters
+	patient_id_1 = str(one_concerned_cds.id)
+	if len(patient_id_1) == 1:
+		patient_id_1 = "00"+patient_id_1
+	if len(patient_id_1) == 2:
+		patient_id_1 = "0"+patient_id_1
+
+	#Let's build the second part of the patient id. It made at minimum by 3 caracters
+	patient_id_2 = str(Report.objects.filter(cds = one_concerned_cds, report_type = args['message_type']).count())
+	if len(patient_id_2) == 1:
+		patient_id_2 = "00"+patient_id_2
+	if len(patient_id_2) == 2:
+		patient_id_2 = "0"+patient_id_2
+
+	id_patient = patient_id_1+""+patient_id_2
+
+	#Let's check if there is no patient with that id 
+	check_patient_exists = Patient.objects.filter(patient_id = id_patient)
+	if len(check_patient_exists) > 0:
+		args['valide'] = False
+		args['info_to_contact'] = "Exception. Consulter l equipe de maintenance du systeme."
+		return
+
+	#==========================================================================================================
+
 	#Let's record a patient
 	
 	#The below line is the best one. The one i activate now is for concordance with A's code.
