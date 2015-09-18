@@ -66,9 +66,6 @@ class PatientsTable(tables.Table):
         attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true"}
         exclude = ('cds_id',)
 
-    # def render_detail(self, value, record):
-    #     return SafeString('''<a href="/cholera/cds/%s">%s</a>''' % (record['cds_id'], value))
-
 class Patients2Table(tables.Table):
     district_id = tables.Column()
     name = tables.Column(verbose_name="Name of District ")

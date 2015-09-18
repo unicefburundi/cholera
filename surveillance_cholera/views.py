@@ -21,7 +21,7 @@ import operator
 def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
     if start_date == '' or start_date== None:
         start_date = u'01/01/2012'
-    if end_date == '' or start_date== None:
+    if end_date == '' or end_date== None:
         end_date = datetime.date.today().strftime('%d/%m/%Y')
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]).filter(cds=moh_facility_id)
     cds_id = {'cds_id': CDS.objects.get(id=moh_facility_id).id}
@@ -87,7 +87,7 @@ class CDSFormView(FormView, CDSDetailView):
 def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
     if start_date == '' or start_date== None :
         start_date = u'01/01/2012'
-    if end_date == '' or start_date== None :
+    if end_date == '' or end_date== None :
         end_date = datetime.date.today().strftime('%d/%m/%Y')
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]).filter(cds__district=moh_facility_id)
     district_id = {'district_id': District.objects.get(id=moh_facility_id).id}
