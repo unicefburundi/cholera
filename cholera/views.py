@@ -15,13 +15,13 @@ import operator
 def get_province_statistics(province, start_date='', end_date=''):
     elemet = {}
     facility = {'name': province.name}
-    detail = {'detail':  province.code}
+    detail = {'detail':  province.id}
     patients = Patient.objects.filter(date_entry__range=[start_date, end_date]).filter(cds__district__province=province.id)
-    total ={'total': patients.filter(cds__district__province=province.id).count()}
+    total ={'total': Patient.objects.filter(cds__district__province=province.id).count()}
     deces= {'deces' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in DEAD)).count()}
     sorties = {'sorties' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in SORTI)).count()}
     hospi = {'hospi' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in HOSPI)).count()}
-    nc = {'nc' : patients.filter( exit_status=None).count()}
+    nc = {'nc' : patients.count()}
 
     for i in [total,deces,sorties,hospi,nc, facility, detail]:
         elemet.update(i)

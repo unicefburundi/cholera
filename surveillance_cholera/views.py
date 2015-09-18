@@ -19,18 +19,18 @@ import operator
 ###########
 
 def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
-    if start_date == '':
+    if start_date == '' or start_date== None:
         start_date = u'01/01/2012'
-    if end_date == '':
+    if end_date == '' or start_date== None:
         end_date = datetime.date.today().strftime('%d/%m/%Y')
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]).filter(cds=moh_facility_id)
     facility = {'name': CDS.objects.get(id=moh_facility_id).name}
     detail = {'detail':  CDS.objects.get(id=moh_facility_id).code}
-    total ={'total': patients.count()}
+    total ={'total': Patient.objects.filter(cds=moh_facility_id).count()}
     deces= {'deces' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in DEAD)).count()}
     sorties = {'sorties' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in SORTI)).count()}
     hospi = {'hospi' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in HOSPI)).count()}
-    nc = {'nc' : patients.filter(exit_status=None).count()}
+    nc = {'nc' : patients.count()}
 
     elemet = {}
     for i in [total,deces,sorties,hospi,nc, facility, detail]:
@@ -50,13 +50,17 @@ class CDSDetailView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(CDSDetailView, self).get_context_data(*args, **kwargs)
         cds_id = self.kwargs['pk']
-        data = [get_per_cds_statistics(cds_id)]
+        data = None
+        if self.request.session['sstart_date'] or self.request.session['eend_date']:
+            data = get_per_cds_statistics(cds_id, start_date=self.request.session['sstart_date'], end_date=self.request.session['eend_date'])
+            context['start_date'] = self.request.session['sstart_date']
+            context['end_date'] = self.request.session['eend_date']
+        else:
+            data = get_per_cds_statistics(cds_id)
         statistics = PatientsTable(data)
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
         context['form'] = SearchForm()
-        self.request.session['sstart_date'] = ''
-        self.request.session['eend_date'] = ''
         return context
 
 class CDSFormView(FormView, CDSDetailView):
@@ -80,18 +84,18 @@ class CDSFormView(FormView, CDSDetailView):
 ###########
 
 def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
-    if start_date == '':
+    if start_date == '' or start_date== None :
         start_date = u'01/01/2012'
-    if end_date == '':
+    if end_date == '' or start_date== None :
         end_date = datetime.date.today().strftime('%d/%m/%Y')
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]).filter(cds__district=moh_facility_id)
     facility = {'name': District.objects.get(id=moh_facility_id).name}
-    detail = {'detail':  District.objects.get(id=moh_facility_id).code}
-    total ={'total': patients.count()}
+    detail = {'detail':  District.objects.get(id=moh_facility_id).id}
+    total ={'total': Patient.objects.filter(cds__district=moh_facility_id).count()}
     deces= {'deces' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in DEAD)).count()}
     sorties = {'sorties' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in SORTI)).count()}
     hospi = {'hospi' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in HOSPI)).count()}
-    nc = {'nc' : patients.filter(exit_status=None).count()}
+    nc = {'nc' : patients.count()}
 
     elemet = {}
     for i in [total,deces,sorties,hospi,nc, facility, detail]:
@@ -114,13 +118,17 @@ class DistrictDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(DistrictDetailView, self).get_context_data(**kwargs)
         district_id = self.kwargs['pk']
-        data = get_district_data(district_id)
+        data = None
+        if self.request.session['sstart_date'] or self.request.session['eend_date']:
+            data = get_district_data(district_id, start_date=self.request.session['sstart_date'], end_date=self.request.session['eend_date'])
+            context['start_date'] = self.request.session['sstart_date']
+            context['end_date'] = self.request.session['eend_date']
+        else:
+            data = get_district_data(district_id)
         statistics = PatientsTable(data)
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
         context['form'] = SearchForm()
-        self.request.session['sstart_date'] = ''
-        self.request.session['eend_date'] = ''
         return context
 
 class DistrictFormView(FormView, DistrictDetailView):
@@ -159,13 +167,18 @@ class ProvinceDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProvinceDetailView, self).get_context_data(**kwargs)
         province_id = self.kwargs['pk']
-        data = get_province_data(province_id)
+        data = None
+        if self.request.session['sstart_date'] or self.request.session['eend_date']:
+            data = get_province_data(province_id, start_date=self.request.session['sstart_date'], end_date=self.request.session['eend_date'])
+            context['start_date'] = self.request.session['sstart_date']
+            context['end_date'] = self.request.session['eend_date']
+        else:
+            data = get_province_data(province_id)
+
         statistics = Patients2Table(data)
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
         context['form'] = SearchForm()
-        self.request.session['sstart_date'] = ''
-        self.request.session['eend_date'] = ''
         return context
 
 
@@ -227,7 +240,7 @@ def get_patients_by_code(request, code=''):
         form = PatientSearchForm(request.POST)
         if form.is_valid():
             if form.cleaned_data['intervention'] !='':
-                all_patients = all_patients.filter(Q(intervention=form.cleaned_data['intervention']))
+                all_patients = all_patients.filter(Q(intervention__icontains=form.cleaned_data['intervention']))
             if form.cleaned_data['sexe'] !='':
                 all_patients = all_patients.filter(Q(sexe=form.cleaned_data['sexe']))
             if form.cleaned_data['age'] !='':
