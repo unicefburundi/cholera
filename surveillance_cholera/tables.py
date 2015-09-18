@@ -1,6 +1,7 @@
 import django_tables2 as tables
 from surveillance_cholera.models import CDS, Patient, Report
 from django_tables2.utils import A  # alias for Accessor
+from django.utils.safestring import SafeString
 
 class CDSTable(tables.Table):
     class Meta:
@@ -46,6 +47,10 @@ class PatientTable(tables.Table):
             return 'Gueri'
         else:
             return value
+
+    def render_patient_id(self, value, record):
+        return SafeString('''<a href="/cholera/patient/%s">%s</a>''' % (record.id, value))
+
 
 class PatientsTable(tables.Table):
     name = tables.Column(verbose_name="Name of CDS ")
