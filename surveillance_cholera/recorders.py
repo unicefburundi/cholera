@@ -418,9 +418,24 @@ def record_patient(args):
 
 	args['valide'] = True
 	args['info_to_contact'] = "Ce patient a ete bien enregistre avec l identifiant : "+id_patient+". Merci."
+
+
+
+
+
+
+
+
 #-----------------------------------------------------------------
-def check_validity_of_id(args):
-	'''This function checks if the patient id is known in the system'''
+
+
+
+
+
+
+
+'''def check_validity_of_id(args):
+	'This function checks if the patient id is known in the system'
 
 	concerned_reporter = Reporter.objects.filter(phone_number = args['phone'])
 	if len(concerned_reporter) < 1:
@@ -444,7 +459,19 @@ def check_validity_of_id(args):
 		args['info_to_contact'] = "Un patient avec cet identifiant n a pas ete enregistre."
 	else:
 		args['valide'] = True
+		args['info_to_contact'] = "Un patient avec cet identifiant existe." '''
+
+def check_validity_of_id(args):
+	'''This function checks if the patient id is known in the system'''
+	patient_id = args['text'].split(' ')[1]
+	patient = Patient.objects.filter(patient_id = patient_id)
+	if len(patient) < 1:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. Il n y a pas de patient avec cet identifiant."
+	else:
+		args['valide'] = True
 		args['info_to_contact'] = "Un patient avec cet identifiant existe."
+	
 
 def check_exit_date(args):
 	'''This function checks if the exit date is valid.'''
@@ -453,14 +480,14 @@ def check_exit_date(args):
 	expression = r'^((0[1-9])|([1-2][0-9])|(3[01]))((0[1-9])|(1[0-2]))[0-9]{2}$'
 	if re.search(expression, args['text'].split(' ')[2]) is None:
 		args['valide'] = False
-		args['info_to_contact'] = "La date indiquee n est pas valide."
+		args['info_to_contact'] = "Erreur. La date indiquee n est pas valide."
 		return
 	
 	exit_date = args['text'].split(' ')[2][0:2]+"-"+args['text'].split(' ')[2][2:4]+"-20"+args['text'].split(' ')[2][4:]
 	#if datetime.datetime.strptime(args['text'].split(' ')[2], '%d-%m-%Y') > datetime.datetime.now():
 	if datetime.datetime.strptime(exit_date, '%d-%m-%Y') > datetime.datetime.now():
 		args['valide'] = False
-		args['info_to_contact'] = "La date indiquee n est pas valide."
+		args['info_to_contact'] = "Erreur. La date indiquee n est pas pas encore arrivee."
 	else:
 		args['valide'] = True
 		args['info_to_contact'] = "La date indiquee est valide."
@@ -511,7 +538,7 @@ def record_track_message(args):
 	if len(concerned_reporter) < 1:
 		#This person is not in the list of reporters
 		args['valide'] = False
-		args['info_to_contact'] = "Vous ne vous etes pas enregistre pour pouvoir donner des rapports."
+		args['info_to_contact'] = "Erreur. Vous ne vous etes pas enregistre pour pouvoir donner des rapports."
 		return
 
 	one_concerned_reporter = concerned_reporter[0]
@@ -520,7 +547,8 @@ def record_track_message(args):
 
 	cds_code = one_concerned_cds.code
 
-	concerned_patient = Patient.objects.filter(patient_id = cds_code+""+args['text'].split(' ')[1])
+	#concerned_patient = Patient.objects.filter(patient_id = cds_code+""+args['text'].split(' ')[1])
+	concerned_patient = Patient.objects.filter(patient_id = args['text'].split(' ')[1])
 
 	one_concerned_patient = concerned_patient[0]
 
@@ -536,6 +564,12 @@ def record_track_message(args):
 	#year_month_day = day_month_year[2]+"-"+day_month_year[1]+"-"+day_month_year[0]
 	year_month_day = "20"+args['text'].split(' ')[2][4:]+"-"+args['text'].split(' ')[2][2:4]+"-"+args['text'].split(' ')[2][0:2]
 
+
+	#Let's check if the exit date is not < to the date the patient came in
+	if datetime.datetime.strptime(day_month_year, '%d-%m-%Y').date() < one_concerned_patient.date_entry:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. La date indiquee est inferieur a la date d entree du patient."
+		return
 
 	#Let's update the patient
 	one_concerned_patient.exit_date = year_month_day

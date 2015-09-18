@@ -21,7 +21,8 @@ def ask_update_on_patient(request):
     the_current_date = datetime.datetime.now().date()
 
     #Let's do a filter of patients who came on the third day before today.
-    filtered_patients = Patient.objects.filter(date_entry=the_current_date - datetime.timedelta(days=3))
+    #filtered_patients = Patient.objects.filter(date_entry=the_current_date - datetime.timedelta(days=3))
+    filtered_patients = Patient.objects.filter(date_entry__lte=the_current_date - datetime.timedelta(days=3), exit_date__isnull = True)
 
     if len(filtered_patients) > 0:
         necessary_data = []
@@ -45,10 +46,10 @@ def ask_update_on_patient(request):
                     an_object['reporter_phone'] = the_reporter_s_phone_number
                     an_object['supervisor_phone'] = the_register.supervisor_phone_number
                     #short_patient_id = patient.patient_id[6:]
-		    short_patient_id = patient.patient_id[5:]
+		    #short_patient_id = patient.patient_id[5:]
                     #an_object['message'] = "Vous n avez donne aucune nouvelle sur le patient "+patient.patient_id
                     #an_object['message'] = "Vous n avez donne aucune nouvelle sur le patient "+short_patient_id
-		    an_object['message'] = "Il y a plus de 3 jours sans nouvelles sur le patient "+short_patient_id+" enregistre par "+an_object['reporter_phone']+"."
+		    an_object['message'] = "Il y a plus de 3 jours sans nouvelles sur le patient "+an_object['patient_id']+" enregistre par "+an_object['reporter_phone']+" sur le CDS dont le code est "+the_registration_report.cds.code+"."
 
                     necessary_data.append(an_object)
 
