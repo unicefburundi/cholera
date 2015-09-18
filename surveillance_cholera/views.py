@@ -240,7 +240,7 @@ def get_patients_by_code(request, code=''):
         form = PatientSearchForm(request.POST)
         if form.is_valid():
             if form.cleaned_data['intervention'] !='':
-                all_patients = all_patients.filter(Q(intervention=form.cleaned_data['intervention']))
+                all_patients = all_patients.filter(Q(intervention__icontains=form.cleaned_data['intervention']))
             if form.cleaned_data['sexe'] !='':
                 all_patients = all_patients.filter(Q(sexe=form.cleaned_data['sexe']))
             if form.cleaned_data['age'] !='':
