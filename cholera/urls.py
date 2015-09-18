@@ -14,7 +14,8 @@ urlpatterns = patterns('',
     url(r'^get_statistics/$', 'cholera.views.get_statistics', name='get_statistics'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^profile/', include('authentication.urls')),
-    url(r'^accounts/', include('registration.backends.simple.urls')),
+    url(r'accounts/', include('django.contrib.auth.urls')),
+    url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^cholera/', include('surveillance_cholera.urls')),
 ) +  static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

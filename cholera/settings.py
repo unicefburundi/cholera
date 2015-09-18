@@ -28,6 +28,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
+
+MANAGERS = ADMINS
 
 # Application definition
 
@@ -169,6 +174,8 @@ ANONYMOUS_USER_ID = -1
 ACCOUNT_ACTIVATION_DAYS = 30
 
 #for e-mail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 INTERNAL_IPS = '127.0.0.1'
 
 EMAIL_HOST = 'smtp.gmail.com'
@@ -182,6 +189,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 SITE_ID = 1
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 try:
     from localsettings import *
