@@ -53,6 +53,7 @@ class PatientTable(tables.Table):
 
 
 class PatientsTable(tables.Table):
+    cds_id = tables.Column()
     name = tables.Column(verbose_name="Name of CDS ")
     total = tables.Column()
     nc = tables.Column()
@@ -63,18 +64,27 @@ class PatientsTable(tables.Table):
 
     class Meta:
         attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true"}
+        exclude = ('cds_id',)
+
+    # def render_detail(self, value, record):
+    #     return SafeString('''<a href="/cholera/cds/%s">%s</a>''' % (record['cds_id'], value))
 
 class Patients2Table(tables.Table):
+    district_id = tables.Column()
     name = tables.Column(verbose_name="Name of District ")
     total = tables.Column()
     nc = tables.Column()
     hospi = tables.Column()
     sorties = tables.Column()
     deces = tables.Column()
-    detail = tables.LinkColumn('district_detail', args=[A('detail')], orderable=False, empty_values=(), verbose_name='Click for details')
+    detail = tables.Column()
 
     class Meta:
         attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true"}
+        exclude = ('district_id',)
+
+    def render_detail(self, value, record):
+        return SafeString('''<a href="/cholera/district/%s">%s</a>''' % (record['district_id'], value))
 
 class Patients3Table(tables.Table):
     name = tables.Column(verbose_name="Name of Province ")
