@@ -497,7 +497,18 @@ def check_exit_date(args):
 		args['info_to_contact'] = "Erreur. La date indiquee n est pas valide."
 		return
 	
+
 	exit_date = args['text'].split(' ')[2][0:2]+"-"+args['text'].split(' ')[2][2:4]+"-20"+args['text'].split(' ')[2][4:]
+
+	exit_date_without_dash = exit_date.replace("-","")
+	try:
+		datetime.datetime.strptime(exit_date_without_dash, "%d%m%Y").date()
+	except:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. La date indiquee n est pas valide."
+		return
+
+
 	#if datetime.datetime.strptime(args['text'].split(' ')[2], '%d-%m-%Y') > datetime.datetime.now():
 	if datetime.datetime.strptime(exit_date, '%d-%m-%Y') > datetime.datetime.now():
 		args['valide'] = False
