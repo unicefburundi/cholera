@@ -223,7 +223,7 @@ def check_patient_entry_date(args):
 		args['valide'] = False
 		args['info_to_contact'] = "Erreur. Vous avez envoye peu de valeurs pour la date d entree du patient"
 		return
-	if len(the_entry_date) < 6:
+	if len(the_entry_date) > 6:
 		args['valide'] = False
 		args['info_to_contact'] = "Erreur. Vous avez envoye beaucoup de valeurs pour la date d entree du patient"
 		return
@@ -241,7 +241,7 @@ def check_patient_age(args):
 
 	if(The_patient_age not in valid_ages):
 		args['valide'] = False
-		args['info_to_contact'] = "La valeur envoyee pour age n est pas valide."
+		args['info_to_contact'] = "Erreur. La valeur envoyee pour age n est pas valide."
 	else:
 		args['valide'] = True
 		args['info_to_contact'] = "La valeur envoyee pour age est valide."
@@ -255,7 +255,7 @@ def check_gender(args):
 
 	if(the_patient_gender not in gender_values):
 		args['valide'] = False
-		args['info_to_contact'] = "La valeur envoyee pour indiquer le genre du patient n est pas valide."
+		args['info_to_contact'] = "Erreur. La valeur envoyee pour indiquer le genre du patient n est pas valide."
 	else:
 		args['valide'] = True
 		args['info_to_contact'] = "La valeur envoyee pour indiquer le genre du patient est valide."
@@ -270,7 +270,7 @@ def check_intervention(args):
 
 	if(capitalized_intervention not in interventions_values):
 		args['valide'] = False
-		args['info_to_contact'] = "La valeur envoyee pour intervention n est pas valide."
+		args['info_to_contact'] = "Erreur. La valeur envoyee pour intervention n est pas valide."
 	else:
 		args['valide'] = True
 		args['info_to_contact'] = "La valeur envoyee pour intervention est valide."
@@ -419,8 +419,12 @@ def record_patient(args):
 	#The below line is the best one. The one i activate now is for concordance with A's code.
 	#the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2], age = args['text'].split(' ')[3], sexe = args['text'].split(' ')[4], intervention = args['text'].split(' ')[5], date_entry = full_entry_date_in_date)
 
+	if args['text'].split(' ')[5].title() == 'Dd':
+		#This patient is registered as dead. His/Her exit date is his/her entry date
+		the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2].title(), age = args['text'].split(' ')[3].title(), sexe = args['text'].split(' ')[4].title(), intervention = args['text'].split(' ')[5].title(), date_entry = full_entry_date_in_date, cds = one_concerned_cds, exit_date = full_entry_date_in_date, exit_status = 'Pd')
 
-	the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2].title(), age = args['text'].split(' ')[3].title(), sexe = args['text'].split(' ')[4].title(), intervention = args['text'].split(' ')[5].title(), date_entry = full_entry_date_in_date, cds = one_concerned_cds)
+	else:
+		the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2].title(), age = args['text'].split(' ')[3].title(), sexe = args['text'].split(' ')[4].title(), intervention = args['text'].split(' ')[5].title(), date_entry = full_entry_date_in_date, cds = one_concerned_cds)
 
 
 	#the_created_report = Report.objects.create(patient = the_created_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'].replace("+", " "), report_type = args['message_type'])
