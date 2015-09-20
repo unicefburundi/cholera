@@ -37,6 +37,16 @@ def check_number_of_values(args):
 		if len(args['text'].split(' ')) == 4:
 			args['valide'] = True
 			args['info_to_contact'] = "Le nombre de valeurs envoye est correct."
+	if(args['message_type']=='RECEPTION_P_T'):
+		if len(args['text'].split(' ')) < 4:
+			args['valide'] = False
+			args['info_to_contact'] = "Vous avez envoye peu de valeurs."
+		if len(args['text'].split(' ')) > 4:
+			args['valide'] = False
+			args['info_to_contact'] = "Vous avez envoye beaucoup de valeurs."
+		if len(args['text'].split(' ')) == 4:
+			args['valide'] = True
+			args['info_to_contact'] = "Le nombre de valeurs envoye est correct."
 
 
 
@@ -426,7 +436,7 @@ def record_patient(args):
 
 
 
-#-----------------------------------------------------------------
+#----------------------------------------PATIENT EXIT REPORT MESSAGES-------------------------
 
 
 
@@ -584,3 +594,136 @@ def record_track_message(args):
 
 
 
+
+
+
+
+
+
+#--------------------------------------RECORD OF A TRANFERED MESSAGE---------------------------------------
+
+def check_reception_date(args):
+	'''This function checks if the reception date is valid.'''
+
+	expression = r'^((0[1-9])|([1-2][0-9])|(3[01]))((0[1-9])|(1[0-2]))[0-9]{2}$'
+	if re.search(expression, args['text'].split(' ')[2]) is None:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. La date indiquee n est pas valide."
+		return
+	
+	reception_date = args['text'].split(' ')[2][0:2]+"-"+args['text'].split(' ')[2][2:4]+"-20"+args['text'].split(' ')[2][4:]
+
+
+	#Let's remove dashs
+	reception_date_without_dash = reception_date.replace("-","")
+	try:
+		datetime.datetime.strptime(reception_date_without_dash, "%d%m%Y").date()
+	except:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. La date de reception du patient n est pas valide."
+		return
+
+	#Let's check if the reception date is not < to the entry date
+	patient_id = args['text'].split(' ')[1]
+	patient = Patient.objects.filter(patient_id = patient_id)
+	
+	if len(patient) < 1:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. Patient non trouve dans le system."
+		return
+	else:
+		patient = patient[0]
+
+	#if the entry date of this patient have been deleted, we can not do the reception record
+	if not patient.date_entry:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. La date d enregistrement de ce patient a ete suprimee. Contacter l administrateur de ce systeme."
+		return
+	
+
+	if datetime.datetime.strptime(reception_date, '%d-%m-%Y').date() < patient.date_entry:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. La date de reception du patient est inferieur a sa date d entree dans le systeme."
+		return
+
+	if patient.exit_date:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. On a deja enregistre la sortie pour ce patient. Si pas erreur sur l id, informer l administrateur de ce systeme."
+		return
+	
+	#Let's check if the reception date is not a future date
+	if datetime.datetime.strptime(reception_date, '%d-%m-%Y') > datetime.datetime.now():
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. La date indiquee n est pas pas encore arrivee."
+	else:
+		args['valide'] = True
+		args['info_to_contact'] = "La date indiquee est valide."
+
+
+
+def patient_reception_status(args):
+	'''This function checks if the reception status is valid.'''
+
+	
+	reception_status = ['Hospi','Desh','Pr','Dd']
+
+	if args['text'].split(' ')[3].title() not in reception_status:
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. L etat du patient indique n est pas valide."
+	else:
+		args['valide'] = True
+		args['info_to_contact'] = "L etat du patient indique est valide."
+
+
+
+def record_patient_reception(args):
+	'''This function is used to record a patient at the reception when transfered'''
+	#Let's check if the message sent is composed by an expected number of values
+	check_number_of_values(args)
+	print(args['valide'])
+	if not args['valide']:
+		return
+
+	#Let's check if the patient id sent by the reporter exists
+	check_validity_of_id(args)
+	print(args['valide'])
+	if not args['valide']:
+		return
+
+	#Let's check if the reception date is valid
+	check_reception_date(args)
+	print(args['valide'])
+	if not args['valide']:
+		return
+
+	#Let's check if the reception status is valid
+	patient_reception_status(args)
+	print(args['valide'])
+	if not args['valide']:
+		return
+
+
+	#Let's check if the person who sent this message is in the list of reporters
+	concerned_reporter = Reporter.objects.filter(phone_number = args['phone'])
+	if len(concerned_reporter) < 1:
+		#This person is not in the list of reporters
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. Vous ne vous etes pas enregistre pour pouvoir donner des rapports."
+		return
+
+	one_concerned_reporter = concerned_reporter[0]
+
+	one_concerned_cds = one_concerned_reporter.cds
+
+	cds_code = one_concerned_cds.code
+
+	#concerned_patient = Patient.objects.filter(patient_id = cds_code+""+args['text'].split(' ')[1])
+	concerned_patient = Patient.objects.filter(patient_id = args['text'].split(' ')[1])
+
+	one_concerned_patient = concerned_patient[0]
+
+
+	the_created_report = Report.objects.create(patient = one_concerned_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'], report_type = args['message_type'])
+
+	args['valide'] = True
+	args['info_to_contact'] = "Votre rapport a ete bien enregistre. Merci."

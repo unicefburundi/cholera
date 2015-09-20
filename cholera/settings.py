@@ -98,6 +98,7 @@ KNOWN_PREFIXES = {
 'RG':'SELF_REGISTRATION',
 'ENR':'PATIENT_REGISTRATION',
 'SV':'TRACK',
+'REC':'RECEPTION_P_T',
 }
 
 #you better use yours

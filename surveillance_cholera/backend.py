@@ -111,6 +111,9 @@ def handel_rapidpro_request(request):
 	if(incoming_data['message_type']=='TRACK'):
 			#The contact who sent the current message is sending a patient track message
 			record_track_message(incoming_data)
+	if(incoming_data['message_type']=='RECEPTION_P_T'):
+			#The contact who sent the current message is registering a transfered patient
+			record_patient_reception(incoming_data)
 
 	if incoming_data['valide'] :
 		#The message have been recorded
