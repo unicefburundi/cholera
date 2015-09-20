@@ -585,6 +585,13 @@ def record_track_message(args):
 		args['info_to_contact'] = "Erreur. La date indiquee est inferieur a la date d entree du patient."
 		return
 
+	#Let's check if this patient is not reported to be exited
+	if one_concerned_patient.exit_date:
+		#No longer report needed for this patient
+		args['valide'] = False
+		args['info_to_contact'] = "Erreur. Il n y a plus de rapport possible pour ce patient. On a enregistre sa sortie."
+		return
+
 	#Let's update the patient
 	one_concerned_patient.exit_date = year_month_day
 	one_concerned_patient.exit_status = args['text'].split(' ')[3].title()
