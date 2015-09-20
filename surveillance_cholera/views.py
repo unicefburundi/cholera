@@ -21,9 +21,10 @@ import operator
 def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
     if start_date == '' or start_date== None:
         start_date = u'01/01/2012'
-    if end_date == '' or start_date== None:
+    if end_date == '' or end_date== None:
         end_date = datetime.date.today().strftime('%d/%m/%Y')
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]).filter(cds=moh_facility_id)
+    cds_id = {'cds_id': CDS.objects.get(id=moh_facility_id).id}
     facility = {'name': CDS.objects.get(id=moh_facility_id).name}
     detail = {'detail':  CDS.objects.get(id=moh_facility_id).code}
     total ={'total': Patient.objects.filter(cds=moh_facility_id).count()}
@@ -33,7 +34,7 @@ def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
     nc = {'nc' : patients.count()}
 
     elemet = {}
-    for i in [total,deces,sorties,hospi,nc, facility, detail]:
+    for i in [total,deces,sorties,hospi,nc, facility, detail, cds_id]:
             elemet.update(i)
     return elemet
 
@@ -51,12 +52,12 @@ class CDSDetailView(DetailView):
         context = super(CDSDetailView, self).get_context_data(*args, **kwargs)
         cds_id = self.kwargs['pk']
         data = None
-        if self.request.session['sstart_date'] or self.request.session['eend_date']:
-            data = get_per_cds_statistics(cds_id, start_date=self.request.session['sstart_date'], end_date=self.request.session['eend_date'])
+        if 'sstart_date' in self.request.session:
+            data = [get_per_cds_statistics(cds_id, start_date=self.request.session['sstart_date'], end_date=self.request.session['eend_date'])]
             context['start_date'] = self.request.session['sstart_date']
             context['end_date'] = self.request.session['eend_date']
         else:
-            data = get_per_cds_statistics(cds_id)
+            data = [get_per_cds_statistics(cds_id)]
         statistics = PatientsTable(data)
         RequestConfig(self.request).configure(statistics)
         context['statistics'] = statistics
@@ -86,9 +87,10 @@ class CDSFormView(FormView, CDSDetailView):
 def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
     if start_date == '' or start_date== None :
         start_date = u'01/01/2012'
-    if end_date == '' or start_date== None :
+    if end_date == '' or end_date== None :
         end_date = datetime.date.today().strftime('%d/%m/%Y')
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]).filter(cds__district=moh_facility_id)
+    district_id = {'district_id': District.objects.get(id=moh_facility_id).id}
     facility = {'name': District.objects.get(id=moh_facility_id).name}
     detail = {'detail':  District.objects.get(id=moh_facility_id).id}
     total ={'total': Patient.objects.filter(cds__district=moh_facility_id).count()}
@@ -98,7 +100,7 @@ def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
     nc = {'nc' : patients.count()}
 
     elemet = {}
-    for i in [total,deces,sorties,hospi,nc, facility, detail]:
+    for i in [total,deces,sorties,hospi,nc, facility, detail, district_id]:
             elemet.update(i)
     return elemet
 
@@ -119,7 +121,7 @@ class DistrictDetailView(DetailView):
         context = super(DistrictDetailView, self).get_context_data(**kwargs)
         district_id = self.kwargs['pk']
         data = None
-        if self.request.session['sstart_date'] or self.request.session['eend_date']:
+        if 'sstart_date' in self.request.session:
             data = get_district_data(district_id, start_date=self.request.session['sstart_date'], end_date=self.request.session['eend_date'])
             context['start_date'] = self.request.session['sstart_date']
             context['end_date'] = self.request.session['eend_date']
@@ -168,7 +170,8 @@ class ProvinceDetailView(DetailView):
         context = super(ProvinceDetailView, self).get_context_data(**kwargs)
         province_id = self.kwargs['pk']
         data = None
-        if self.request.session['sstart_date'] or self.request.session['eend_date']:
+        # import ipdb; ipdb.set_trace()
+        if 'sstart_date' in self.request.session :
             data = get_province_data(province_id, start_date=self.request.session['sstart_date'], end_date=self.request.session['eend_date'])
             context['start_date'] = self.request.session['sstart_date']
             context['end_date'] = self.request.session['eend_date']
@@ -228,8 +231,14 @@ def get_patients_by_code(request, code=''):
     if len(code)>4 :
         moh_facility = CDS.objects.get(code=code)
         all_patients = all_patients.filter(cds__code=code)
-    sstart_date = request.session['sstart_date']
-    eend_date = request.session['eend_date']
+    sstart_date = ''
+    eend_date = ''
+    if 'sstart_date' in request.session:
+        sstart_date = request.session['sstart_date']
+        eend_date = request.session['eend_date']
+    else:
+        sstart_date = request.session['sstart_date'] = ''
+        eend_date = request.session['eend_date'] = ''
     if sstart_date == None or sstart_date == '':
         sstart_date= datetime.date(2012,1,1).strftime('%d/%m/%Y')
     if eend_date == None or eend_date == '':

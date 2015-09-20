@@ -1,6 +1,7 @@
 import django_tables2 as tables
 from surveillance_cholera.models import CDS, Patient, Report
 from django_tables2.utils import A  # alias for Accessor
+from django.utils.safestring import SafeString
 
 class CDSTable(tables.Table):
     class Meta:
@@ -47,7 +48,12 @@ class PatientTable(tables.Table):
         else:
             return value
 
+    def render_patient_id(self, value, record):
+        return SafeString('''<a href="/cholera/patient/%s">%s</a>''' % (record.id, value))
+
+
 class PatientsTable(tables.Table):
+    cds_id = tables.Column()
     name = tables.Column(verbose_name="Name of CDS ")
     total = tables.Column()
     nc = tables.Column()
@@ -58,18 +64,24 @@ class PatientsTable(tables.Table):
 
     class Meta:
         attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true"}
+        exclude = ('cds_id',)
 
 class Patients2Table(tables.Table):
+    district_id = tables.Column()
     name = tables.Column(verbose_name="Name of District ")
     total = tables.Column()
     nc = tables.Column()
     hospi = tables.Column()
     sorties = tables.Column()
     deces = tables.Column()
-    detail = tables.LinkColumn('district_detail', args=[A('detail')], orderable=False, empty_values=(), verbose_name='Click for details')
+    detail = tables.Column()
 
     class Meta:
         attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true"}
+        exclude = ('district_id',)
+
+    def render_detail(self, value, record):
+        return SafeString('''<a href="/cholera/district/%s">%s</a>''' % (record['district_id'], value))
 
 class Patients3Table(tables.Table):
     name = tables.Column(verbose_name="Name of Province ")
