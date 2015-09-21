@@ -99,6 +99,8 @@ def check_supervisor_phone_number_not_for_this_contact(args):
 def save_temporary_the_reporter(args):
 	same_existing_temp = Temporary.objects.filter(phone_number = args['phone'])
 	if len(same_existing_temp) > 0:
+		same_existing_temp = same_existing_temp[0]
+		same_existing_temp.delete()
 		args['valide'] = False
 		args['info_to_contact'] = "Vous devriez envoyer le numero de telephone de votre superviseur seulement."
 	else:
