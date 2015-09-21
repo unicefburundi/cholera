@@ -81,7 +81,7 @@ class Patients2Table(tables.Table):
         exclude = ('district_id',)
 
     def render_detail(self, value, record):
-        return SafeString('''<a href="/cholera/district/%s">%s</a>''' % (record['district_id'], value))
+        return SafeString('''<a href="/cholera/district/%s"><i class="glyphicon glyphicon-list-alt"></i></a>''' % (record['district_id']))
 
 class Patients3Table(tables.Table):
     name = tables.Column(verbose_name="Name of Province ")
@@ -90,10 +90,11 @@ class Patients3Table(tables.Table):
     hospi = tables.Column()
     sorties = tables.Column()
     deces = tables.Column()
-    detail = tables.LinkColumn('province_detail', args=[A('detail')], orderable=False, empty_values=(), verbose_name='Click for details')
-
+    detail = tables.Column()
     class Meta:
         attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true"}
+    def render_detail(self, value, record):
+        return SafeString('''<a href="/cholera/province/%s"><i class="glyphicon glyphicon-list-alt"></i></a>''' % (value))
 
 class ReportTable(tables.Table):
     class Meta:
