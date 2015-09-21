@@ -193,7 +193,7 @@ def complete_registration(args):
 		else:
 			the_one_existing_temp.delete()
 			args['valide'] = False
-			args['info_to_contact'] = "Vous avez envoye le numero de telephone du superviseur de differentes manieres. Recommencer l enregistrement."
+			args['info_to_contact'] = "Vous avez envoye le numero de telephone du superviseur de differentes manieres."
 
 
 
