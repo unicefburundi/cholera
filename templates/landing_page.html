@@ -95,7 +95,6 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                {% if user.is_authenticated %}
                     <li>
                         <a class="page-scroll" href="#about">About</a>
                     </li>
@@ -108,9 +107,13 @@
                     <li>
                         <a class="page-scroll" href="#contact">Contact</a>
                     </li>
+                    {% if user.is_authenticated %}
                     {% if user.is_active %}
-                        <li>
+                    <li>
                         <a class="page-scroll" href="{% url 'landing' %}">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'auth_logout' %}?next=/"><i class="glyphicon glyphicon-lock"></i> Logout</a>
                     </li>
                     {% endif %}
                     {% else %}
