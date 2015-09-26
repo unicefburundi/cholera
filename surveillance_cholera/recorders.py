@@ -99,6 +99,8 @@ def check_supervisor_phone_number_not_for_this_contact(args):
 def save_temporary_the_reporter(args):
 	same_existing_temp = Temporary.objects.filter(phone_number = args['phone'])
 	if len(same_existing_temp) > 0:
+		same_existing_temp = same_existing_temp[0]
+		same_existing_temp.delete()
 		args['valide'] = False
 		args['info_to_contact'] = "Vous devriez envoyer le numero de telephone de votre superviseur seulement."
 	else:
@@ -191,7 +193,7 @@ def complete_registration(args):
 		else:
 			the_one_existing_temp.delete()
 			args['valide'] = False
-			args['info_to_contact'] = "Vous avez envoye le numero de telephone du superviseur de differentes manieres. Recommencer l enregistrement."
+			args['info_to_contact'] = "Vous avez envoye le numero de telephone du superviseur de differentes manieres."
 
 
 
@@ -578,7 +580,7 @@ def record_track_message(args):
 	one_concerned_patient = concerned_patient[0]
 
 	#the_created_report = Report.objects.create(patient = one_concerned_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'].replace("+", " "), report_type = args['message_type'])
-	the_created_report = Report.objects.create(patient = one_concerned_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'], report_type = args['message_type'])
+	#the_created_report = Report.objects.create(patient = one_concerned_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'], report_type = args['message_type'])
 
 	#exit_date = datetime.datetime.strptime(args['text'].split('+')[2], '%Y-%m-%d')
 
@@ -602,6 +604,11 @@ def record_track_message(args):
 		args['valide'] = False
 		args['info_to_contact'] = "Erreur. Il n y a plus de rapport possible pour ce patient. On a enregistre sa sortie."
 		return
+
+
+	the_created_report = Report.objects.create(patient = one_concerned_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'], report_type = args['message_type'])
+		
+	
 
 	#Let's update the patient
 	one_concerned_patient.exit_date = year_month_day
