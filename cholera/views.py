@@ -21,9 +21,9 @@ def get_province_statistics(province, start_date='', end_date=''):
     deces= {'deces' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in DEAD)).count()}
     sorties = {'sorties' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in SORTI)).count()}
     hospi = {'hospi' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in HOSPI)).count()}
-    nc = {'nc' : patients.count()}
+    new_cases = {'new_cases' : patients.count()}
 
-    for i in [total,deces,sorties,hospi,nc, facility, detail]:
+    for i in [total,deces,sorties,hospi,new_cases, facility, detail]:
         elemet.update(i)
 
     return elemet

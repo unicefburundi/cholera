@@ -31,10 +31,10 @@ def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
     deces= {'deces' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in DEAD)).count()}
     sorties = {'sorties' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in SORTI)).count()}
     hospi = {'hospi' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in HOSPI)).count()}
-    nc = {'nc' : patients.count()}
+    new_cases = {'new_cases' : patients.count()}
 
     elemet = {}
-    for i in [total,deces,sorties,hospi,nc, facility, detail, cds_id]:
+    for i in [total,deces,sorties,hospi,new_cases, facility, detail, cds_id]:
             elemet.update(i)
     return elemet
 
@@ -97,10 +97,10 @@ def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
     deces= {'deces' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in DEAD)).count()}
     sorties = {'sorties' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in SORTI)).count()}
     hospi = {'hospi' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in HOSPI)).count()}
-    nc = {'nc' : patients.count()}
+    new_cases= {'new_cases' : patients.count()}
 
     elemet = {}
-    for i in [total,deces,sorties,hospi,nc, facility, detail, district_id]:
+    for i in [total,deces,sorties,hospi,new_cases, facility, detail, district_id]:
             elemet.update(i)
     return elemet
 
