@@ -51,7 +51,7 @@
   </head>
   <body>
 <!-- Header -->
-<div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+<div id="top-nav" class="navbar navbar-static-top">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -61,22 +61,16 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-
-        <li class="dropdown">
-          <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-            <i class="glyphicon glyphicon-user"></i> Admin <span class="caret"></span></a>
-          <ul id="g-account-menu" class="dropdown-menu" role="menu">
           {% if user.is_authenticated %}
-            <li><a href="{% url 'profile' slug=user.username %}"> {{user.username|capfirst}} Profile</a></li>
-            <li><a href="{% url 'auth_logout' %}"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
+            <li><a href="{% url 'profile' slug=user.username %}"> {{user.username|capfirst}}</a></li>
+            <li><a href="#">Leve:{{mylevel}}</a></li>
+            <li><a href="{% url 'auth_logout' %}?next=/"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
             {% else %}
             <li>
                 <a class="page-scroll text-right" href="{% url 'auth_login' %}">Login</a>
             </li>
         {% endif %}
           </ul>
-        </li>
-      </ul>
     </div>
   </div><!-- /container -->
 </div>

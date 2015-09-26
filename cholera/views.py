@@ -29,7 +29,7 @@ def get_province_statistics(province, start_date='', end_date=''):
     return elemet
 
 def home(request):
-    return render(request, 'base_layout.html')
+    return render(request, 'landing_page.html')
 
 def get_cdss(request, district_id):
     district = District.objects.get(pk=district_id)
