@@ -6,11 +6,13 @@ from django.contrib.auth.decorators import login_required
 from surveillance_cholera.tables import PatientTable, Patients3Table
 from django.http import JsonResponse
 import datetime
-from surveillance_cholera.templatetags.extras_utils import format_to_time, get_all_patients, DEAD, HOSPI, SORTI
+from surveillance_cholera.templatetags.extras_utils import format_to_time, get_all_patients, DEAD, HOSPI, GUERI, REFER
 from authentication.models import UserProfile
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 import operator
+from django.db.models import Q
+
 
 def get_province_statistics(province, start_date='', end_date=''):
     elemet = {}
@@ -18,12 +20,13 @@ def get_province_statistics(province, start_date='', end_date=''):
     detail = {'detail':  province.id}
     patients = Patient.objects.filter(date_entry__range=[start_date, end_date]).filter(cds__district__province=province.id)
     total ={'total': Patient.objects.filter(cds__district__province=province.id).count()}
-    deces= {'deces' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in DEAD)).count()}
-    sorties = {'sorties' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in SORTI)).count()}
+    deces= {'deces' : reduce(operator.or_, (patients.filter(Q(intervention__icontains=item) | Q(exit_status__icontains=item)) for item in DEAD)).count()}
     hospi = {'hospi' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in HOSPI)).count()}
     new_cases = {'new_cases' : patients.count()}
+    gueris= {'gueris' : reduce(operator.or_, (patients.filter(Q(intervention__icontains=item) | Q(exit_status__icontains=item)) for item in GUERI)).count()}
+    references= {'references' : reduce(operator.or_, (patients.filter(Q(intervention__icontains=item) | Q(exit_status__icontains=item)) for item in REFER)).count()}
 
-    for i in [total,deces,sorties,hospi,new_cases, facility, detail]:
+    for i in [total,deces,hospi,new_cases, references, gueris, facility, detail]:
         elemet.update(i)
 
     return elemet
@@ -65,7 +68,7 @@ def get_statistics(request):
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
         if request.POST.get('start_date') == '':
-            start_date = u'01/01/2012'
+            start_date = u'01/01/2015'
         if request.POST.get('end_date') == '':
             end_date = datetime.date.today().strftime('%d/%m/%Y')
         if request.POST.get('province') !='':
@@ -110,13 +113,13 @@ def get_by_code(request, code='', start_date='', end_date=''):
 
 def landing(request):
     code = UserProfile.objects.get(user=request.user).moh_facility
-    start_date = u'01/01/2012'
+    start_date = u'01/01/2015'
     end_date = datetime.date.today().strftime('%d/%m/%Y')
     if request.method == 'POST':
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
         if request.POST.get('start_date') == '':
-            start_date = u'01/01/2012'
+            start_date = u'01/01/2015'
         if request.POST.get('end_date') == '':
             end_date = datetime.date.today().strftime('%d/%m/%Y')
 

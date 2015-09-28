@@ -3,7 +3,8 @@ import datetime
 from surveillance_cholera.models import Patient
 DEAD = ['dd', 'deces']
 HOSPI = ['hospi', 'hopi']
-SORTI = ['pr', 'ref', 'desh']
+REFER = ['pr', 'ref']
+GUERI = ['pg']
 
 register = template.Library()
 @register.filter(name='has_group')

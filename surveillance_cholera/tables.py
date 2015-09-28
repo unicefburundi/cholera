@@ -55,10 +55,10 @@ class PatientTable(tables.Table):
 class PatientsTable(tables.Table):
     cds_id = tables.Column()
     name = tables.Column(verbose_name="Name of CDS ")
-    # total = tables.Column()
     new_cases = tables.Column()
     hospi = tables.Column()
-    # sorties = tables.Column()
+    gueris = tables.Column()
+    references = tables.Column()
     deces = tables.Column()
     detail = tables.LinkColumn('get_patients_by_code', args=[A('detail')], orderable=False, empty_values=(), verbose_name='Click for details')
 
@@ -69,10 +69,10 @@ class PatientsTable(tables.Table):
 class Patients2Table(tables.Table):
     district_id = tables.Column()
     name = tables.Column(verbose_name="Name of District ")
-    # total = tables.Column()
     new_cases = tables.Column()
     hospi = tables.Column()
-    # sorties = tables.Column()
+    gueris = tables.Column()
+    references = tables.Column()
     deces = tables.Column()
     detail = tables.Column()
 
@@ -85,10 +85,10 @@ class Patients2Table(tables.Table):
 
 class Patients3Table(tables.Table):
     name = tables.Column(verbose_name="Name of Province ")
-    # total = tables.Column()
     new_cases = tables.Column()
     hospi = tables.Column()
-    # sorties = tables.Column()
+    gueris = tables.Column()
+    references = tables.Column()
     deces = tables.Column()
     detail = tables.Column()
     class Meta:

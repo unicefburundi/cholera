@@ -11,7 +11,7 @@ from cholera.views import get_all_patients
 from django.db.models import Q
 import datetime
 from django.views.generic import FormView
-from surveillance_cholera.templatetags.extras_utils import format_to_time, DEAD, HOSPI, SORTI
+from surveillance_cholera.templatetags.extras_utils import format_to_time, DEAD, HOSPI, GUERI, REFER
 import operator
 
 ###########
@@ -20,7 +20,7 @@ import operator
 
 def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
     if start_date == '' or start_date== None:
-        start_date = u'01/01/2012'
+        start_date = u'01/01/2015'
     if end_date == '' or end_date== None:
         end_date = datetime.date.today().strftime('%d/%m/%Y')
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]).filter(cds=moh_facility_id)
@@ -28,13 +28,14 @@ def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
     facility = {'name': CDS.objects.get(id=moh_facility_id).name}
     detail = {'detail':  CDS.objects.get(id=moh_facility_id).code}
     total ={'total': Patient.objects.filter(cds=moh_facility_id).count()}
-    deces= {'deces' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in DEAD)).count()}
-    sorties = {'sorties' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in SORTI)).count()}
+    deces= {'deces' : reduce(operator.or_, (patients.filter(Q(intervention__icontains=item) | Q(exit_status__icontains=item)) for item in DEAD)).count()}
     hospi = {'hospi' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in HOSPI)).count()}
     new_cases = {'new_cases' : patients.count()}
+    gueris= {'gueris' : reduce(operator.or_, (patients.filter(Q(intervention__icontains=item) | Q(exit_status__icontains=item)) for item in GUERI)).count()}
+    references= {'references' : reduce(operator.or_, (patients.filter(Q(intervention__icontains=item) | Q(exit_status__icontains=item)) for item in REFER)).count()}
 
     elemet = {}
-    for i in [total,deces,sorties,hospi,new_cases, facility, detail, cds_id]:
+    for i in [total,deces,hospi,new_cases, references, gueris, facility, detail, cds_id]:
             elemet.update(i)
     return elemet
 
@@ -86,7 +87,7 @@ class CDSFormView(FormView, CDSDetailView):
 
 def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
     if start_date == '' or start_date== None :
-        start_date = u'01/01/2012'
+        start_date = u'01/01/2015'
     if end_date == '' or end_date== None :
         end_date = datetime.date.today().strftime('%d/%m/%Y')
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]).filter(cds__district=moh_facility_id)
@@ -94,13 +95,14 @@ def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
     facility = {'name': District.objects.get(id=moh_facility_id).name}
     detail = {'detail':  District.objects.get(id=moh_facility_id).id}
     total ={'total': Patient.objects.filter(cds__district=moh_facility_id).count()}
-    deces= {'deces' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in DEAD)).count()}
-    sorties = {'sorties' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in SORTI)).count()}
+    deces= {'deces' : reduce(operator.or_, (patients.filter(Q(intervention__icontains=item) | Q(exit_status__icontains=item)) for item in DEAD)).count()}
     hospi = {'hospi' : reduce(operator.or_, (patients.filter(intervention__icontains=item) for item in HOSPI)).count()}
     new_cases= {'new_cases' : patients.count()}
+    gueris= {'gueris' : reduce(operator.or_, (patients.filter(Q(intervention__icontains=item) | Q(exit_status__icontains=item)) for item in GUERI)).count()}
+    references= {'references' : reduce(operator.or_, (patients.filter(Q(intervention__icontains=item) | Q(exit_status__icontains=item)) for item in REFER)).count()}
 
     elemet = {}
-    for i in [total,deces,sorties,hospi,new_cases, facility, detail, district_id]:
+    for i in [total,deces,hospi,new_cases, facility, references, gueris, detail, district_id]:
             elemet.update(i)
     return elemet
 
