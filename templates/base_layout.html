@@ -86,7 +86,7 @@
       {% if user.is_authenticated %}
       <ul class="nav nav-stacked">
 
-                <li><a href="{% url 'test_task' %}"><i class="glyphicon glyphicon-flash"></i> Alerts</a></li>
+                <li><a href="{% url 'get_alerts' %}"><i class="glyphicon glyphicon-flash"></i> Alerts</a></li>
             {% if user|has_group:'CDS' %}
                 <li><a href="{% url 'cds_detail' pk=myfacility.id %}"><i class="glyphicon glyphicon-list-alt"></i> Statistics</a></li>
               {% elif  user|has_group:'BDS' %}

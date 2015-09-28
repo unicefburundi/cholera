@@ -11,7 +11,7 @@ from cholera.views import get_all_patients
 from django.db.models import Q
 import datetime
 from django.views.generic import FormView
-from surveillance_cholera.templatetags.extras_utils import format_to_time, DEAD, HOSPI, GUERI, REFER
+from surveillance_cholera.templatetags.extras_utils import format_to_time, DEAD, HOSPI, GUERI, REFER, get_all_reports
 import operator
 
 ###########
@@ -187,6 +187,21 @@ class ProvinceDetailView(DetailView):
         return context
 
 
+class ProvinceFormView(FormView, ProvinceDetailView):
+    models = Province
+    form_class = SearchForm
+    template_name = 'surveillance_cholera/province_detail.html'
+
+    def post(self, request, *args, **kwargs):
+        form = SearchForm(request)
+        data = get_province_data(kwargs['pk'], request.POST.get('start_date'), request.POST.get('end_date'))
+        statistics = Patients2Table(data)
+        RequestConfig(request).configure(statistics)
+        request.session['sstart_date'] = request.POST.get('start_date')
+        request.session['eend_date'] = request.POST.get('end_date')
+
+        return render(request, 'surveillance_cholera/province_detail.html', {'form':form, 'statistics':statistics, 'object': Province.objects.get(pk=kwargs['pk']), 'start_date': request.POST.get('start_date'), 'end_date':request.POST.get('end_date')} )
+
 ###########
 # Patient        ##
 ###########
@@ -275,17 +290,15 @@ def get_patients_by_code(request, code=''):
     return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': moh_facility, 'sstart_date':request.session['sstart_date'], 'eend_date':request.session['eend_date']})
 
 
-class ProvinceFormView(FormView, ProvinceDetailView):
-    models = Province
-    form_class = SearchForm
-    template_name = 'surveillance_cholera/province_detail.html'
+########
+# Alerts   ##
+########
+@login_required
+def get_alerts(request, treshold=3):
+    form = SearchForm(request)
+    userprofile = UserProfile.objects.get(user=request.user)
+    all_reports = get_all_reports(level=userprofile.level, moh_facility=userprofile.moh_facility).filter(Q(patient__exit_status=None) | Q(patient__exit_status=''))
+    results = all_reports.filter(patient__exit_status=None).values('patient__patient_id', 'patient__date_entry', 'cds__name', 'reporter__phone_number', 'reporter__supervisor_phone_number')
 
-    def post(self, request, *args, **kwargs):
-        form = SearchForm(request)
-        data = get_province_data(kwargs['pk'], request.POST.get('start_date'), request.POST.get('end_date'))
-        statistics = Patients2Table(data)
-        RequestConfig(request).configure(statistics)
-        request.session['sstart_date'] = request.POST.get('start_date')
-        request.session['eend_date'] = request.POST.get('end_date')
+    return render(request, 'surveillance_cholera/alerts.html', { 'form':form, 'results' : results})
 
-        return render(request, 'surveillance_cholera/province_detail.html', {'form':form, 'statistics':statistics, 'object': Province.objects.get(pk=kwargs['pk']), 'start_date': request.POST.get('start_date'), 'end_date':request.POST.get('end_date')} )

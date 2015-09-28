@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from surveillance_cholera.backend import handel_rapidpro_request
-from surveillance_cholera.views import CDSListView, CDSDetailView, DistrictListView, DistrictDetailView, ProvinceListView, ProvinceDetailView, PatientListView, PatientDetailView, get_patients_by_code, CDSFormView, DistrictFormView, ProvinceFormView
+from surveillance_cholera.views import CDSListView, CDSDetailView, DistrictListView, DistrictDetailView, ProvinceListView, ProvinceDetailView, PatientListView, PatientDetailView, get_patients_by_code, CDSFormView, DistrictFormView, ProvinceFormView, get_alerts
 from surveillance_cholera.tasks import ask_update_on_patient
 
 urlpatterns = patterns('',
@@ -24,4 +24,7 @@ urlpatterns = patterns('',
     url(r'^patient/$', PatientListView.as_view(), name='patient_list'),
     url(r'^patient/(?P<pk>\d+)/$', PatientDetailView.as_view(), name='patient_detail'),
     url(r'^patients/(?P<code>\d+)/$', get_patients_by_code, name='get_patients_by_code'),
+
+    #Alerts
+    url(r'^get_alerts/$', get_alerts, name='get_alerts'),
 )

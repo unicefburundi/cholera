@@ -1,0 +1,39 @@
+{% extends "base_layout.html" %}
+{% load render_table from django_tables2 %}
+
+{% block page_title %}
+<h3><i class="glyphicon glyphicon-list-alt"></i> Cas de retard de rapportage</h3>
+{% endblock page_title %}
+
+{% block content %}
+{% if  results %}
+    <div class="row">
+            <div class="col-md-10">
+                <table id="reports" class="table table-bordered" data-toggle="table" data-search="true" data-show-export="true" data-export-types=['csv','excel']>
+            <thead>
+              <tr>
+                <th>Patient ID</th>
+                <th>Date Entry</th>
+                <th>Reporter Phone </th>
+                <th>Supervisor Phone</th>
+                <th>Cds</th>
+              </tr>
+            </thead>
+
+        {% for report in results %}
+            <tr>
+                <td>{{ report.patient__patient_id }}</td>
+                <td>{{ report.patient__date_entry}}</td>
+                <td>{{ report.reporter__phone_number}}</td>
+                <td>{{ report.reporter__supervisor_phone_number}}</td>
+                <td>{{ report.cds__name}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+            </div>
+            <div class="col-md-2"></div>
+    </div>
+{% else %}
+    <p>Pas de cas de depassement de date de mise a jour.</p>
+{% endif %}
+{% endblock content %}

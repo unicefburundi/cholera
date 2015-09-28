@@ -1,6 +1,6 @@
 from django import template
 import datetime
-from surveillance_cholera.models import Patient
+from surveillance_cholera.models import Patient, Report
 DEAD = ['dd', 'deces']
 HOSPI = ['hospi', 'hopi']
 REFER = ['pr', 'ref']
@@ -44,3 +44,13 @@ def get_all_patients(level=None,moh_facility=None):
         return Patient.objects.filter(cds__district__province__code=moh_facility)
     else:
         return Patient.objects.all()
+
+def get_all_reports(level=None,moh_facility=None):
+    if level=='CDS':
+        return Report.objects.filter(cds__code=moh_facility)
+    if level=='BDS':
+        return Report.objects.filter(cds__district__code=moh_facility)
+    if level =='BPS':
+        return Report.objects.filter(cds__district__province__code=moh_facility)
+    else:
+        return Report.objects.all()
