@@ -1,5 +1,6 @@
 from django import forms
 from surveillance_cholera.models import *
+from django.forms.models import inlineformset_factory
 
 class SearchForm(forms.Form):
     def __init__(self,  request=None, *args, **kwargs):
@@ -71,3 +72,20 @@ class AlertForm(forms.Form):
     """docstring for AlertForm"""
     treshold = forms.IntegerField(initial=3, required=False)
 
+class ProvinceForm(forms.ModelForm):
+    class Meta:
+        model = Province
+        fields = '__all__'
+
+class DistrictForm(forms.ModelForm):
+    class Meta:
+        model = District
+        fields = '__all__'
+
+class CDSForm(forms.ModelForm):
+    class Meta:
+        model = CDS
+        fields = '__all__'
+
+DistrictFormSet = inlineformset_factory(Province, District, fields = '__all__')
+CDSFormSet = inlineformset_factory(District, CDS, fields = '__all__')
