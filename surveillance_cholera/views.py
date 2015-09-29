@@ -4,7 +4,7 @@ from authentication.models import UserProfile
 from django_tables2 import  RequestConfig
 from surveillance_cholera.tables import PatientsTable, Patients2Table
 from django.shortcuts import render
-from surveillance_cholera.forms import PatientSearchForm, SearchForm
+from surveillance_cholera.forms import PatientSearchForm, SearchForm, AlertForm
 from django.contrib.auth.decorators import login_required
 from surveillance_cholera.tables import PatientTable, ReportTable
 from cholera.views import get_all_patients
@@ -295,10 +295,15 @@ def get_patients_by_code(request, code=''):
 ########
 @login_required
 def get_alerts(request, treshold=3):
-    form = SearchForm(request)
+    form = AlertForm()
     userprofile = UserProfile.objects.get(user=request.user)
     all_reports = get_all_reports(level=userprofile.level, moh_facility=userprofile.moh_facility).filter(Q(patient__exit_status=None) | Q(patient__exit_status=''))
-    results = all_reports.filter(patient__exit_status=None).values('patient__patient_id', 'patient__date_entry', 'cds__name', 'reporter__phone_number', 'reporter__supervisor_phone_number')
+    the_current_date = datetime.datetime.now().date()
+    if request.method == 'POST':
+        form = AlertForm(request.POST or None)
+        if form.is_valid():
+            treshold = form.cleaned_data['treshold']
+    results = all_reports.filter(patient__exit_status=None, patient__date_entry__lte=the_current_date - datetime.timedelta(days=treshold)).values('patient__patient_id', 'patient__date_entry', 'cds__name', 'reporter__phone_number', 'reporter__supervisor_phone_number')
 
-    return render(request, 'surveillance_cholera/alerts.html', { 'form':form, 'results' : results})
+    return render(request, 'surveillance_cholera/alerts.html', { 'form':form, 'results' : results, 'form': form})
 

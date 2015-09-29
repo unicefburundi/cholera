@@ -6,6 +6,20 @@
 {% endblock page_title %}
 
 {% block content %}
+<div class="row">
+        <div class="col-md-8">
+            <form action="{% url 'get_alerts' %}" method="post" id="post-form" class="form-inline">
+                {% csrf_token %}
+                <div class="form-group col-md-4">
+                    <label for="province">Treshold:</label>
+                        {{form.treshold}}
+                </div>
+                <div  style="padding-top: 18px">
+                    <button type="submit" class="btn btn-primary" >Analyse</button>
+                </div>
+            </form>
+        </div>
+    </div>
 {% if  results %}
     <div class="row">
             <div class="col-md-10">
@@ -34,6 +48,10 @@
             <div class="col-md-2"></div>
     </div>
 {% else %}
-    <p>Pas de cas de depassement de date de mise a jour.</p>
+    <div class="row">
+        <div>
+            <span>Pas de cas de depassement de date de mise a jour.</span>
+        </div>
+    </div>
 {% endif %}
 {% endblock content %}

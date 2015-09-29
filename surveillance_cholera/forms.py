@@ -67,5 +67,7 @@ class PatientSearchForm(forms.ModelForm):
         model = Patient
         exclude = ('patient_id','date_entry', 'exit_date', 'cds')
 
-
+class AlertForm(forms.Form):
+    """docstring for AlertForm"""
+    treshold = forms.IntegerField(initial=3, required=False)
 
