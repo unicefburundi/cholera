@@ -1,0 +1,33 @@
+{% extends "moh_facility.html" %}
+{% block activeuser %}{% endblock activeuser %}
+{% block activeuser1 %}{% endblock activeuser1 %}
+{% block activecds %}class="active"{% endblock activecds %}
+{% block activecds1 %}active{% endblock activecds1 %}
+{% block cds %}
+
+<form action="{% url 'cds_add' %}" method="POST" class="form-inline">
+    {% csrf_token %}
+    <div class="col-md-3">
+        <label for="districtcds">{{form.district.label_tag}}</label>
+        <p>{{form.district.errors}}</p>
+        <p>{{form.district}}</p>
+    </div>
+     <div class="col-md-3">
+        <label for="namecds">{{form.name.label_tag}}</label>
+        <p>{{form.name.errors}}</p>
+        <p>{{form.name}}</p>
+    </div>
+     <div class="col-md-3">
+        <label for="codecds">{{form.code.label_tag}}</label>
+        <p>{{form.code.errors}}</p>
+        <p>{{form.code}}</p>
+    </div>
+     <div class="col-md-3">
+        <label for="statuscds">{{form.status.label_tag}}</label>
+        <p>{{form.status.errors}}</p>
+        <p>{{form.status}}</p>
+    </div>
+    <button type="submit" name="intervalsubmit" class="btn btn-primary">Create</button>
+</form>
+
+{% endblock cds %}

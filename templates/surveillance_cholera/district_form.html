@@ -1,0 +1,15 @@
+{% extends "moh_facility.html" %}
+{% block activeuser %}{% endblock activeuser %}
+{% block activeuser1 %}{% endblock activeuser1 %}
+{% block activedistrict %}class="active"{% endblock activedistrict %}
+{% block activedistrict1 %}active{% endblock activedistrict1 %}
+
+{% block district %}
+
+<form action="" method="POST" class="form-inline">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit" name="intervalsubmit" class="btn btn-primary">Create</button>
+</form>
+
+{% endblock district %}

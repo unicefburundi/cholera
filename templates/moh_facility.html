@@ -1,0 +1,160 @@
+{% extends "base_layout.html" %}
+
+{% block actions %}
+<ul class="nav nav-tabs">
+  <li  {% block activeuser %}class="active"{% endblock activeuser %} ><a href="#user" data-toggle="tab">Users</a></li>
+  <li {% block activeprovince %}{% endblock activeprovince %} ><a href="#province"   data-toggle="tab">Province</a></li>
+  <li {% block activedistrict %}{% endblock activedistrict %} ><a href="#district"   data-toggle="tab">District</a></li>
+  <li {% block activecds %}{% endblock activecds %} ><a href="#cds"   data-toggle="tab">Cds</a></li>
+</ul>
+{% endblock actions  %}
+
+{% block content %}
+
+<div class="col-md-10">
+    <div class="tab-content">
+              {% block user1 %}
+                    <div class="tab-pane {% block activeuser1 %}active{% endblock activeuser1 %}" id="user">
+                <h4><i class="glyphicon glyphicon-user"></i></h4>
+                <form action="{% url 'registration_register' %}"  method="POST" class="form-inline">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="username">{{user_form.username.label_tag}}</label>
+                            <p>{{user_form.username.errors}}</p>
+                            <p>{{user_form.username}}</p>
+                            <p>{{user_form.username.help_text}}</p>
+                        </div>
+                         <div class="col-md-3">
+                            <label for="email">{{user_form.email.label_tag}}</label>
+                            <p>{{user_form.email.errors}}</p>
+                            <p>{{user_form.email}}</p>
+                        </div>
+                         <div class="col-md-3">
+                            <label for="password">{{user_form.password1.label_tag}}</label>
+                            <p>{{user_form.password1.errors}}</p>
+                            <p>{{user_form.password1}}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="password2">{{user_form.password2.label_tag}}</label>
+                            <p>{{user_form.password2.errors}}</p>
+                            <p>{{user_form.password2}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="telephone">{{profile_form.telephone.label_tag}}</label>
+                            <p>{{profile_form.telephone.errors}}</p>
+                            <p>{{profile_form.telephone}}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="level">{{profile_form.level.label_tag}}</label>
+                            <p>{{profile_form.level.errors}}</p>
+                            <p>{{profile_form.level}}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="facility">Facilities</label>
+                            <p></p>
+                                <select name="facility" id="facility">
+                                    <option value="">-----</option>
+                                </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="moh_facility">{{profile_form.moh_facility.label_tag}}</label>
+                            <p>{{profile_form.moh_facility.errors}}</p>
+                            <p>{{profile_form.moh_facility}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button type="submit" name="intervalsubmit" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
+              </div>
+              {% endblock user1 %}
+              <div class="tab-pane {% block activeprovince1 %}{% endblock activeprovince1 %}" id="province">
+                <h4><i class="glyphicon glyphicon-comment"></i></h4>
+                {% block province %}
+                    <form action="{% url 'province_add' %}" method="POST" class="form-inline">
+                        {% csrf_token %}
+                         <div class="row">
+                             <div class="col-md-4">
+                                <label for="nameprovince">{{province_form.name.label_tag}}</label>
+                                <p>{{province_form.name.errors}}</p>
+                                <p>{{province_form.name}}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="codeprovince">{{province_form.code.label_tag}}</label>
+                                <p>{{province_form.code.errors}}</p>
+                                <p>{{province_form.code}}</p>
+                            </div>
+                         </div>
+                        <div class="row">
+                            <button type="submit" name="intervalsubmit" class="btn btn-primary">Create</button>
+                        </div>
+                    </form>
+                {% endblock province %}
+              </div>
+              <div class="tab-pane {% block activedistrict1 %}{% endblock activedistrict1 %}" id="district">
+                <h4><i class="glyphicon glyphicon-cog"></i></h4>
+                {% block district %}
+                    <form action="{% url 'district_add' %}" method="POST" class="form-inline">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="provincedistrict">{{district_form.province.label_tag}}</label>
+                                <p>{{district_form.province.errors}}</p>
+                                <p>{{district_form.province}}</p>
+                            </div>
+                             <div class="col-md-4">
+                                <label for="namedistrict">{{district_form.name.label_tag}}</label>
+                                <p>{{district_form.name.errors}}</p>
+                                <p>{{district_form.name}}</p>
+                            </div>
+                             <div class="col-md-4">
+                                <label for="codedistrict">{{district_form.code.label_tag}}</label>
+                                <p>{{district_form.code.errors}}</p>
+                                <p>{{district_form.code}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button type="submit" name="intervalsubmit" class="btn btn-primary">Create</button>
+                        </div>
+                    </form>
+                {% endblock district %}
+              </div>
+              <div class="tab-pane {% block activecds1 %}{% endblock activecds1 %}" id="cds">
+                <h4><i class="glyphicon glyphicon-list-alt"></i></h4>
+                {% block cds %}
+                    <form action="{% url 'cds_add' %}" method="POST" class="form-inline">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="districtcds">{{cds_form.district.label_tag}}</label>
+                                <p>{{cds_form.district.errors}}</p>
+                                <p>{{cds_form.district}}</p>
+                            </div>
+                             <div class="col-md-3">
+                                <label for="namecds">{{cds_form.name.label_tag}}</label>
+                                <p>{{cds_form.name.errors}}</p>
+                                <p>{{cds_form.name}}</p>
+                            </div>
+                             <div class="col-md-3">
+                                <label for="codecds">{{cds_form.code.label_tag}}</label>
+                                <p>{{cds_form.code.errors}}</p>
+                                <p>{{cds_form.code}}</p>
+                            </div>
+                             <div class="col-md-3">
+                                <label for="statuscds">{{cds_form.status.label_tag}}</label>
+                                <p>{{cds_form.status.errors}}</p>
+                                <p>{{cds_form.status}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button type="submit" name="intervalsubmit" class="btn btn-primary">Create</button>
+                        </div>
+                    </form>
+                {% endblock cds %}
+              </div>
+    </div>
+</div>
+{% endblock content %}
