@@ -1,15 +1,34 @@
-{% extends "base_layout.html" %}
+{% extends "moh_facility.html" %}
 {% load i18n staticfiles %}
-{% block content %}
+{% block user1 %}
 <h2>{% trans 'New User ? ' %}</h2>
 {% if form.errors %}
 <p>{% trans 'Invalid data. Please try again.' %}</p>
 {% endif %}
 <form method="post" action="" >
   {% csrf_token %}
-  <div class="form-group">
-      {{ form.as_p }}
-        <input type="submit" class="btn btn-default" value="{% trans 'Register' %}" />
-  </div>
+  <div class="row">
+    <div class="col-md-3">
+        <label for="username">{{form.username.label_tag}}</label>
+        <p>{{form.username.errors}}</p>
+        <p>{{form.username}}</p>
+        <p>{{form.username.help_text}}</p>
+    </div>
+     <div class="col-md-3">
+        <label for="email">{{form.email.label_tag}}</label>
+        <p>{{form.email.errors}}</p>
+        <p>{{form.email}}</p>
+    </div>
+     <div class="col-md-3">
+        <label for="password">{{form.password1.label_tag}}</label>
+        <p>{{form.password1.errors}}</p>
+        <p>{{form.password1}}</p>
+    </div>
+    <div class="col-md-3">
+        <label for="password2">{{form.password2.label_tag}}</label>
+        <p>{{form.password2.errors}}</p>
+        <p>{{form.password2}}</p>
+    </div>
+    </div>
 </form>
 {% endblock %}

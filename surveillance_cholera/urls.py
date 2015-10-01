@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from surveillance_cholera.backend import handel_rapidpro_request
-from surveillance_cholera.views import CDSListView, CDSDetailView, DistrictListView, DistrictDetailView, ProvinceListView, ProvinceDetailView, PatientListView, PatientDetailView, get_patients_by_code, CDSFormView, DistrictFormView, ProvinceFormView, get_alerts
+from surveillance_cholera.views import CDSListView, CDSDetailView, DistrictListView, DistrictDetailView, ProvinceListView, ProvinceDetailView, PatientListView, PatientDetailView, get_patients_by_code, CDSFormView, DistrictFormView, ProvinceFormView, get_alerts, CDSCreateView, DistrictCreateView, ProvinceCreateView, moh_facility
 from surveillance_cholera.tasks import ask_update_on_patient
 
 urlpatterns = patterns('',
@@ -9,14 +9,17 @@ urlpatterns = patterns('',
     url(r'test_task', ask_update_on_patient, name="test_task"),
     #CDS
     url(r'^cds/$', CDSListView.as_view(), name='cds_list'),
+    url(r'^cds/add/$', CDSCreateView.as_view(), name='cds_add'),
     url(r'^cds/(?P<pk>\d+)/$', CDSDetailView.as_view(), name='cds_detail'),
     url(r'^cds_statistics/(?P<pk>\d+)/$', CDSFormView.as_view(), name='cds_statistics'),
     #Districts
     url(r'^district/$', DistrictListView.as_view(), name='district_list'),
+    url(r'^district/add/$', DistrictCreateView.as_view(), name='district_add'),
     url(r'^district/(?P<pk>\d+)/$', DistrictDetailView.as_view(), name='district_detail'),
     url(r'^district_statistics/(?P<pk>\d+)/$', DistrictFormView.as_view(), name='district_statistics'),
     #Provinces
     url(r'^province/$', ProvinceListView.as_view(), name='province_list'),
+    url(r'^province/add/$', ProvinceCreateView.as_view(), name='province_add'),
     url(r'^province/(?P<pk>\d+)/$', ProvinceDetailView.as_view(), name='province_detail'),
     url(r'^province_statistics/(?P<pk>\d+)/$', ProvinceFormView.as_view(), name='province_statistics'),
 
@@ -27,4 +30,7 @@ urlpatterns = patterns('',
 
     #Alerts
     url(r'^get_alerts/$', get_alerts, name='get_alerts'),
+
+    #moh_facility
+    url(r'^moh_facility/$', moh_facility, name='moh_facility'),
 )

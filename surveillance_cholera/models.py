@@ -1,6 +1,7 @@
 from django.db import models
 from authentication.models import UserProfile
 from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
 
 class Person(models.Model):
     user = models.OneToOneField(UserProfile)
@@ -23,6 +24,12 @@ class Province(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_absolute_url(self):
+            return reverse('province_detail', kwargs={'pk': self.id})
+
+    class Meta:
+        ordering = ('name',)
+
 class District(models.Model):
     province = models.ForeignKey(Province)
     name = models.CharField(unique=True, max_length=40)
@@ -30,6 +37,12 @@ class District(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+            return reverse('district_detail', kwargs={'pk': self.id})
+
+    class Meta:
+        ordering = ('name',)
 
 class CDS(models.Model):
     STATUS_CHOICES = (
@@ -48,6 +61,12 @@ class CDS(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+            return reverse('cds_detail', kwargs={'pk': self.id})
+
+    class Meta:
+        ordering = ('name',)
 
 class Patient(models.Model):
     cds = models.ForeignKey(CDS, null=True, blank=True)

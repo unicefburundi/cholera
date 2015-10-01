@@ -28,9 +28,25 @@ $(document).ready(function(){
                 }
             })
         });
-     $('td[name=provinces]').click(function() {
-            province_id = $('td[name=provinces]').val();
-            console.log(province_id);
-            //<---- move it here
+     $('select[name=level]').click(function() {
+            level = $(this).val();
+            if (level == ''){
+                level = 'CEN'
+            }
+            request_url = '/get_by_level/' + level + '/';
+            $.ajax({
+                url: request_url,
+                success: function(data){
+                    $('select[name=facility]').empty(); // remove the value from the input
+                    $.each(data[0], function(key, value){
+                        $('select[name=facility]').append('<option value="' + key + '">' + value +'</option>');
+                    })
+                }
+            });
+            return false; //<---- move it here
+        });
+     $('select[name=facility]').click(function() {
+            facility = $(this).val();
+            document.getElementById('id_moh_facility').value = parseInt(facility);
         });
     });

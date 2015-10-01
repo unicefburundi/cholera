@@ -78,6 +78,7 @@ class ProvinceForm(forms.ModelForm):
         fields = '__all__'
 
 class DistrictForm(forms.ModelForm):
+    province = forms.ModelChoiceField(queryset=Province.objects.order_by('name'))
     class Meta:
         model = District
         fields = '__all__'
@@ -86,6 +87,3 @@ class CDSForm(forms.ModelForm):
     class Meta:
         model = CDS
         fields = '__all__'
-
-DistrictFormSet = inlineformset_factory(Province, District, fields = '__all__')
-CDSFormSet = inlineformset_factory(District, CDS, fields = '__all__')

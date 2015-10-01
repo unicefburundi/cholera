@@ -7,6 +7,7 @@ class ProvinceAdminImporter(forms.ModelForm):
     class Meta:
         model = Province
         fields = ('name', 'code')
+        ordering = ['name']
 
 class ProvinceAdmin(ImportCSVModelAdmin):
     importer_class = ProvinceAdminImporter
@@ -15,6 +16,7 @@ class DistrictAdminImporter(forms.ModelForm):
     class Meta:
         model = District
         fields = ('province', 'name', 'code' )
+        ordering = ['name']
 
 class DistrictAdmin(ImportCSVModelAdmin):
     importer_class = DistrictAdminImporter
@@ -23,6 +25,7 @@ class CDSAdminImporter(forms.ModelForm):
     class Meta:
         model = CDS
         fields = ('district','name', 'code')
+        ordering = ['name']
 
 class CDSAdmin(ImportCSVModelAdmin):
     importer_class = CDSAdminImporter

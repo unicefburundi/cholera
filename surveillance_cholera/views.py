@@ -1,10 +1,10 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from surveillance_cholera.models import CDS, Province, District, Patient, Report
 from authentication.models import UserProfile
 from django_tables2 import  RequestConfig
 from surveillance_cholera.tables import PatientsTable, Patients2Table
 from django.shortcuts import render
-from surveillance_cholera.forms import PatientSearchForm, SearchForm, AlertForm
+from surveillance_cholera.forms import PatientSearchForm, SearchForm, AlertForm, CDSForm, DistrictForm, ProvinceForm
 from django.contrib.auth.decorators import login_required
 from surveillance_cholera.tables import PatientTable, ReportTable
 from cholera.views import get_all_patients
@@ -13,6 +13,8 @@ import datetime
 from django.views.generic import FormView
 from surveillance_cholera.templatetags.extras_utils import format_to_time, DEAD, HOSPI, GUERI, REFER, get_all_reports
 import operator
+from authentication.forms import UserProfileForm, UserProfileForm2
+from registration.forms import RegistrationForm
 
 ###########
 # CDS             ##
@@ -40,6 +42,9 @@ def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
     return elemet
 
 
+class CDSCreateView(CreateView):
+    model = CDS
+    form_class = CDSForm
 
 class CDSListView(ListView):
     model = CDS
@@ -112,6 +117,10 @@ def get_district_data(moh_facility_id, start_date='', end_date=''):
         elemet.append(get_per_cds_statistics(i.id, start_date, end_date))
     return elemet
 
+class DistrictCreateView(CreateView):
+    model = District
+    form_class = DistrictForm
+
 class DistrictListView(ListView):
     model = District
     paginate_by = 25
@@ -159,6 +168,10 @@ def get_province_data(moh_facility_id, start_date='', end_date=''):
     for i in District.objects.filter(province=moh_facility_id):
         elemet.append(get_per_district_statistics(i.id, start_date, end_date))
     return elemet
+
+class ProvinceCreateView(CreateView):
+    model = Province
+    form_class = ProvinceForm
 
 class ProvinceListView(ListView):
     model = Province
@@ -306,4 +319,14 @@ def get_alerts(request, treshold=3):
     results = all_reports.filter(patient__exit_status=None, patient__date_entry__lte=the_current_date - datetime.timedelta(days=treshold)).values('patient__patient_id', 'patient__date_entry', 'cds__name', 'reporter__phone_number', 'reporter__supervisor_phone_number')
 
     return render(request, 'surveillance_cholera/alerts.html', { 'form':form, 'results' : results, 'form': form})
+
+#moh_facility
+
+def moh_facility(request):
+    profile_form = UserProfileForm2
+    user_form = RegistrationForm
+    cds_form = CDSForm
+    district_form = DistrictForm
+    province_form = ProvinceForm
+    return render(request, 'moh_facility.html', {'cds_form':cds_form, 'district_form':district_form, 'province_form':province_form, 'profile_form': profile_form, 'user_form': user_form})
 
