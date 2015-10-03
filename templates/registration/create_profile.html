@@ -1,0 +1,60 @@
+{% extends "base_layout.html" %}
+
+{% block content %}
+        <div class="tab-pane {% block activeuser1 %}active{% endblock activeuser1 %}" id="user">
+            <h4><i class="glyphicon glyphicon-user"></i></h4>
+                <form action="."  method="POST" class="form-inline">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="username">{{form.user.username.label_tag}}</label>
+                            <p>{{form.user.username.errors}}</p>
+                            <p>{{form.user.username}}</p>
+                            <p>{{form.user.username.help_text}}</p>
+                        </div>
+                         <div class="col-md-3">
+                            <label for="email">{{form.user.email.label_tag}}</label>
+                            <p>{{form.user.email.errors}}</p>
+                            <p>{{form.user.email}}</p>
+                        </div>
+                         <div class="col-md-3">
+                            <label for="password">{{form.user.password1.label_tag}}</label>
+                            <p>{{form.user.password1.errors}}</p>
+                            <p>{{form.user.password1}}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="password2">{{form.user.password2.label_tag}}</label>
+                            <p>{{form.user.password2.errors}}</p>
+                            <p>{{form.user.password2}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="telephone">{{form.profile.telephone.label_tag}}</label>
+                            <p>{{form.profile.telephone.errors}}</p>
+                            <p>{{form.profile.telephone}}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="level">{{form.profile.level.label_tag}}</label>
+                            <p>{{form.profile.level.errors}}</p>
+                            <p>{{form.profile.level}}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="facility">Facilities</label>
+                            <p></p>
+                                <select name="facility" id="facility">
+                                    <option value="">-----</option>
+                                </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="moh_facility">{{form.profile.moh_facility.label_tag}}</label>
+                            <p>{{form.profile.moh_facility.errors}}</p>
+                            <p>{{form.profile.moh_facility}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button type="submit" name="intervalsubmit" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
+              </div>
+{% endblock content %}

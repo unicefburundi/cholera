@@ -15,7 +15,7 @@ class UserProfile(models.Model):
         ('CDS', 'CDS'),
     )
     # This line is required. Links UserProfile to a User model instance.
-    user = models.OneToOneField(User, help_text=_('The general user'))
+    user = models.OneToOneField(User, primary_key=True, help_text=_('The general user'))
     # The additional attributes we wish to include.
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message=_("Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."))
     telephone = models.CharField(validators=[phone_regex], blank=True, help_text=_('The telephone to contact you.'), max_length=16)

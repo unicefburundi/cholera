@@ -13,7 +13,7 @@ import datetime
 from django.views.generic import FormView
 from surveillance_cholera.templatetags.extras_utils import format_to_time, DEAD, HOSPI, GUERI, REFER, get_all_reports
 import operator
-from authentication.forms import UserProfileForm, UserProfileForm2
+from authentication.forms import UserProfileForm2
 from registration.forms import RegistrationForm
 
 ###########

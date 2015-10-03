@@ -2,6 +2,9 @@ from django import forms
 from .models import UserProfile
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
+from betterforms.multiform import MultiModelForm
+from authtools.forms import UserCreationForm
+from collections import OrderedDict
 
 class UserProfileForm(forms.ModelForm):
     first_name = forms.CharField(label=_(u'First Name'), max_length=30)
@@ -39,3 +42,9 @@ class UserProfileForm2(forms.ModelForm):
     class Meta:
         model = UserProfile
         exclude = ('user',)
+
+class UserCreationMultiForm(MultiModelForm):
+    form_classes = OrderedDict((
+        ('user', UserCreationForm),
+        ('profile', UserProfileForm2),
+    ))

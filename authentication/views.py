@@ -1,4 +1,4 @@
-from django.views.generic import  DetailView, UpdateView
+from django.views.generic import  DetailView, UpdateView, CreateView
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from authentication.models import UserProfile
@@ -6,7 +6,9 @@ from authentication.forms import UserProfileForm
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from surveillance_cholera.context_processors import get_name_of_mohfacility
-
+from django.core.urlresolvers import reverse_lazy
+from django.shortcuts import redirect
+from .forms import UserCreationMultiForm
 
 
 
@@ -48,3 +50,19 @@ class UserProfileEditView(UpdateView):
             return HttpResponseRedirect(self.get_success_url())
         else:
             return render(request, 'registration/edit_profile.html', {'form' : form})
+
+class UserSignupView(CreateView):
+    form_class = UserCreationMultiForm
+    template_name = 'registration/create_profile.html'
+
+    def get_success_url(self, user):
+        return reverse( 'profile', kwargs = {'slug': user.username},)
+
+    def form_valid(self, form):
+        # Save the user first, because the profile needs a user before it
+        # can be saved.
+        user = form['user'].save()
+        profile = form['profile'].save(commit=False)
+        profile.user = user
+        profile.save()
+        return redirect(self.get_success_url(user))
