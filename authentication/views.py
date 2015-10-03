@@ -6,7 +6,7 @@ from authentication.forms import UserProfileForm
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from surveillance_cholera.context_processors import get_name_of_mohfacility
-from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth.models import Group
 from django.shortcuts import redirect
 from .forms import UserCreationMultiForm
 
@@ -63,6 +63,8 @@ class UserSignupView(CreateView):
         # can be saved.
         user = form['user'].save()
         profile = form['profile'].save(commit=False)
+        group = Group.objects.get_or_create(name=form['profile'].cleaned_data['level'])
+        user.groups.add(group[0])
         profile.user = user
         profile.save()
         return redirect(self.get_success_url(user))
