@@ -28,8 +28,9 @@ $(document).ready(function(){
                 }
             })
         });
-     $('select[name=level]').click(function() {
+     $('select[name=profile-level]').click(function() {
             level = $(this).val();
+            console.log(level);
             if (level == ''){
                 level = 'CEN'
             }
@@ -37,6 +38,7 @@ $(document).ready(function(){
             $.ajax({
                 url: request_url,
                 success: function(data){
+                    console.log(data);
                     $('select[name=facility]').empty(); // remove the value from the input
                     $.each(data[0], function(key, value){
                         $('select[name=facility]').append('<option value="' + key + '">' + value +'</option>');
@@ -47,6 +49,6 @@ $(document).ready(function(){
         });
      $('select[name=facility]').click(function() {
             facility = $(this).val();
-            document.getElementById('id_moh_facility').value = parseInt(facility);
+            document.getElementById('id_profile-moh_facility').value = parseInt(facility);
         });
     });

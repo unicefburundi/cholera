@@ -13,7 +13,7 @@ import datetime
 from django.views.generic import FormView
 from surveillance_cholera.templatetags.extras_utils import format_to_time, DEAD, HOSPI, GUERI, REFER, get_all_reports
 import operator
-from authentication.forms import UserProfileForm2
+from authentication.forms import UserCreationMultiForm
 from registration.forms import RegistrationForm
 
 ###########
@@ -323,10 +323,9 @@ def get_alerts(request, treshold=3):
 #moh_facility
 
 def moh_facility(request):
-    profile_form = UserProfileForm2
-    user_form = RegistrationForm
+    profile_form = UserCreationMultiForm
     cds_form = CDSForm
     district_form = DistrictForm
     province_form = ProvinceForm
-    return render(request, 'moh_facility.html', {'cds_form':cds_form, 'district_form':district_form, 'province_form':province_form, 'profile_form': profile_form, 'user_form': user_form})
+    return render(request, 'moh_facility.html', {'cds_form':cds_form, 'district_form':district_form, 'province_form':province_form, 'profile_form': profile_form})
 

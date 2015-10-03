@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'betterforms',
     'surveillance_cholera',
     'django_tables2',
     'authentication',

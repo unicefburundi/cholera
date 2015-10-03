@@ -14,43 +14,43 @@
 <div class="col-md-10">
     <div class="tab-content">
               {% block user1 %}
-                    <div class="tab-pane {% block activeuser1 %}active{% endblock activeuser1 %}" id="user">
-                <h4><i class="glyphicon glyphicon-user"></i></h4>
-                <form action="{% url 'registration_register' %}"  method="POST" class="form-inline">
+        <div class="tab-pane {% block activeuser1 %}active{% endblock activeuser1 %}" id="user">
+            <h4><i class="glyphicon glyphicon-user"></i></h4>
+                <form action="{% url 'create_profile' %}"  method="POST" class="form-inline">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="username">{{user_form.username.label_tag}}</label>
-                            <p>{{user_form.username.errors}}</p>
-                            <p>{{user_form.username}}</p>
-                            <p>{{user_form.username.help_text}}</p>
+                            <label for="username">{{profile_form.user.username.label_tag}}</label>
+                            <p>{{profile_form.user.username.errors}}</p>
+                            <p>{{profile_form.user.username}}</p>
+                            <p>{{profile_form.user.username.help_text}}</p>
                         </div>
                          <div class="col-md-3">
-                            <label for="email">{{user_form.email.label_tag}}</label>
-                            <p>{{user_form.email.errors}}</p>
-                            <p>{{user_form.email}}</p>
+                            <label for="email">{{profile_form.user.email.label_tag}}</label>
+                            <p>{{profile_form.user.email.errors}}</p>
+                            <p>{{profile_form.user.email}}</p>
                         </div>
                          <div class="col-md-3">
-                            <label for="password">{{user_form.password1.label_tag}}</label>
-                            <p>{{user_form.password1.errors}}</p>
-                            <p>{{user_form.password1}}</p>
+                            <label for="password">{{profile_form.user.password1.label_tag}}</label>
+                            <p>{{profile_form.user.password1.errors}}</p>
+                            <p>{{profile_form.user.password1}}</p>
                         </div>
                         <div class="col-md-3">
-                            <label for="password2">{{user_form.password2.label_tag}}</label>
-                            <p>{{user_form.password2.errors}}</p>
-                            <p>{{user_form.password2}}</p>
+                            <label for="password2">{{profile_form.user.password2.label_tag}}</label>
+                            <p>{{profile_form.user.password2.errors}}</p>
+                            <p>{{profile_form.user.password2}}</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="telephone">{{profile_form.telephone.label_tag}}</label>
-                            <p>{{profile_form.telephone.errors}}</p>
-                            <p>{{profile_form.telephone}}</p>
+                            <label for="telephone">{{profile_form.profile.telephone.label_tag}}</label>
+                            <p>{{profile_form.profile.telephone.errors}}</p>
+                            <p>{{profile_form.profile.telephone}}</p>
                         </div>
                         <div class="col-md-3">
-                            <label for="level">{{profile_form.level.label_tag}}</label>
-                            <p>{{profile_form.level.errors}}</p>
-                            <p>{{profile_form.level}}</p>
+                            <label for="level">{{profile_form.profile.level.label_tag}}</label>
+                            <p>{{profile_form.profile.level.errors}}</p>
+                            <p>{{profile_form.profile.level}}</p>
                         </div>
                         <div class="col-md-3">
                             <label for="facility">Facilities</label>
@@ -60,9 +60,9 @@
                                 </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="moh_facility">{{profile_form.moh_facility.label_tag}}</label>
-                            <p>{{profile_form.moh_facility.errors}}</p>
-                            <p>{{profile_form.moh_facility}}</p>
+                            <label for="moh_facility">{{profile_form.profile.moh_facility.label_tag}}</label>
+                            <p>{{profile_form.profile.moh_facility.errors}}</p>
+                            <p>{{profile_form.profile.moh_facility}}</p>
                         </div>
                     </div>
                     <div class="row">
