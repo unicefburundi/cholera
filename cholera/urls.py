@@ -24,7 +24,3 @@ urlpatterns = patterns('',
 #In development, static files should be served from app static directories
 if settings.DEBUG == True:
     urlpatterns += staticfiles_urlpatterns()
-    import debug_toolbar
-    urlpatterns += patterns('',
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-    )
