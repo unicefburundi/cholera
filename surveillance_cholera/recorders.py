@@ -610,10 +610,11 @@ def record_track_message(args):
 		
 	
 
-	#Let's update the patient
-	one_concerned_patient.exit_date = year_month_day
-	one_concerned_patient.exit_status = args['text'].split(' ')[3].title()
-	one_concerned_patient.save()
+	#Let's update the patient if it is not a trensfert report
+	if args['text'].split(' ')[3].title() != "Pr":
+		one_concerned_patient.exit_date = year_month_day
+		one_concerned_patient.exit_status = args['text'].split(' ')[3].title()
+		one_concerned_patient.save()
 
 
 	TrackPatientMessage.objects.create(exit_date = year_month_day, exit_status = args['text'].split(' ')[3].title(), report = the_created_report)
