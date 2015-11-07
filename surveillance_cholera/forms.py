@@ -1,6 +1,5 @@
 from django import forms
 from surveillance_cholera.models import *
-from django.forms.models import inlineformset_factory
 
 class SearchForm(forms.Form):
     def __init__(self,  request=None, *args, **kwargs):
