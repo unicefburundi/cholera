@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'betterforms',
+    'import_export',
     'surveillance_cholera',
     'django_tables2',
     'djangular',

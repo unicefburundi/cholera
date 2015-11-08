@@ -8,6 +8,7 @@ click==5.1
 decorator==4.0.2
 django-authtools==1.2.0
 django-betterforms==1.1.2
+django-import-export
 django-angular==0.7.15
 django-appconf==1.0.1
 django-compressor==1.5
