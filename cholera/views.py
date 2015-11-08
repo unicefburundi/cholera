@@ -81,9 +81,9 @@ def get_statistics(request):
             all_patients = all_patients.filter(patient_id__icontains=request.POST.get('patient'))
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
-        if request.POST.get('start_date') == '':
+        if not request.POST.get('start_date') :
             start_date = u'01/01/2015'
-        if request.POST.get('end_date') == '':
+        if not request.POST.get('end_date') :
             end_date = datetime.date.today().strftime('%d/%m/%Y')
         if request.POST.get('province') !='':
             if request.POST.get('districts') != '':
@@ -132,9 +132,9 @@ def landing(request):
     if request.method == 'POST':
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
-        if request.POST.get('start_date') == '':
+        if  not request.POST.get('start_date'):
             start_date = u'01/01/2015'
-        if request.POST.get('end_date') == '':
+        if not  request.POST.get('end_date') :
             end_date = datetime.date.today().strftime('%d/%m/%Y')
 
     return get_by_code(request=request,code=str(code), start_date=start_date, end_date=end_date)

@@ -16,15 +16,16 @@ from surveillance_cholera.forms import UserCreationMultiForm
 from django.contrib.auth.models import Group
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.contrib.auth.forms import PasswordResetForm
 
 ###########
 # CDS             ##
 ###########
 
 def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
-    if start_date == '' or start_date== None:
+    if not start_date:
         start_date = u'01/01/2015'
-    if end_date == '' or end_date== None:
+    if end_date:
         end_date = datetime.date.today().strftime('%d/%m/%Y')
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]).filter(cds=moh_facility_id)
     cds_id = {'cds_id': CDS.objects.get(id=moh_facility_id).id}
