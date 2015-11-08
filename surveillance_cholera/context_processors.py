@@ -1,6 +1,5 @@
 from surveillance_cholera.forms import SearchForm
-from authentication.models import UserProfile
-from surveillance_cholera.models import CDS, District, Province
+from surveillance_cholera.models import CDS, District, Province, UserProfile
 
 def get_name_of_mohfacility(level='',code=''):
     if level=='CDS':

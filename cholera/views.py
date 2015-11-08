@@ -1,13 +1,12 @@
 from django.shortcuts import render
 from surveillance_cholera.forms import SearchForm
-from surveillance_cholera.models import CDS,District, Province, Patient
+from surveillance_cholera.models import *
 from django_tables2   import RequestConfig
 from django.contrib.auth.decorators import login_required
 from surveillance_cholera.tables import PatientTable, Patients3Table
 from django.http import JsonResponse
 import datetime
 from surveillance_cholera.templatetags.extras_utils import format_to_time, get_all_patients, DEAD, HOSPI, GUERI, REFER
-from authentication.models import UserProfile
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 import operator
@@ -108,7 +107,7 @@ def get_statistics(request):
 def get_by_code(request, code='', start_date='', end_date=''):
     request.session['sstart_date'] = start_date
     request.session['eend_date'] = end_date
-    if code=='None':
+    if not code:
         form = SearchForm
         results = [get_province_statistics(i, format_to_time(start_date), format_to_time(end_date)) for i in Province.objects.all() ]
         statistics = Patients3Table(results)

@@ -39,4 +39,5 @@ admin.site.register(Reporter)
 admin.site.register(Report)
 admin.site.register(TrackPatientMessage)
 admin.site.register(Temporary)
+admin.site.register(UserProfile)
 

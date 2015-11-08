@@ -113,12 +113,12 @@
                         <a class="page-scroll" href="{% url 'landing' %}">Dashboard</a>
                     </li>
                     <li>
-                        <a href="{% url 'auth_logout' %}?next=/"><i class="glyphicon glyphicon-lock"></i> Logout</a>
+                        <a href="{% url 'logout' %}?next=/"><i class="glyphicon glyphicon-lock"></i> Logout</a>
                     </li>
                     {% endif %}
                     {% else %}
                     <li>
-                        <a class="page-scroll" href="{% url 'auth_login' %}">Login</a>
+                        <a class="page-scroll" href="{% url 'login' %}">Login</a>
                     </li>
                 {% endif %}
                 </ul>

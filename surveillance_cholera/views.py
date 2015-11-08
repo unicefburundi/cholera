@@ -1,6 +1,5 @@
-from django.views.generic import ListView, DetailView, CreateView
-from surveillance_cholera.models import CDS, Province, District, Patient, Report
-from authentication.models import UserProfile
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from surveillance_cholera.models import *
 from django_tables2 import  RequestConfig
 from surveillance_cholera.tables import PatientsTable, Patients2Table
 from django.shortcuts import render
@@ -13,7 +12,10 @@ import datetime
 from django.views.generic import FormView
 from surveillance_cholera.templatetags.extras_utils import format_to_time, DEAD, HOSPI, GUERI, REFER, get_all_reports
 import operator
-from authentication.forms import UserCreationMultiForm
+from surveillance_cholera.forms import UserCreationMultiForm
+from django.contrib.auth.models import Group
+from django.contrib import messages
+from django.shortcuts import redirect
 
 ###########
 # CDS             ##
@@ -90,9 +92,9 @@ class CDSFormView(FormView, CDSDetailView):
 ###########
 
 def get_per_district_statistics(moh_facility_id, start_date='', end_date=''):
-    if start_date == '' or start_date== None :
+    if not start_date :
         start_date = u'01/01/2015'
-    if end_date == '' or end_date== None :
+    if not end_date :
         end_date = datetime.date.today().strftime('%d/%m/%Y')
     patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]).filter(cds__district=moh_facility_id)
     district_id = {'district_id': District.objects.get(id=moh_facility_id).id}
@@ -251,7 +253,7 @@ def get_patients_by_code(request, code=''):
     all_patients = get_all_patients(level=userprofile.level, moh_facility=userprofile.moh_facility)
     form = PatientSearchForm()
     moh_facility = None
-    if len(code)<=2 :
+    if 1<= len(code)<=2 :
         moh_facility = Province.objects.get(code=code)
         all_patients = all_patients.filter(cds__district__province__code=code)
     if len(code)>2 and len(code)<=4 :
@@ -318,6 +320,52 @@ def get_alerts(request, treshold=3):
     results = all_reports.filter(patient__exit_status=None, patient__date_entry__lte=the_current_date - datetime.timedelta(days=treshold)).values('patient__patient_id', 'patient__date_entry', 'cds__name', 'reporter__phone_number', 'reporter__supervisor_phone_number')
 
     return render(request, 'surveillance_cholera/alerts.html', { 'form':form, 'results' : results, 'form': form})
+
+class ProfileUserListView(ListView):
+    model = UserProfile
+    paginate_by = 25
+
+class ProfileUserDetailView(DetailView):
+    model = UserProfile
+    slug_field = "user"
+
+class ProfileUserUpdateView(UpdateView):
+    model = UserProfile
+    fields = ('telephone',)
+    exclude = ('user',)
+
+# ProfileUser
+class UserSignupView(CreateView):
+    form_class = UserCreationMultiForm
+    template_name = 'registration/create_profile.html'
+
+    def get_success_url(self, user):
+        return reverse( 'profile_user_detail', kwargs = {'pk': user})
+
+    def form_valid(self, form):
+        # Save the user first, because the profile needs a user before it
+        # can be saved.
+        user = form['user'].save()
+        profile = form['profile'].save(commit=False)
+        group = Group.objects.get_or_create(name=form['profile'].cleaned_data['level'])
+        user.groups.add(group[0])
+        profile.user = user
+        profile.save()
+        if not form['user'].cleaned_data['password1']  or  not form['user'].cleaned_data['password2'] :
+            try:
+                reset_form = PasswordResetForm({'email': user.email})
+                assert reset_form.is_valid()
+                reset_form.save(
+                    request=self.request,
+                    use_https=self.request.is_secure(),
+                    subject_template_name='registration/account_creation_subject.txt',
+                    email_template_name='registration/account_creation_email.html',
+                )
+                messages.success(self.request, 'Prifile created and mail sent to {0}.'.format(user.email))
+            except:
+                messages.success(self.request, 'Unable to send mail  to {0}.'.format(user.email))
+                pass
+        return redirect(self.get_success_url(profile.id))
 
 #moh_facility
 

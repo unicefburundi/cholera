@@ -1,14 +1,17 @@
 from django import forms
 from surveillance_cholera.models import *
+from authtools.forms import UserCreationForm
+from betterforms.multiform import MultiModelForm
+from collections import OrderedDict
 
 class SearchForm(forms.Form):
     def __init__(self,  request=None, *args, **kwargs):
         user = None
         PROVINCES = Province.objects.values_list('id','name').distinct()
-        if request != None and request.user.is_authenticated():
-            user = UserProfile.objects.get(user=request.user)
-            level = user.level
-            moh_facility = user.moh_facility
+        if request and request.user.is_authenticated():
+            user = UserProfile.objects.get_or_create(user=request.user)
+            level = user[0].level
+            moh_facility = user[0].moh_facility
             if level == 'BPS':
                 PROVINCES= Province.objects.filter(code=moh_facility).values_list('id','name').distinct()
                 DISTRICTS = District.objects.filter(province__code=moh_facility).values_list('id','name').distinct()
@@ -86,3 +89,36 @@ class CDSForm(forms.ModelForm):
     class Meta:
         model = CDS
         fields = '__all__'
+
+#User
+class UserCreationForm(UserCreationForm):
+    """
+    A UserCreationForm with optional password inputs.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super(UserCreationForm, self).__init__(*args, **kwargs)
+        self.fields['password1'].required = False
+        self.fields['password2'].required = False
+        # If one field gets autocompleted but not the other, our 'neither
+        # password or both password' validation will be triggered.
+        self.fields['password1'].widget.attrs['autocomplete'] = 'off'
+        self.fields['password2'].widget.attrs['autocomplete'] = 'off'
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = super(UserCreationForm, self).clean_password2()
+        if bool(password1) ^ bool(password2):
+            raise forms.ValidationError("Fill out both fields")
+        return password2
+
+class UserProfileForm2(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        exclude = ('user',)
+
+class UserCreationMultiForm(MultiModelForm):
+    form_classes = OrderedDict((
+        ('user', UserCreationForm),
+        ('profile', UserProfileForm2),
+    ))

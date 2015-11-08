@@ -19,7 +19,7 @@
     {{ form.username }}
 </div>
 <div class="form-group">
-  <div for="pwd">{{ form.password.label_tag }}<a href="{% url 'auth_password_reset' %}">(forgot password)</a></div>
+  <div for="pwd">{{ form.password.label_tag }}<a href="{% url 'password_reset' %}">(forgot password)</a></div>
     {{ form.password }}
 </div>
   <input type="submit" value="Login" class="btn btn-sm btn-success"/>

@@ -47,11 +47,10 @@ INSTALLED_APPS = (
     'betterforms',
     'surveillance_cholera',
     'django_tables2',
-    'authentication',
     'djangular',
     'guardian',
     'django_extensions',
-    'registration',
+    'authtools',
 )
 
 MIDDLEWARE_CLASSES = (

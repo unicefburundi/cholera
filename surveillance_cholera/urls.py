@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from surveillance_cholera.backend import handel_rapidpro_request
-from surveillance_cholera.views import CDSListView, CDSDetailView, DistrictListView, DistrictDetailView, ProvinceListView, ProvinceDetailView, PatientListView, PatientDetailView, get_patients_by_code, CDSFormView, DistrictFormView, ProvinceFormView, get_alerts, CDSCreateView, DistrictCreateView, ProvinceCreateView, moh_facility
+from surveillance_cholera.views import *
 from surveillance_cholera.tasks import ask_update_on_patient
 
 urlpatterns = patterns('',
@@ -33,4 +33,9 @@ urlpatterns = patterns('',
 
     #moh_facility
     url(r'^moh_facility/$', moh_facility, name='moh_facility'),
+
+    #ProfileUser
+    url(r'^register/$', UserSignupView.as_view(), name="create_profile"),
+    url(r'^profile/(?P<pk>\d+)/$', ProfileUserDetailView.as_view(), name="profile_user_detail"),
+    url(r'^profile_edit/(?P<pk>\d+)/$', ProfileUserUpdateView.as_view(), name="profileuser_update"),
 )
