@@ -362,7 +362,7 @@ class UserSignupView(CreateView):
                     subject_template_name='registration/account_creation_subject.txt',
                     email_template_name='registration/account_creation_email.html',
                 )
-                messages.success(self.request, 'Prifile created and mail sent to {0}.'.format(user.email))
+                messages.success(self.request, 'Profile created and mail sent to {0}.'.format(user.email))
             except:
                 messages.success(self.request, 'Unable to send mail  to {0}.'.format(user.email))
                 pass
