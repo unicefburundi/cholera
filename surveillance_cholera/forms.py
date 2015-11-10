@@ -8,6 +8,7 @@ class SearchForm(forms.Form):
     def __init__(self,  request=None, *args, **kwargs):
         user = None
         PROVINCES = Province.objects.values_list('id','name').distinct()
+        import ipdb; ipdb.set_trace()
         if request and request.user.is_authenticated():
             user = UserProfile.objects.get_or_create(user=request.user)
             level = user[0].level
@@ -34,7 +35,7 @@ class SearchForm(forms.Form):
                 self.base_fields['districts'] = forms.ChoiceField(widget = forms.Select(), choices=[(str(cds.district.id), cds.district.name)],  required=False)
                 self.base_fields['cds'] = forms.ChoiceField(widget = forms.Select(), choices=[(str(cds.id), cds.name)], required=False)
 
-            if level=='CEN':
+            if level in ['CEN', 'Central']:
                 PROVINCES = [('', '---------')] + [(str(i),n) for i,n in PROVINCES]
                 self.base_fields['province'] =  forms.ChoiceField(widget = forms.Select(), choices=PROVINCES)
                 self.base_fields['districts'] = forms.ChoiceField(widget = forms.Select(), choices=[('', '---------')],  required=False)

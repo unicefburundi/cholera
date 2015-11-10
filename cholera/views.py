@@ -58,7 +58,7 @@ def get_by_level(request, level='CEN'):
         results = District.objects.all().order_by('name')
     if level == 'CDS':
         results = CDS.objects.all().order_by('name')
-    if level in ['CEN', '']  :
+    if level in ['CEN', '', 'Central']  :
         return JsonResponse([{'':'-----'}], safe=False)
     for result in results:
         results_dict[result.code] = result.name
