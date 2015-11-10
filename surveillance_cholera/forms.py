@@ -8,7 +8,6 @@ class SearchForm(forms.Form):
     def __init__(self,  request=None, *args, **kwargs):
         user = None
         PROVINCES = Province.objects.values_list('id','name').distinct()
-        import ipdb; ipdb.set_trace()
         if request and request.user.is_authenticated():
             user = UserProfile.objects.get_or_create(user=request.user)
             level = user[0].level
