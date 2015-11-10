@@ -10,7 +10,7 @@ from cholera.views import get_all_patients
 from django.db.models import Q
 import datetime
 from django.views.generic import FormView
-from surveillance_cholera.templatetags.extras_utils import format_to_time, DEAD, HOSPI, GUERI, REFER, get_all_reports
+from surveillance_cholera.templatetags.extras_utils import  *
 import operator
 from surveillance_cholera.forms import UserCreationMultiForm
 from django.contrib.auth.models import Group
@@ -24,10 +24,10 @@ from django.contrib.auth.forms import PasswordResetForm
 
 def get_per_cds_statistics(moh_facility_id, start_date='', end_date=''):
     if not start_date:
-        start_date = u'01/01/2015'
+        start_date = datetime.date(2015,1,1).strftime('%Y-%m-%d')
     if end_date:
         end_date = datetime.date.today().strftime('%d/%m/%Y')
-    patients = Patient.objects.filter(date_entry__range=[format_to_time(start_date), format_to_time(end_date)]).filter(cds=moh_facility_id)
+    patients = Patient.objects.filter(date_entry__range=[format_to_time1(start_date), format_to_time1(end_date)]).filter(cds=moh_facility_id)
     cds_id = {'cds_id': CDS.objects.get(id=moh_facility_id).id}
     facility = {'name': CDS.objects.get(id=moh_facility_id).name}
     detail = {'detail':  CDS.objects.get(id=moh_facility_id).code}
