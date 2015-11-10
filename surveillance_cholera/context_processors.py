@@ -8,7 +8,7 @@ def get_name_of_mohfacility(level='',code=''):
         return District.objects.get(code=code)
     if level=='BPS':
         return Province.objects.get(code=code)
-    if level=='CEN':
+    if level in ['CEN', 'Central']:
         return 'Central'
 
 def search_form(request):
@@ -17,6 +17,7 @@ def search_form(request):
 
 def myfacility(request):
     myprofile = None
+    # import ipdb; ipdb.set_trace()
     try:
         myprofile = UserProfile.objects.get(user=request.user)
     except TypeError:
