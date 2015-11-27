@@ -11,14 +11,12 @@ register = template.Library()
 def has_group(user, group_name):
     return user.groups.filter(name=group_name).exists()
 
+
 def format_to_time(date):
     if not date:
-        return datetime.datetime.today().strftime('%d/%m/%Y')
-    return datetime.datetime.strptime(date, '%d/%m/%Y')
-
-def format_to_time1(date):
-    if not date:
         return datetime.datetime.today().strftime('%Y-%m-%d')
+    if '/' in date:
+        return datetime.datetime.strptime(date, '%d/%m/%Y')
     return datetime.datetime.strptime(date, '%Y-%m-%d')
 
 def not_in_cds_group(user):
