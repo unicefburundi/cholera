@@ -9,15 +9,21 @@
 {% if object %}
     <div class="row">
         <div class="col-md-3">
-            <dl class="dl-horizontal">
-                <dt>Name of the District : </dt>
-                <p> {{object.name}}</p>
-                <dt>Code of the District : </dt>
-                <p> {{object.code}}</p>
-                <dt>Province : </dt>
-                <p> {{object.province}}</p>
-            </dl>
-        </div>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="badge">{{object.name}}</span>
+              Name of the District :
+            </li>
+            <li class="list-group-item">
+              <span class="badge">{{object.code}}</span>
+              Code of the District :
+            </li>
+            <li class="list-group-item">
+              <span class="badge">{{object.province}}</span>
+              Province :
+            </li>
+       </ul> 
+       </div>
         <div class="col-md-8">
         <div class="row">
                 <form action="{% url 'district_statistics' pk=object.id %}" method="post" id="post-form" class="form-inline">
