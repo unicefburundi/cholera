@@ -9,12 +9,15 @@
 {% if object %}
     <div class="row">
         <div class="col-md-3">
-            <dl class="dl-horizontal">
-                <dt>Name of the Province : </dt>
-                <p> {{object.name}}</p>
-                <dt>Code of the Province : </dt>
-                <p> {{object.code}}</p>
-            </dl>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="badge">{{object.name}}</span>
+              Name of the Province :
+            </li>
+            <li class="list-group-item">
+              <span class="badge">{{object.code}}</span>
+              Code of the Province :
+            </li>
         </div>
         <div class="col-md-8">
         <div class="row">

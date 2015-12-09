@@ -125,8 +125,10 @@ def get_by_code(request, code='', start_date='', end_date=''):
         url = reverse('cds_detail', kwargs={'pk': CDS.objects.get(code=code).id})
         return HttpResponseRedirect(url)
 
+@login_required
 def landing(request):
-    code = UserProfile.objects.get(user=request.user).moh_facility
+    code , created= UserProfile.objects.get_or_create(user=request.user)
+    code = code.moh_facility
     start_date = u'01/01/2015'
     end_date = datetime.date.today().strftime('%d/%m/%Y')
     if request.method == 'POST':

@@ -157,6 +157,21 @@
   {% block js_footer %}
       <!-- Scrolling Nav JavaScript -->
       <script src="{% static 'js/jquery.easing.min.js' %}"></script>
+      <script>
+function totalTextFormatter(data) {
+        console.log(data);
+          return '<strong class="text-primary" >Total</strong>';
+      };
+
+function sumFormatter(data) {
+          var total = 0;
+          field = this.field;
+          $.each(data, function (i, row) {
+                total += +(row[field]);
+            });
+          return '<strong>'+ total + '</strong>';
+      };
+</script>
   {% endblock js_footer %}
   </body>
 </html>

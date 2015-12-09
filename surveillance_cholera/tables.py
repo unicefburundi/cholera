@@ -54,45 +54,45 @@ class PatientTable(tables.Table):
 
 class PatientsTable(tables.Table):
     cds_id = tables.Column()
-    name = tables.Column(verbose_name="Name of CDS ")
-    new_cases = tables.Column()
-    hospi = tables.Column()
-    gueris = tables.Column()
-    references = tables.Column()
-    deces = tables.Column()
+    name = tables.Column(verbose_name="Name of CDS ", attrs={'th':{'data-footer-formatter':"totalTextFormatter"}})
+    new_cases = tables.Column(verbose_name="Cumulative cases", attrs={'th':{'data-footer-formatter':"sumFormatter"}})
+    hospi = tables.Column( attrs={'th':{'data-footer-formatter':"sumFormatter"}})
+    gueris = tables.Column( attrs={'th':{'data-footer-formatter':"sumFormatter"}})
+    #references = tables.Column()
+    deces = tables.Column( attrs={'th':{'data-footer-formatter':"sumFormatter"}})
     detail = tables.LinkColumn('get_patients_by_code', args=[A('detail')], orderable=False, empty_values=(), verbose_name='Click for details')
 
     class Meta:
-        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true", 'data-export-types': "['csv','excel']"}
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true", 'data-export-types': "['csv','excel']", "data-show-footer":"true"}
         exclude = ('cds_id',)
 
 class Patients2Table(tables.Table):
     district_id = tables.Column()
-    name = tables.Column(verbose_name="Name of District ")
-    new_cases = tables.Column()
-    hospi = tables.Column()
-    gueris = tables.Column()
-    references = tables.Column()
-    deces = tables.Column()
+    name = tables.Column(verbose_name="Name of District ", attrs={'th':{'data-footer-formatter':"totalTextFormatter"}})
+    new_cases = tables.Column(verbose_name="Cumulative cases", attrs={'th':{'data-footer-formatter':"sumFormatter"}})
+    hospi = tables.Column( attrs={'th':{'data-footer-formatter':"sumFormatter"}})
+    gueris = tables.Column( attrs={'th':{'data-footer-formatter':"sumFormatter"}})
+    #references = tables.Column()
+    deces = tables.Column( attrs={'th':{'data-footer-formatter':"sumFormatter"}})
     detail = tables.Column()
 
     class Meta:
-        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true", 'data-export-types': "['csv','excel']"}
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true", 'data-export-types': "['csv','excel']", "data-show-footer":"true"}
         exclude = ('district_id',)
 
     def render_detail(self, value, record):
         return SafeString('''<a href="/cholera/district/%s"><i class="glyphicon glyphicon-list-alt"></i></a>''' % (record['district_id']))
 
 class Patients3Table(tables.Table):
-    name = tables.Column(verbose_name="Name of Province ")
-    new_cases = tables.Column()
-    hospi = tables.Column()
-    gueris = tables.Column()
-    references = tables.Column()
-    deces = tables.Column()
+    name = tables.Column(verbose_name="Name of Province ", attrs={'th':{'data-footer-formatter':"totalTextFormatter"}})
+    new_cases = tables.Column(verbose_name="Cumulative cases", attrs={'th':{'data-footer-formatter':"sumFormatter"}})
+    hospi = tables.Column( attrs={'th':{'data-footer-formatter':"sumFormatter"}})
+    gueris = tables.Column( attrs={'th':{'data-footer-formatter':"sumFormatter"}})
+    #references = tables.Column()
+    deces = tables.Column( attrs={'th':{'data-footer-formatter':"sumFormatter"}})
     detail = tables.Column()
     class Meta:
-        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true", 'data-export-types': "['csv','excel']"}
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true", 'data-export-types': "['csv','excel']", "data-show-footer":"true"}
     def render_detail(self, value, record):
         return SafeString('''<a href="/cholera/province/%s"><i class="glyphicon glyphicon-list-alt"></i></a>''' % (value))
 

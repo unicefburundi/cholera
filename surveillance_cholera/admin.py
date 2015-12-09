@@ -53,6 +53,7 @@ class PatientAdminResource(resources.ModelResource):
 
 class PatientAdmin(ExportMixin, admin.ModelAdmin):
     resource_class = PatientAdminResource
+    date_hierarchy = 'date_entry'
     list_display = ('patient_id', 'colline_name', 'age', 'intervention', 'date_entry', 'exit_status', 'cds', 'district', 'province')
     list_filter = ('age', 'intervention', 'exit_status')
     search_fields = ('cds__name', 'patient_id', 'colline_name', 'cds__district__name', 'cds__district__province__name')
