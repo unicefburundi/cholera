@@ -45,6 +45,39 @@ class CDSAdmin(ExportMixin, admin.ModelAdmin):
     def province(self, obj):
         return obj.district.province.name
 
+class ReporterAdminResource(resources.ModelResource):
+    class Meta:
+        model = Reporter
+        fields = ('cds__name','cds__district__name', 'phone_number', 'supervisor_phone_number', 'cds__district__province__name')
+        ordering = ['phone_number']
+
+class ReporterAdmin(ExportMixin, admin.ModelAdmin):
+    resource_class = ReporterAdminResource
+    list_display = ('phone_number', 'supervisor_phone_number', 'cds', 'district', 'province')
+    search_fields = ('phone_number', 'supervisor_phone_number', 'cds__district__name', 'cds__district__province__name', 'cds__district__name')
+
+    def district(self, obj):
+        return obj.cds.district.name
+
+    def province(self, obj):
+        return obj.cds.district.province.name
+
+class ReportAdminResource(resources.ModelResource):
+    class Meta:
+        model = Report
+        fields = ('patient__patient_id', 'reporter__phone_number', 'message','cds__name','cds__district__name',  'cds__district__province__name')
+
+class ReportAdmin(ExportMixin, admin.ModelAdmin):
+    resource_class = ReportAdminResource
+    list_display = ('patient', 'reporter', 'message', 'cds', 'district', 'province', 'report_type')
+    search_fields = ('patient', 'message', 'cds__district__name', 'cds__district__province__name', 'cds__district__name', 'report_type')
+
+    def district(self, obj):
+        return obj.cds.district.name
+
+    def province(self, obj):
+        return obj.cds.district.province.name
+
 class PatientAdminResource(resources.ModelResource):
     class Meta:
         model = Patient
@@ -69,8 +102,8 @@ admin.site.register(Patient, PatientAdmin)
 admin.site.register(Province, ProvinceAdmin)
 admin.site.register(District, DistrictAdmin)
 admin.site.register(CDS, CDSAdmin)
-admin.site.register(Reporter)
-admin.site.register(Report)
+admin.site.register(Reporter, ReporterAdmin)
+admin.site.register(Report, ReportAdmin)
 admin.site.register(TrackPatientMessage)
 admin.site.register(Temporary)
 admin.site.register(UserProfile)
