@@ -1,6 +1,10 @@
 from surveillance_cholera.models import CDS, Temporary, Reporter, Patient, Report, TrackPatientMessage
 import re
 import datetime
+import requests
+import json
+from django.conf import settings
+
 
 def check_number_of_values(args):
 	#This function checks if the message sent is composed by an expected number of values
@@ -330,6 +334,7 @@ def record_patient(args):
 
 	cds_code = one_concerned_cds.code
 
+	cds_name = one_concerned_cds.name
 
 	#the_time = time.strftime("%Y%m%d")
 	#year = the_time[2:4]
@@ -434,13 +439,31 @@ def record_patient(args):
 
 	args['valide'] = True
 	args['info_to_contact'] = "Ce patient a ete bien enregistre avec l identifiant : "+id_patient+". Merci."
+		
 
 
 
 
 
+	#If there is a new patient, the supervisor of the patient need to be informed
+
+	url = 'https://api.rapidpro.io/api/v1/broadcasts.json'
+	token = getattr(settings,'TOKEN','')
+
+	message_to_send_if_new_case = "Un nouveau cas de cholera est enregistre a "+cds_name
+
+	the_supervisor_phone_number = one_concerned_reporter.supervisor_phone_number
+	print("the_supervisor_phone_number")
+	print(the_supervisor_phone_number)
+	if the_supervisor_phone_number == "":
+		print("The phone number is not valid.")
+	else:
+		#Let's inform the supervisor that there is a new case of cholera
+		the_supervisor_phone_number = "tel:"+the_supervisor_phone_number
+		data = {"urns": [the_supervisor_phone_number],"text": message_to_send_if_new_case}
 
 
+		response = requests.post(url, headers={'Content-type': 'application/json', 'Authorization': 'Token %s' % token}, data = json.dumps(data))
 
 #----------------------------------------PATIENT EXIT REPORT MESSAGES-------------------------
 
