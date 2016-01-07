@@ -450,7 +450,7 @@ def record_patient(args):
 	url = 'https://api.rapidpro.io/api/v1/broadcasts.json'
 	token = getattr(settings,'TOKEN','')
 
-	message_to_send_if_new_case = "Un nouveau cas de cholera est enregistre a "+cds_name
+	message_to_send_if_new_case = "Un nouveau cas de cholera vient d etre enregistre. Lieu d enregistrement : "+cds_name
 
 	the_supervisor_phone_number = one_concerned_reporter.supervisor_phone_number
 	print("the_supervisor_phone_number")
