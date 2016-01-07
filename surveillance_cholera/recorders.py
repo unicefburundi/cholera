@@ -450,7 +450,7 @@ def record_patient(args):
 	url = 'https://api.rapidpro.io/api/v1/broadcasts.json'
 	token = getattr(settings,'TOKEN','')
 
-	message_to_send_if_new_case = "Un nouveau cas de cholera vient d etre enregistre. Lieu d enregistrement : "+cds_name
+	message_to_send_if_new_case = "Un nouveau cas de cholera vient d etre signale. Lieu : "+cds_name
 
 	the_supervisor_phone_number = one_concerned_reporter.supervisor_phone_number
 	print("the_supervisor_phone_number")
@@ -465,6 +465,14 @@ def record_patient(args):
 
 		response = requests.post(url, headers={'Content-type': 'application/json', 'Authorization': 'Token %s' % token}, data = json.dumps(data))
 
+
+	#If there is a new patient, the is a group of persons which need to be informed
+	phone_numbers = getattr(settings,'CENTRAL_GROUP','')
+	if len(phone_numbers) > 0:
+		#These phone numbers are for central group. Let's send a message to them.
+		data = {"urns": phone_numbers,"text": message_to_send_if_new_case}
+		response = requests.post(url, headers={'Content-type': 'application/json', 'Authorization': 'Token %s' % token}, data = json.dumps(data))
+	
 #----------------------------------------PATIENT EXIT REPORT MESSAGES-------------------------
 
 
