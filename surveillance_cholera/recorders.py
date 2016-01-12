@@ -404,11 +404,34 @@ def record_patient(args):
 		patient_id_1 = "0"+patient_id_1
 
 	#Let's build the second part of the patient id. It made at minimum by 3 caracters
-	patient_id_2 = str(Report.objects.filter(cds = one_concerned_cds, report_type = args['message_type']).count())
+	'''patient_id_2 = str(Report.objects.filter(cds = one_concerned_cds, report_type = args['message_type']).count())
+	if len(patient_id_2) == 1:
+		patient_id_2 = "00"+patient_id_2
+	if len(patient_id_2) == 2:
+		patient_id_2 = "0"+patient_id_2'''
+
+	the_last_patient_at_this_cds = Patient.objects.filter(cds = one_concerned_cds).order_by("-id")[0]
+
+	#Let's identify the id used by the system users for this patient
+	the_last_patient_id = the_last_patient_at_this_cds.patient_id
+
+	#Let's remove the first part (patient_id_1) and increment the second one
+	the_length_of_the_first_part = len(patient_id_1)
+	the_second_part = the_last_patient_id[the_length_of_the_first_part:]
+
+	#Let's increment the second part.
+	the_second_part_int = int(the_second_part)
+	the_second_part_int = the_second_part_int+1
+
+	#patient_id_2 is the second part of the new patient
+	patient_id_2 = str(the_second_part_int)
+
+
 	if len(patient_id_2) == 1:
 		patient_id_2 = "00"+patient_id_2
 	if len(patient_id_2) == 2:
 		patient_id_2 = "0"+patient_id_2
+
 
 	id_patient = patient_id_1+""+patient_id_2
 
@@ -471,6 +494,7 @@ def record_patient(args):
 	if len(phone_numbers) > 0:
 		#These phone numbers are for central group. Let's send a message to them.
 		data = {"urns": phone_numbers,"text": message_to_send_if_new_case}
+		#data = {"groups": ["CHOLERA_CENTRALE"], "text": "message_to_send_if_new_case"}
 		response = requests.post(url, headers={'Content-type': 'application/json', 'Authorization': 'Token %s' % token}, data = json.dumps(data))
 	
 #----------------------------------------PATIENT EXIT REPORT MESSAGES-------------------------
