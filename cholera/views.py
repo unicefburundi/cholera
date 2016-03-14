@@ -138,5 +138,4 @@ def landing(request):
             start_date = u'01/01/2015'
         if not  request.POST.get('end_date') :
             end_date = datetime.date.today().strftime('%d/%m/%Y')
-
     return get_by_code(request=request,code=str(code), start_date=start_date, end_date=end_date)
