@@ -179,7 +179,7 @@ def complete_registration(args):
 				args['info_to_contact'] = "Erreur. Vous vous etes deja enregistre sur ce meme CDS. Merci."
 				the_one_existing_temp.delete()
 				return
-	
+
 			#Let's check if this reporter is not already registered
 			check_duplication1 = Reporter.objects.filter(phone_number = the_one_existing_temp.phone_number)
 			if len(check_duplication1) > 0:
@@ -393,7 +393,7 @@ def record_patient(args):
 	#====================================Patient is changed how it is==========================================
 	#The patient id is now made by two parts.
 	#The first part primary key of the cds
-	#The second part is number of patient in that cds	
+	#The second part is number of patient in that cds
 
 	id_patient = ""
 
@@ -411,22 +411,26 @@ def record_patient(args):
 	if len(patient_id_2) == 2:
 		patient_id_2 = "0"+patient_id_2'''
 
-	the_last_patient_at_this_cds = Patient.objects.filter(cds = one_concerned_cds).order_by("-id")[0]
+	# the_last_patient_at_this_cds = Patient.objects.filter(cds = one_concerned_cds).order_by("-id")[0]
+	the_last_patient_at_this_cds = Patient.objects.filter(cds = one_concerned_cds)
 
-	#Let's identify the id used by the system users for this patient
-	the_last_patient_id = the_last_patient_at_this_cds.patient_id
+	if (len(the_last_patient_at_this_cds>0)):
+		the_last_patient_at_this_cds = Patient.objects.filter(cds = one_concerned_cds).order_by("-id")[0]
+		#Let's identify the id used by the system users for this patient
+		the_last_patient_id = the_last_patient_at_this_cds.patient_id
 
-	#Let's remove the first part (patient_id_1) and increment the second one
-	the_length_of_the_first_part = len(patient_id_1)
-	the_second_part = the_last_patient_id[the_length_of_the_first_part:]
+		#Let's remove the first part (patient_id_1) and increment the second one
+		the_length_of_the_first_part = len(patient_id_1)
+		the_second_part = the_last_patient_id[the_length_of_the_first_part:]
 
-	#Let's increment the second part.
-	the_second_part_int = int(the_second_part)
-	the_second_part_int = the_second_part_int+1
+		#Let's increment the second part.
+		the_second_part_int = int(the_second_part)
+		the_second_part_int = the_second_part_int+1
 
-	#patient_id_2 is the second part of the new patient
-	patient_id_2 = str(the_second_part_int)
-
+		#patient_id_2 is the second part of the new patient
+		patient_id_2 = str(the_second_part_int)
+	else:
+		patient_id_2 = '0'
 
 	if len(patient_id_2) == 1:
 		patient_id_2 = "00"+patient_id_2
@@ -436,7 +440,7 @@ def record_patient(args):
 
 	id_patient = patient_id_1+""+patient_id_2
 
-	#Let's check if there is no patient with that id 
+	#Let's check if there is no patient with that id
 	check_patient_exists = Patient.objects.filter(patient_id = id_patient)
 	if len(check_patient_exists) > 0:
 		args['valide'] = False
@@ -446,7 +450,7 @@ def record_patient(args):
 	#==========================================================================================================
 
 	#Let's record a patient
-	
+
 	#The below line is the best one. The one i activate now is for concordance with A's code.
 	#the_created_patient = Patient.objects.create(patient_id = id_patient, colline_name = args['text'].split(' ')[2], age = args['text'].split(' ')[3], sexe = args['text'].split(' ')[4], intervention = args['text'].split(' ')[5], date_entry = full_entry_date_in_date)
 
@@ -463,7 +467,7 @@ def record_patient(args):
 
 	args['valide'] = True
 	args['info_to_contact'] = "Ce patient a ete bien enregistre avec l identifiant : "+id_patient+". Merci."
-		
+
 
 
 
@@ -497,7 +501,7 @@ def record_patient(args):
 		data = {"urns": phone_numbers,"text": message_to_send_if_new_case}
 		#data = {"groups": ["CHOLERA_CENTRALE"], "text": "message_to_send_if_new_case"}
 		response = requests.post(url, headers={'Content-type': 'application/json', 'Authorization': 'Token %s' % token}, data = json.dumps(data))
-	
+
 #----------------------------------------PATIENT EXIT REPORT MESSAGES-------------------------
 
 
@@ -543,7 +547,7 @@ def check_validity_of_id(args):
 	else:
 		args['valide'] = True
 		args['info_to_contact'] = "Un patient avec cet identifiant existe."
-	
+
 
 def check_exit_date(args):
 	'''This function checks if the exit date is valid.'''
@@ -554,7 +558,7 @@ def check_exit_date(args):
 		args['valide'] = False
 		args['info_to_contact'] = "Erreur. La date indiquee n est pas valide."
 		return
-	
+
 
 	exit_date = args['text'].split(' ')[2][0:2]+"-"+args['text'].split(' ')[2][2:4]+"-20"+args['text'].split(' ')[2][4:]
 
@@ -663,8 +667,8 @@ def record_track_message(args):
 
 
 	the_created_report = Report.objects.create(patient = one_concerned_patient, reporter = one_concerned_reporter, cds = one_concerned_cds, message = args['text'], report_type = args['message_type'])
-		
-	
+
+
 
 	#Let's update the patient if it is not a trensfert report
 	if args['text'].split(' ')[3].title() != "Pr":
@@ -696,7 +700,7 @@ def check_reception_date(args):
 		args['valide'] = False
 		args['info_to_contact'] = "Erreur. La date indiquee n est pas valide."
 		return
-	
+
 	reception_date = args['text'].split(' ')[2][0:2]+"-"+args['text'].split(' ')[2][2:4]+"-20"+args['text'].split(' ')[2][4:]
 
 
@@ -712,7 +716,7 @@ def check_reception_date(args):
 	#Let's check if the reception date is not < to the entry date
 	patient_id = args['text'].split(' ')[1]
 	patient = Patient.objects.filter(patient_id = patient_id)
-	
+
 	if len(patient) < 1:
 		args['valide'] = False
 		args['info_to_contact'] = "Erreur. Patient non trouve dans le system."
@@ -725,7 +729,7 @@ def check_reception_date(args):
 		args['valide'] = False
 		args['info_to_contact'] = "Erreur. La date d enregistrement de ce patient a ete suprimee. Contacter l administrateur de ce systeme."
 		return
-	
+
 
 	if datetime.datetime.strptime(reception_date, '%d-%m-%Y').date() < patient.date_entry:
 		args['valide'] = False
@@ -736,7 +740,7 @@ def check_reception_date(args):
 		args['valide'] = False
 		args['info_to_contact'] = "Erreur. On a deja enregistre la sortie pour ce patient. Si pas erreur sur l id, informer l administrateur de ce systeme."
 		return
-	
+
 	#Let's check if the reception date is not a future date
 	if datetime.datetime.strptime(reception_date, '%d-%m-%Y') > datetime.datetime.now():
 		args['valide'] = False
@@ -750,7 +754,7 @@ def check_reception_date(args):
 def patient_reception_status(args):
 	'''This function checks if the reception status is valid.'''
 
-	
+
 	reception_status = ['Hospi','Desh','Pr','Dd']
 
 	if args['text'].split(' ')[3].title() not in reception_status:
