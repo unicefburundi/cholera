@@ -70,7 +70,9 @@ class ReportAdminResource(resources.ModelResource):
 class ReportAdmin(ExportMixin, admin.ModelAdmin):
     resource_class = ReportAdminResource
     list_display = ('patient', 'reporter', 'message', 'cds', 'district', 'province', 'report_type')
-    search_fields = ('patient', 'message', 'cds__district__name', 'cds__district__province__name', 'cds__district__name', 'report_type')
+    search_fields = ( 'message', 'patient__patient_id', 'cds__name','cds__district__name',  'cds__district__province__name')
+    list_filter = ('report_type', )
+
 
     def district(self, obj):
         return obj.cds.district.name
