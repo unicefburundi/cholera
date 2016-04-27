@@ -411,23 +411,32 @@ def record_patient(args):
 	if len(patient_id_2) == 2:
 		patient_id_2 = "0"+patient_id_2'''
 
-	the_last_patient_at_this_cds = Patient.objects.filter(cds = one_concerned_cds).order_by("-id")[0]
+	#the_last_patient_at_this_cds = Patient.objects.filter(cds = one_concerned_cds).order_by("-id")[0]
+	the_last_patient_at_this_cds = Patient.objects.filter(cds = one_concerned_cds)
+	patient_id_2 = '0'
+	print("-1-")	
+	if(len(the_last_patient_at_this_cds) > 0):
+		print("-2-")
+		the_last_patient_at_this_cds = Patient.objects.filter(cds = one_concerned_cds).order_by("-id")[0]
+		#Let's identify the id used by the system users for this patient
+		the_last_patient_id = the_last_patient_at_this_cds.patient_id
 
-	#Let's identify the id used by the system users for this patient
-	the_last_patient_id = the_last_patient_at_this_cds.patient_id
+		#Let's remove the first part (patient_id_1) and increment the second one
+		the_length_of_the_first_part = len(patient_id_1)
+		the_second_part = the_last_patient_id[the_length_of_the_first_part:]
 
-	#Let's remove the first part (patient_id_1) and increment the second one
-	the_length_of_the_first_part = len(patient_id_1)
-	the_second_part = the_last_patient_id[the_length_of_the_first_part:]
+		#Let's increment the second part.
+		the_second_part_int = int(the_second_part)
+		the_second_part_int = the_second_part_int+1
 
-	#Let's increment the second part.
-	the_second_part_int = int(the_second_part)
-	the_second_part_int = the_second_part_int+1
+		#patient_id_2 is the second part of the new patient
+		patient_id_2 = str(the_second_part_int)
+		print("-3-")
+	else:
+		print("-4-")
+		patient_id_2 = '0'
 
-	#patient_id_2 is the second part of the new patient
-	patient_id_2 = str(the_second_part_int)
-
-
+	print("-5-")
 	if len(patient_id_2) == 1:
 		patient_id_2 = "00"+patient_id_2
 	if len(patient_id_2) == 2:
@@ -468,7 +477,7 @@ def record_patient(args):
 
 
 
-
+	print("-Ok-")
 	#If there is a new patient, the supervisor of the patient need to be informed
 
 	url = 'https://api.rapidpro.io/api/v1/broadcasts.json'
@@ -487,7 +496,7 @@ def record_patient(args):
 		data = {"urns": [the_supervisor_phone_number],"text": message_to_send_if_new_case}
 
 
-		response = requests.post(url, headers={'Content-type': 'application/json', 'Authorization': 'Token %s' % token}, data = json.dumps(data))
+		#response = requests.post(url, headers={'Content-type': 'application/json', 'Authorization': 'Token %s' % token}, data = json.dumps(data))
 
 
 	#If there is a new patient, the is a group of persons which need to be informed
@@ -496,7 +505,7 @@ def record_patient(args):
 		#These phone numbers are for central group. Let's send a message to them.
 		data = {"urns": phone_numbers,"text": message_to_send_if_new_case}
 		#data = {"groups": ["CHOLERA_CENTRALE"], "text": "message_to_send_if_new_case"}
-		response = requests.post(url, headers={'Content-type': 'application/json', 'Authorization': 'Token %s' % token}, data = json.dumps(data))
+		#response = requests.post(url, headers={'Content-type': 'application/json', 'Authorization': 'Token %s' % token}, data = json.dumps(data))
 	
 #----------------------------------------PATIENT EXIT REPORT MESSAGES-------------------------
 
