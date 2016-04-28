@@ -411,7 +411,6 @@ def record_patient(args):
 	if len(patient_id_2) == 2:
 		patient_id_2 = "0"+patient_id_2'''
 
-	#the_last_patient_at_this_cds = Patient.objects.filter(cds = one_concerned_cds).order_by("-id")[0]
 	the_last_patient_at_this_cds = Patient.objects.filter(cds = one_concerned_cds)
 	patient_id_2 = '0'
 	print("-1-")	
@@ -506,7 +505,6 @@ def record_patient(args):
 		data = {"urns": phone_numbers,"text": message_to_send_if_new_case}
 		#data = {"groups": ["CHOLERA_CENTRALE"], "text": "message_to_send_if_new_case"}
 		#response = requests.post(url, headers={'Content-type': 'application/json', 'Authorization': 'Token %s' % token}, data = json.dumps(data))
-	
 #----------------------------------------PATIENT EXIT REPORT MESSAGES-------------------------
 
 
