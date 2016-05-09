@@ -337,6 +337,12 @@ def record_patient(args):
 
 	cds_name = one_concerned_cds.name
 
+	the_concerned_district = one_concerned_cds.district
+	district_name = the_concerned_district.name
+
+	the_concerned_province = the_concerned_district.province
+	province_name = the_concerned_province.name
+
 	#the_time = time.strftime("%Y%m%d")
 	#year = the_time[2:4]
 	#month = the_time[4:6]
@@ -471,9 +477,8 @@ def record_patient(args):
 
 	args['valide'] = True
 	args['info_to_contact'] = "Ce patient a ete bien enregistre avec l identifiant : "+id_patient+". Merci."
-	args['info_to_supervisors'] = "Un nouveau cas de cholera vient d etre signale. Lieu : "+cds_name
-
-
+	args['info_to_supervisors'] = "Un nouveau cas de cholera vient d etre signale au centre de sante "+cds_name+", district "+district_name+", province "+province_name
+	
 
 
 
