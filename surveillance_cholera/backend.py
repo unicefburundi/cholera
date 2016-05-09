@@ -124,7 +124,8 @@ def handel_rapidpro_request(request):
 
 	response['info_to_contact'] = incoming_data['info_to_contact']
 
-
+	if incoming_data['info_to_supervisors']:
+		response['info_to_supervisors'] = incoming_data['info_to_supervisors']
 
 	return response
 
