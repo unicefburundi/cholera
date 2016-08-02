@@ -477,7 +477,7 @@ def record_patient(args):
 
 	args['valide'] = True
 	args['info_to_contact'] = "Ce patient a ete bien enregistre avec l identifiant : "+id_patient+". Merci."
-	args['info_to_supervisors'] = "Un nouveau cas de cholera vient d etre signale au centre de sante "+cds_name+", district "+district_name+", province "+province_name
+	args['info_to_supervisors'] = "Un nouveau cas de cholera vient d etre signale au centre de sante "+cds_name+", district "+district_name+", province "+province_name+". Le id de ce nouveau cas est "+id_patient
 	
 
 
