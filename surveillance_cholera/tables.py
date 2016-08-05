@@ -15,7 +15,7 @@ class PatientTable(tables.Table):
     class Meta:
         model = Patient
         attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" ,  "data-show-export":"true", 'data-export-types': "['csv','excel']"}
-        exclude = ('id', 'colline_name')
+        exclude = ('id', )
         sequence = ("patient_id", "...", "cds")
 
     def render_intervention(self, value):
