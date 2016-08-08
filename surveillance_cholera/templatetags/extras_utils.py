@@ -1,7 +1,7 @@
 from django import template
 import datetime
 from surveillance_cholera.models import Patient, Report
-DEAD = ['dd', 'deces']
+DEAD = ['dd', 'deces', 'pd']
 HOSPI = ['hospi', 'hopi']
 REFER = ['pr', 'ref']
 GUERI = ['pg']
