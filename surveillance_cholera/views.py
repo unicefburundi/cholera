@@ -177,7 +177,7 @@ class ProvinceCreateView(CreateView):
 
 class ProvinceListView(ListView):
     model = Province
-    paginate_by = 25
+    paginate_by = 50
 
 
 class ProvinceDetailView(DetailView):
@@ -196,7 +196,7 @@ class ProvinceDetailView(DetailView):
             data = get_province_data(province_id)
 
         statistics = Patients2Table(data)
-        RequestConfig(self.request).configure(statistics)
+        RequestConfig(self.request, paginate={"per_page": 1000}).configure(statistics)
         context['statistics'] = statistics
         context['form'] = SearchForm()
         return context
@@ -211,7 +211,7 @@ class ProvinceFormView(FormView, ProvinceDetailView):
         form = SearchForm(request)
         data = get_province_data(kwargs['pk'], request.POST.get('start_date'), request.POST.get('end_date'))
         statistics = Patients2Table(data)
-        RequestConfig(request).configure(statistics)
+        RequestConfig(request, paginate={"per_page": 1000}).configure(statistics)
         request.session['sstart_date'] = request.POST.get('start_date')
         request.session['eend_date'] = request.POST.get('end_date')
 
@@ -223,7 +223,7 @@ class ProvinceFormView(FormView, ProvinceDetailView):
 
 class PatientListView(ListView):
     model = Patient
-    paginate_by = 25
+    paginate_by = 50
 
     def get_queryset(self):
         qs = Patient.objects.all()
@@ -244,7 +244,7 @@ class PatientDetailView(DetailView):
         patient_id = self.kwargs['pk']
         data = Report.objects.filter(patient__id=patient_id)
         reports = ReportTable(data)
-        RequestConfig(self.request).configure(reports)
+        RequestConfig(self.request, paginate={"per_page": 1000}).configure(reports)
         context['reports'] = reports
         return context
 
@@ -296,12 +296,12 @@ def get_patients_by_code(request, code=''):
                 form.cleaned_data['end_date'] = datetime.date.today()
 
             results = PatientTable(all_patients.filter(date_entry__range=[form.cleaned_data['start_date'], form.cleaned_data['end_date']]))
-            RequestConfig(request, paginate={"per_page": 25}).configure(results)
+            RequestConfig(request, paginate={"per_page": 1000}).configure(results)
             return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': moh_facility, 'sstart_date':request.session['sstart_date'], 'eend_date':request.session['eend_date']})
 
 
     results = PatientTable(all_patients)
-    RequestConfig(request, paginate={"per_page": 25}).configure(results)
+    RequestConfig(request, paginate={"per_page": 1000}).configure(results)
     return render(request, 'surveillance_cholera/patients.html', { 'form':form, 'results' : results, 'moh_facility': moh_facility, 'sstart_date':request.session['sstart_date'], 'eend_date':request.session['eend_date']})
 
 

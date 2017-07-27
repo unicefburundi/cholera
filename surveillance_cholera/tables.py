@@ -14,8 +14,8 @@ class PatientTable(tables.Table):
 
     class Meta:
         model = Patient
-        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" ,  "data-show-export":"true", 'data-export-types': "['csv','excel']"}
-        exclude = ('id', 'colline_name')
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" ,  "data-show-export":"true", "data-side-pagination":"client", "data-pagination":"true", "data-page-list":"[25, 50, 100, 200]" ,"data-export-types": "['csv','excel']"}
+        exclude = ('id', )
         sequence = ("patient_id", "...", "cds")
 
     def render_intervention(self, value):
@@ -63,7 +63,7 @@ class PatientsTable(tables.Table):
     detail = tables.LinkColumn('get_patients_by_code', args=[A('detail')], orderable=False, empty_values=(), verbose_name='Click for details')
 
     class Meta:
-        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true", 'data-export-types': "['csv','excel']", "data-show-footer":"true"}
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-show-export":"true", "data-side-pagination":"client", "data-pagination":"true", "data-page-list":"[25, 50, 100, 200]" ,"data-export-types": "['csv','excel']"}
         exclude = ('cds_id',)
 
 class Patients2Table(tables.Table):
@@ -77,7 +77,7 @@ class Patients2Table(tables.Table):
     detail = tables.Column()
 
     class Meta:
-        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true", 'data-export-types': "['csv','excel']", "data-show-footer":"true"}
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" ,  "data-show-export":"true", "data-side-pagination":"client", "data-pagination":"true", "data-page-list":"[25, 50, 100, 200]" ,"data-export-types": "['csv','excel']"}
         exclude = ('district_id',)
 
     def render_detail(self, value, record):
@@ -92,7 +92,7 @@ class Patients3Table(tables.Table):
     deces = tables.Column( attrs={'th':{'data-footer-formatter':"sumFormatter"}})
     detail = tables.Column()
     class Meta:
-        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true" , "data-click-to-select":"true", "data-show-export":"true", 'data-export-types': "['csv','excel']", "data-show-footer":"true"}
+        attrs = {"class": "table ", "data-toggle":"table", "data-search":"true" ,"data-show-columns":"true",  "data-show-export":"true" ,"data-export-types": "['csv','excel']"}
     def render_detail(self, value, record):
         return SafeString('''<a href="/cholera/province/%s"><i class="glyphicon glyphicon-list-alt"></i></a>''' % (value))
 

@@ -151,7 +151,7 @@
 <!-- /Main -->
 
 
-<footer class="text-center">&copy; {% now "Y" %} <span class="separator">|</span> Powered by Open-Source. <span class="separator"> | </span>  Bootstrap Theme by <a href="http://www.bootply.com/85850"><strong>Bootply.com</strong></a></footer>
+<footer class="text-center">&copy; {% now "Y" %} <span class="separator">|</span> Powered by Open-Source. </footer>
 
   <!-- script references -->
   {% block js_footer %}
@@ -159,7 +159,6 @@
       <script src="{% static 'js/jquery.easing.min.js' %}"></script>
       <script>
 function totalTextFormatter(data) {
-        console.log(data);
           return '<strong class="text-primary" >Total</strong>';
       };
 
