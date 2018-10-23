@@ -38,9 +38,6 @@
                   <li {% block provinces %}class="active"{% endblock provinces %} >
                     <a href="#provinces"   data-toggle="tab">Provinces</a>
                   </li>
-                  <li {% block patients %}{% endblock patients %} >
-                    <a href="#patients"   data-toggle="tab">Patients</a>
-                  </li>
             </ul>
         <div class="tab-content">
             <div class="tab-pane {% block activeprovinces %}active{% endblock activeprovinces %}" id="provinces">
@@ -49,48 +46,6 @@
             Displaying results from : <span class="badge">{{start_date|default:"The Beginning"}}</span> to : <span class="badge">{{end_date|default:current_year}}</span>
         {% endif %}
             {% render_table statistics %}
-            </div>
-            <div class="tab-pane {% block activepatients %}{% endblock activepatients %}" id="patients">
-                <table class="table table-bordered" data-toggle="table"  data-show-export="true" data-search="true" data-export-types=['csv','excel'] data-show-footer="true">
-                    <thead>
-                        <tr>
-                            <th>District</th>
-                            <th>Date</th>
-                            <th>Heure</th>
-                            <th>NC</th>
-                            <th>CUMUL</th>
-                            <th>HOSP</th>
-                            <th>Sorties</th>
-                            <th>Deces</th>
-                            <th>CUMUL
-                            <p>DES DECES</p></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td> Hôpital/ CDS GIHANGA</td>
-                            <td>Samedi le 10 10 2015</td>
-                            <td>8h00</td>
-                            <td>15</td>
-                            <td>15</td>
-                            <td>14</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>Samedi le 11 10 2015</td>
-                            <td>8h00</td>
-                            <td>3</td>
-                            <td>18</td>
-                            <td>14</td>
-                            <td>3</td>
-                            <td>0</td>
-                            <td>1</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
           </div>
         </div>
