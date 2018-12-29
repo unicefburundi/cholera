@@ -20,7 +20,7 @@ django-tables2==1.0.4
 docutils==0.12
 future==0.15.0
 json2xls==0.1.2
-kombu==3.0.26
+kombu>=3.0.30
 oauthlib==1.0.3
 path.py==7.6.1
 pexpect==3.3
